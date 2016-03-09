@@ -1,0 +1,53 @@
+#map {
+	width: 100%;
+	height: 800px;
+}
+
+#header .btn, #header .btn-group {
+	margin-right: 10px;
+	margin-bottom: 15px;
+}
+
+#header .btn-group > .btn {
+	margin-bottom: 0;	
+	margin-right: 0;
+}
+
+#data-table .pagination {
+	float: right;
+}
+
+#ChartsContainer .column-buttons .btn {
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
+
+#ChartsContainer .toggle-time {
+	float: right;
+}
+
+#ChartsContainer {
+	margin-top: 20px;
+}
+
+#chartContainer {
+	float: right;
+}
+
+.c3 {
+	width: 100%;
+	height: 600px;
+}
+
+.c3 line, .c3 path {
+    stroke: #d9d9d9;
+}
+
+.c3 .tick text {
+    fill: #666666;
+}
+
+.c3 svg {
+    font: 12px "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    line-height: 1.4;
+}
