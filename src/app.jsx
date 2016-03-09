@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import { Router, Route, browserHistory, hashHistory } from 'react-router'
 
 import Dataset from './components/dataset/Dataset.jsx'
-import DatasetBrowse from './components/list/DatasetBrowse.jsx'
+import DatasetBrowse from './components/search/DatasetBrowse.jsx'
 
 ReactDOM.render((
   <Router history={hashHistory}>

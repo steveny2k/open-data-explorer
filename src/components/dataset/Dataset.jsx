@@ -9,6 +9,7 @@ import moment from 'moment'
 import soda from 'soda-js'
 import pluralize from 'pluralize'
 import titleize from 'underscore.string/titleize'
+//might be best to use underscore inflector for both titleize and pluralize (among other transforms) - https://github.com/jeremyruppel/underscore.inflection
 
 import DownloadLinks from './DownloadLinks.jsx'
 import DataTable from './DataTable.jsx'
@@ -16,7 +17,7 @@ import DatasetMap from './DatasetMap.jsx'
 import ChartsContainer from './charts/ChartsContainer.jsx'
 import DataDictionary from './dictionary/DataDictionary.jsx'
 
-var viewOptions = ['table','charts','map','dictionary']
+var viewOptions = ['overview','details','charts','map','table']
 
 export default class Dataset extends React.Component {
 
@@ -36,7 +37,7 @@ export default class Dataset extends React.Component {
 			map: false,
 			selectedCol: null,
 			colSortDirs: {},
-			viewType: 'table',
+			viewType: 'overview',
 			mapToken: 'pk.eyJ1IjoiZGF0YXNmIiwiYSI6ImNpazF6YWZ0NTM5bjV2eWtpOG1pZWlndGUifQ.z1NQOOB-SDyNVbspnyMKmw',
 			mapView: {
 				container: 'map',
@@ -233,18 +234,16 @@ render() {
 		var licenseLink = <a href={license.termsLink} target="_blank">{license.name}</a>
 	}
 
-
-	
-
 		var active = _.indexOf(viewOptions,this.state.viewType)
-		var mapTab = this.state.map ? <NavItem eventKey={2}>Map</NavItem> : null
+		var mapTab = this.state.map ? <NavItem eventKey={3}>Map</NavItem> : null
 		var tabs = (<Row>
 					<Col sm={12}>
 						<Nav bsStyle="tabs" justified activeKey={active} onSelect={this.handleTabSelect}>
-							<NavItem eventKey={0}>Table</NavItem>
-							<NavItem eventKey={1}>Charts</NavItem>
+							<NavItem eventKey={0}>Overview</NavItem>
+							<NavItem eventKey={1}>Dataset Details</NavItem>
+							<NavItem eventKey={2}>Charts</NavItem>
 							{mapTab}
-							<NavItem eventKey={3}>Data Dictionary</NavItem>
+							<NavItem eventKey={4}>Table Preview</NavItem>
 						</Nav>
 					</Col>
 				</Row>)
@@ -258,7 +257,7 @@ render() {
 			return (
 				<ChartsContainer datasetId={this.state.datasetId} fieldDefs={this.state.fieldDefs} rowLabel={rowLabel}/>
 				)
-		} else if(params.viewType == 'dictionary') {
+		} else if(params.viewType == 'details') {
 			return (
 				<DataDictionary fieldDefs={this.state.fieldDefs} />
 				)
