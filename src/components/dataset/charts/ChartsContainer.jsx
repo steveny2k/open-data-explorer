@@ -311,11 +311,15 @@ export default class ChartsContainer extends React.Component {
 						end = filter.endDate.format('YYYY-MM-DD')
 					query.where(filter.key + '>="' + start + '" and ' + filter.key + '<="' + end + '"')
 				} else if(filter.type === 'category' && filter.selected) {
-					query.where(filter.key + '="' + filter.selected + '"')
-				} else if(filter.type === 'checkbox' && filter.selected.length > 0) {
-					filter.selected.forEach(function(selection){
-
-					})
+					let joined = filter.selected
+					if(Array.isArray(filter.selected)) {
+						joined = filter.selected.join(' or ' + filter.key + '=')
+					}
+					query.where(filter.key + '=' + joined)
+				} else if(filter.type === 'checkbox' && filter.selected && filter.selected.length > 0 ) {
+					let join = filter.join || 'or',
+						joined = filter.selected.join(' ' + join + ' ')
+					query.where(joined)
 				}
 			}
 		}
