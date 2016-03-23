@@ -51,6 +51,7 @@ export default class ChartsContainer extends React.Component {
 		this._handleViewOptions = this._handleViewOptions.bind(this)
 		this._handleCompare = this._handleCompare.bind(this)
 		this.handleAddFilter = this.handleAddFilter.bind(this)
+		this.handleRemoveFilter = this.handleRemoveFilter.bind(this)
 		this.setFilter = this.setFilter.bind(this)
 		this._buildChartTitle = this._buildChartTitle.bind(this)
 		this._mergeFilter = this._mergeFilter.bind(this)
@@ -67,27 +68,18 @@ export default class ChartsContainer extends React.Component {
 		this.selectedCol = selectedCol
 		let fieldDefs = this.props.fieldDefs,
 			fieldIdx = _.findIndex(fieldDefs,{'key': selectedCol}),
-			fieldDef = this.fieldDef = fieldIdx !== -1 ? fieldDefs[fieldIdx] : null,
-			groupIdx = _.findIndex(fieldDefs,{'key': this.groupBy}),
-			groupDef = this.groupDef = groupIdx !== -1 ? fieldDefs[groupIdx] : null
+			fieldDef = this.fieldDef = fieldIdx !== -1 ? fieldDefs[fieldIdx] : null
 
-
-		if(fieldDef.type === 'calendar_date') {
-			this.setState({
-				filters: this.state.filters.concat(this._setDateFilter(fieldDef))
-			}, this._runQuery)
-		} else {
-			this._runQuery()
-		}
+		this._runQuery()
 	}
 
 	_toggleYearMonth() {
 		this.dateBy = this.state.dateBy == 'month' ? 'year' : 'month'
 		let filterIdx = _.findIndex(this.state.filters, {'key': this.fieldDef.key}),
-			filter = this.state.filters[filterIdx],
-			duration = moment.duration(filter.endDate - filter.startDate).asYears()
+			filter = this.state.filters[filterIdx]
+			//duration = moment.duration(filter.endDate - filter.startDate).asYears()
 
-		if (duration > 5 && this.state.dateBy === 'year') {
+		if (this.state.dateBy === 'year') {
 			let updatedFilter = {}
 			updatedFilter.startDate = defaultStartDate.month
 			updatedFilter.endDate = moment()
@@ -158,11 +150,45 @@ export default class ChartsContainer extends React.Component {
 			type: filterDef ? filterDef.type : 'checkbox'
 		}]
 
+		if(filterDef && filterDef.type === 'number') {
+			filter[0].min = parseInt(filterDef.smallest)
+			filter[0].max = parseInt(filterDef.largest)
+			filter[0].range = [parseInt(filterDef.smallest), parseInt(filterDef.largest)]
+		}
+
+		if(filterDef && filterDef.type === 'calendar_date') {
+			switch(this.dateBy) {
+				case 'year':
+				case 'month':
+					filter[0].startDate = moment(filterDef.smallest)
+					filter[0].endDate = moment(filterDef.largest)
+					break
+					/*
+				case 'month':
+					filter[0].startDate = moment().subtract(5,'years').startOf('year')
+					filter[0].endDate = moment(filterDef.largest)
+					break*/
+				default:
+					filter[0].startDate = moment().subtract(1,'year').startOf('year')
+					filter[0].endDate = moment(filterDef.largest)
+					break
+			}
+		}
+
 		if(_.findIndex(this.state.filters, {'key' : val.value}) === -1) {
 			this.setState({
 				filters: this.state.filters.concat(filter)
 			})
 		}
+	}
+
+	handleRemoveFilter(key) {
+		let fieldDefs = this.props.fieldDefs
+		let filterIdx = _.findIndex(this.state.filters, {'key': key})
+
+		this.setState({
+			filters: update(this.state.filters, {$splice: [[filterIdx, 1]]})
+		},this._runQuery)
 	}
 
 	setFilter(options) {
@@ -286,13 +312,13 @@ export default class ChartsContainer extends React.Component {
 				.where('label is not null')
 				.group('label')
 				.order('label')
-		} else if(fieldDef.type == 'category') {
+		} else if(fieldDef.type === 'category' || fieldDef.type === 'number') {
 			query = query
 				.select('count(*) as value')
 				.select(selectedCol + ' as label')
 				.group('label')
 				.order('value desc')
-		} else if(fieldDef.type == 'checkbox') {
+		} else if(fieldDef.type === 'checkbox') {
 			query = query
 				.select('sum(case('+selectedCol+'=false,1,true,0)) as '+selectedCol+'_false')
 				.select('sum(case('+selectedCol+'=true,1,true,0)) as '+selectedCol+'_true')
@@ -311,15 +337,20 @@ export default class ChartsContainer extends React.Component {
 						end = filter.endDate.format('YYYY-MM-DD')
 					query.where(filter.key + '>="' + start + '" and ' + filter.key + '<="' + end + '"')
 				} else if(filter.type === 'category' && filter.selected) {
-					let joined = filter.selected
+					let enclose = '"',
+						joined = filter.selected
 					if(Array.isArray(filter.selected)) {
-						joined = filter.selected.join(' or ' + filter.key + '=')
+						joined = filter.selected.join(enclose + ' or ' + filter.key + '=' + enclose)
 					}
-					query.where(filter.key + '=' + joined)
+					query.where(filter.key + '=' + enclose + joined + enclose)
 				} else if(filter.type === 'checkbox' && filter.selected && filter.selected.length > 0 ) {
 					let join = filter.join || 'or',
 						joined = filter.selected.join(' ' + join + ' ')
 					query.where(joined)
+				} else if(filter.type === 'number') {
+					let first = parseInt(filter.range[0]) - 1
+					let last = parseInt(filter.range[1]) + 1
+					query.where(filter.key + ' between "' + first + '" and "' + last + '"')
 				}
 			}
 		}
@@ -365,7 +396,7 @@ export default class ChartsContainer extends React.Component {
 			counts = []
 
 		var cols = fieldDefs.map(function(col,i){
-			if(col.type !== 'text' && col.type !== 'location') {
+			if((col.type !== 'text' && col.type !== 'location') && !col.pkey) {
 				return (
 					<Button key={i} bsSize="small" bsStyle="primary" onClick={handleColumnSelect.bind(this,col.key)}>{col.name}</Button>
 					)
@@ -415,7 +446,8 @@ export default class ChartsContainer extends React.Component {
 												handleGroupBy={this._handleGroupBy} 
 												handleViewOptions={this._handleViewOptions} 
 												handleCompare={this._handleCompare} 
-												handleAddFilter={this.handleAddFilter} 
+												handleAddFilter={this.handleAddFilter}
+												handleRemoveFilter={this.handleRemoveFilter} 
 												filters={this.state.filters}
 												setFilter={this.setFilter}/>
 		}

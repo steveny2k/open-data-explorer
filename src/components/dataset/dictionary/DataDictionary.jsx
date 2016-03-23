@@ -16,7 +16,8 @@ var humanType = {
 	'category': 'Category',
 	'checkbox': 'True/False',
 	'calendar_date': 'Date/Time',
-	'location': 'Latitude and Longitude'
+	'location': 'Latitude and Longitude',
+	'number': 'Number'
 }
 
 export default class DataDictionary extends React.Component {

@@ -10,12 +10,12 @@ export default class DatasetItem extends React.Component {
 
 	render() {
 		let {dataset} = this.props,
-			{id, _highlightResult, name} = dataset,
+			{systemID, _highlightResult, name} = dataset,
 			description = dataset.description,
 			highlightedName = _highlightResult.name.value
 
 		var category = dataset.category || 'dataset'
-		var path = '/' + slugify(category) + '/' + slugify(name) + '/' + id
+		var path = '/' + slugify(category) + '/' + slugify(name) + '/' + systemID
 		var link = <Link to={`${path}`}>{name}</Link>
 		return(
 				<Row>

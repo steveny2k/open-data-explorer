@@ -6,6 +6,7 @@ import _ from 'lodash'
 import FilterDateTime from './filters/FilterDateTime.jsx'
 import FilterCategory from './filters/FilterCategory.jsx'
 import FilterBoolean from './filters/FilterBoolean.jsx'
+import FilterNumeric from './filters/FilterNumeric.jsx'
 
 const notFilters = ['text','checkbox','location','url']
 
@@ -16,7 +17,7 @@ export default class ChartFilters extends React.Component {
 
 	render() {
 
-		let {fieldDefs, groupBy, handleAddFilter, filters, onFilter, dateBy} = this.props,
+		let {fieldDefs, groupBy, handleAddFilter, filters, onFilter, dateBy, handleRemoveFilter} = this.props,
 			checkboxes = false, checkboxOptions = []
 
 
@@ -24,10 +25,13 @@ export default class ChartFilters extends React.Component {
 			if(option.type == 'checkbox') {
 				checkboxes = true
 			}
-			if(notFilters.indexOf(option.type) !== -1) {
+			if(notFilters.indexOf(option.type) > -1) {
 				return false
 			}
-			if(groupBy == option.key) {
+			if(option.pkey) {
+				return false
+			}
+			if(_.findIndex(filters, {'key': option.key}) > -1) {
 				return false
 			}
 			return true
@@ -41,7 +45,10 @@ export default class ChartFilters extends React.Component {
 		})
 
 		if(checkboxes) {
-			options.push({value: 'checkboxes', label: 'Checkboxes (true/false)'})
+			if( _.findIndex(filters, {'key': 'checkboxes'}) === -1) {
+				options.push({value: 'checkboxes', label: 'Checkboxes (true/false)'})
+			}
+
 			checkboxOptions = fieldDefs.filter(function(option) {
 				if(option.type === 'checkbox') {
 					return true
@@ -82,13 +89,16 @@ export default class ChartFilters extends React.Component {
 					case 'checkbox':
 						filterContent = <FilterBoolean key={filter.key} options={checkboxOptions} onFilter={onFilter} filter={filter} />
 						break
+					case 'number':
+						filterContent = <FilterNumeric key={filter.key} min={filter.min} max={filter.max} range={filter.range} filter={filter} onFilter={onFilter}/>
+						break
 					default:
 						filterContent = null
 					}
 
 				let filterOption = (<Well bsSize="small" className="filter" key={filter.key}>
 					<div className="filter-content">
-					<Button className="close">&times;</Button>
+					<Button className="close" onClick={handleRemoveFilter.bind(this,filter.key)}>&times;</Button>
 					<h4>{filter.name}</h4>
 						{filterContent}
 					</div>

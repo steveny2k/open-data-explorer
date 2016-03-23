@@ -17,7 +17,9 @@ import DatasetMap from './DatasetMap.jsx'
 import ChartsContainer from './charts/ChartsContainer.jsx'
 import DataDictionary from './dictionary/DataDictionary.jsx'
 
-var viewOptions = ['overview','details','charts','map','table']
+const viewOptions = ['overview','details','charts','map','table']
+//since only a handful of categories may be numeric, setting an array here to reduce the API call overhead - we should likely encode these as text anyway in the dataset
+const numericCategories = ['supervisor_district']
 
 export default class Dataset extends React.Component {
 
@@ -90,11 +92,13 @@ export default class Dataset extends React.Component {
 			var fieldDefs = []
 			request.get(viewUrl, function(err, response){
 				var viewDef = response.body
+				var pkey = response.body.rowIdentifierColumnId || null
 				viewDef.columns.map(function(column){
 					var colDef = {}
 					//exclude system calculated fields
 					if(!column.fieldName.includes(':@')) {
 						colDef.id = column.id
+						colDef.pkey = (pkey == colDef.id ? true : false)
 						colDef.key = column.fieldName
 						colDef.name = column.name.replace(/[_-]/g, " ")
 						colDef.type = column.dataTypeName
@@ -132,7 +136,7 @@ export default class Dataset extends React.Component {
 loadColumnProps() {
 	var fieldDefsUpdated = this.newState.fieldDefs
 	fieldDefsUpdated.forEach(function(column,i){
-		if (column.type == 'text' || column.type == 'number') {
+		if (column.type == 'text' || numericCategories.indexOf(column.key) > -1) {
 			let colKey = column.key == 'category' ? 'category' :  column.key + ' as category'
 			let select = column.type == 'text' ? '$select=count(*), ' + colKey : '$select=count(*),' + column.key + ' as category'
 			let groupBy = '$group=category'

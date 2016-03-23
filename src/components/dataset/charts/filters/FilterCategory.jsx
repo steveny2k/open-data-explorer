@@ -50,7 +50,7 @@ export default class FilterCategory extends React.Component {
             <input
                 type="radio"
                 value="false"
-                name="category_multi"
+                name={filter.key + "_multi"}
                 defaultChecked
                 onClick={this.onFilter.bind(this,{multi: false})}
             /> Single Option
@@ -59,7 +59,7 @@ export default class FilterCategory extends React.Component {
             <input
                 type="radio"
                 value="and"
-                name="category_multi"
+                name={filter.key + "_multi"}
                 onClick={this.onFilter.bind(this,{multi: true})}
             /> Multiple Options
         </label>

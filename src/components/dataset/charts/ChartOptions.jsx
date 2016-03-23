@@ -59,7 +59,7 @@ export default class ChartOptions extends React.Component {
 		//
 		const format = 'MM/DD/YYYY';
 		
-		let {fieldDefs, handleGroupBy, handleViewOptions, handleCompare, handleAddFilter, chartDef, counts, order, filters, setFilter, ...props} = this.props,
+		let {fieldDefs, handleGroupBy, handleViewOptions, handleCompare, handleAddFilter, chartDef, counts, order, filters, setFilter, handleRemoveFilter, ...props} = this.props,
 			{rangePicker} = this.state,
 			alert = null, 
 			categories = _.filter(fieldDefs, {'type': 'category'}),
@@ -119,7 +119,13 @@ export default class ChartOptions extends React.Component {
     		{alert}
     		{quickViewOptions}
     		{compareOptions}
-    	<ChartFilters fieldDefs={fieldDefs} groupBy={chartDef.groupBy} dateBy={chartDef.dateBy} handleAddFilter={handleAddFilter} onFilter={setFilter} filters={filters} />
+    	<ChartFilters fieldDefs={fieldDefs} 
+    		groupBy={chartDef.groupBy} 
+    		dateBy={chartDef.dateBy} 
+    		handleAddFilter={handleAddFilter} 
+    		handleRemoveFilter={handleRemoveFilter}
+    		onFilter={setFilter} 
+    		filters={filters} />
     	</div>
 			)
 	}

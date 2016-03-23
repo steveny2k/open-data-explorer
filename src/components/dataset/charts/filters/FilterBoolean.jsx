@@ -38,7 +38,7 @@ export default class FilterCategory extends React.Component {
             <input
                 type="radio"
                 value="or"
-                name="checkbox_join"
+                name={filter.key + "_join"}
                 defaultChecked
                 onClick={this.onFilter.bind(this,{filterJoin: 'or'})}
             /> Any
@@ -47,7 +47,7 @@ export default class FilterCategory extends React.Component {
             <input
                 type="radio"
                 value="and"
-                name="checkbox_join"
+                name={filter.key + "_join"}
                 onClick={this.onFilter.bind(this,{filterJoin: 'and'})}
             /> All
         </label>

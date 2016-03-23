@@ -14,15 +14,15 @@ import DatasetFacets from './DatasetFacets.jsx'
 const client = search('N6IVMSP2S4', '3bd0fc517f80911bf21045747262a1bd')
 const helper = searchHelper(
 	client,
-	'dev_catalog', {
-		facets: ['metadata.custom_fields.Department Metrics.Publishing Department','flags'],
-		disjunctiveFacets: ['category','displayType']
+	'dev_dataset_search', {
+		facets: ['publishing_dept'],
+		disjunctiveFacets: ['category']
 	}
 )
 
 const facetIndex = {
 	'categories' : 'category',
-	'departments' : 'metadata.custom_fields.Department Metrics.Publishing Department'
+	'departments' : 'publishing_dept'
 }
 
 export default class DatasetBrowse extends React.Component {
@@ -65,7 +65,7 @@ export default class DatasetBrowse extends React.Component {
 	_updateResults(content) {
 		console.log(content)
 		var facets = {}
-		facets.departments = content.getFacetValues('metadata.custom_fields.Department Metrics.Publishing Department')
+		facets.departments = content.getFacetValues('publishing_dept')
 		facets.categories = content.getFacetValues('category')
 		console.log(facets.departments)
 		this.setState({
@@ -113,10 +113,7 @@ export default class DatasetBrowse extends React.Component {
 		  console.error(err);
 		})
 
-		helper.addDisjunctiveFacetRefinement('displayType', 'table')
-			.addDisjunctiveFacetRefinement('displayType', 'map')
-			.addFacetRefinement('flags','default')
-			.setQuery('')
+		helper.setQuery('')
 			.search()
 	}
 
