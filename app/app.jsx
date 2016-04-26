@@ -1,21 +1,24 @@
-require('./app.scss');
+import './favicon.ico'
+import './index.html'
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Router, Route, browserHistory, hashHistory } from 'react-router'
+import React from 'react'
+import { render } from 'react-dom'
+import { hashHistory } from 'react-router'
+import { syncHistoryWithStore } from 'react-router-redux'
+import Root from './containers/Root'
+import configureStore from './store/configureStore'
 
-import Dataset from './components/dataset/Dataset.jsx'
-import DatasetBrowse from './components/search/DatasetBrowse.jsx'
+const initialState = {
+  dataset: {
+    query: {
+      dateBy: 'year'
+    }
+  }
+}
+const store = configureStore(initialState)
+const history = syncHistoryWithStore(hashHistory, store)
 
-ReactDOM.render((
-  <Router history={hashHistory}>
-    <Route path="/" component={DatasetBrowse}>
-    	<Route path="browse" component={DatasetBrowse}/>
-    	<Route path=":num" component={DatasetBrowse}/>
-    </Route>
-    <Route path="/:category/:title/:id" component={Dataset}>
-    	<Route path=":viewType" component={Dataset}/>
-    </Route>
-    <Route path="*" component={Dataset}/>
-  </Router>
-), document.getElementById('app'))
+render(
+  <Root store={store} history={history} />,
+  document.getElementById('app')
+)
