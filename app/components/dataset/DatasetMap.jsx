@@ -5,7 +5,7 @@ import request from 'superagent'
 import _ from 'lodash'
 
 export default class DatasetMap extends React.Component {
-	constructor(props){
+	constructor (props){
 		super(props)
 
 		this.aggregatePoints = this.aggregatePoints.bind(this)
@@ -47,7 +47,7 @@ export default class DatasetMap extends React.Component {
 	}
 
 	_loadInitialGrid() {
-		
+
 	}
 
 	//on moveend
@@ -106,7 +106,7 @@ export default class DatasetMap extends React.Component {
 					//var expanded = this.aggregatePoints(hexgrid,geojson)
 					var breaks = turf.jenks(counted, 'count', 5);
 					var colors = ['#ffffd4','#fed98e','#fe9929','#d95f0e','#993404']
-					
+
 					sourceObj.setData(counted)
 
 					this.map.addSource('hexgrid', sourceObj)
@@ -206,7 +206,7 @@ this.map.on('moveend', function(e) {
 			    				})
 			    			}
 			    		}
-}.bind(this))	    	
+}.bind(this))
 }
 prevZ = z
 }.bind(this))

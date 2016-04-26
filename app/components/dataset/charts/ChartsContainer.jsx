@@ -204,14 +204,17 @@ export default class ChartsContainer extends React.Component {
   }
 
   _dataSuccessHandler (rows) {
-    let fieldDef = this.fieldDef, groupBy = this.groupBy,
-      data = [],
-      keys = []
+    let fieldDef = this.fieldDef
+    let groupBy = this.groupBy
+    let data = []
+    let keys = []
+    let selectedCol = this.selectedCol
+
     // pre-process returned data if necessary
     if (fieldDef.type === 'checkbox') {
       // data returned from checkboxes needs to be pre-processed a little
-      var trueKey = this.selectedCol + '_true'
-      var falseKey = this.selectedCol + '_false'
+      var trueKey = selectedCol + '_true'
+      var falseKey = selectedCol + '_false'
       for (var i = 0; i < rows.length; i++) {
         var label = rows.length > 1 ? rows[i][groupBy] : fieldDef.name
         label = typeof label === 'undefined' ? 'Unknown' : label
@@ -227,6 +230,18 @@ export default class ChartsContainer extends React.Component {
       var dataRows = []
       // if not a checkbox, but more than 2 records, then a groupby is being used and it needs to be pre-processed
       //
+      var labels = rows.map(function (row) {
+        if (typeof row.label === 'undefined') {
+          return 'Unknown'
+        } else {
+          return row.label
+        }
+      }).filter(function (elem, index, array) {
+        return array.indexOf(elem) === index
+      })
+
+      labels = ['x'].concat(labels)
+
       keys = rows.map(function (row) {
         if (typeof row[groupBy] === 'undefined') {
           return 'Unknown'
@@ -237,34 +252,19 @@ export default class ChartsContainer extends React.Component {
         return array.indexOf(elem) === index
       })
 
-      keys = ['x'].concat(keys)
-
-      var labels = rows.map(function (row) {
-        if (typeof row.label === 'undefined') {
-          return 'Unknown'
-        } else {
-          return row.label
-        }
-      }).filter(function (elem, index, array) {
-        return array.indexOf(elem) === index
-      })
-      console.log(labels)
-
-      labels.forEach(function (label, index, array) {
-        let row = Array.apply(null, new Array(keys.length - 1)).map(Number.prototype.valueOf, 0)
-        row = [label].concat(row)
+      keys.forEach(function (key, index, array) {
+        let row = Array.apply(null, new Array(labels.length - 1)).map(Number.prototype.valueOf, 0)
+        row = [key].concat(row)
         dataRows.push(row)
       })
 
       rows.forEach(function (row, index, array) {
         var label = row.label || 'Unknown'
         var key = row[groupBy] || 'Unknown'
-        console.log(row.value)
-        console.log(row)
-        dataRows[labels.indexOf(label)][keys.indexOf(key)] = row.value
+        dataRows[keys.indexOf(key)][labels.indexOf(label)] = row.value
       })
 
-      data = [keys].concat(dataRows)
+      data = [labels].concat(dataRows)
     } else {
       data = [{
         key: this.props.rowLabel,
@@ -443,11 +443,7 @@ export default class ChartsContainer extends React.Component {
       let groupDef = groupByIdx !== -1 ? fieldDefs[groupByIdx] : null
       let type = 'bar'
       if (fieldDef.type === 'calendar_date') {
-        type = 'timeseries'
-      } else if (fieldDef.type === 'checkbox') {
-        type = 'multiBarGroup'
-      } else if (fieldDef.type === 'category' && groupBy) {
-        type = 'multiBar'
+        type = 'area'
       }
 
       if (groupDef) {
@@ -461,6 +457,7 @@ export default class ChartsContainer extends React.Component {
         groupBy: this.state.groupBy,
         dateBy: this.state.dateBy,
         type: type,
+        fieldType: fieldDef.type,
         title: title,
         viewOption: viewOptions[this.state.viewOption]
       }

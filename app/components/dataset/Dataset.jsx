@@ -1,4 +1,4 @@
-require('./dataset.scss')
+require('./_Dataset.scss')
 
 import React from 'react'
 import { Grid, Row, Col, Nav, NavItem, Button } from 'react-bootstrap'
@@ -10,12 +10,12 @@ import soda from 'soda-js'
 import pluralize from 'pluralize'
 // might be best to use underscore inflector for both titleize and pluralize (among other transforms) - https://github.com/jeremyruppel/underscore.inflection
 
-import DownloadLinks from './DownloadLinks.jsx'
-import DataTable from './DataTable.jsx'
-import DatasetMap from './DatasetMap.jsx'
-import ChartsContainer from './charts/ChartsContainer.jsx'
-import DataDictionary from './dictionary/DataDictionary.jsx'
-import Login from '../home/Login.jsx'
+import DownloadLinks from './DownloadLinks'
+import DataTable from './DataTable'
+import DatasetMap from './DatasetMap'
+import ChartsContainer from './Charts/ChartsContainer'
+import DataDictionary from './Details/DataDictionary'
+import Overview from './Overview/Overview'
 
 const viewOptions = ['overview', 'details', 'charts', 'map', 'table']
 // since only a handful of categories may be numeric, setting an array here to reduce the API call overhead - we should likely encode these as text anyway in the dataset
@@ -221,7 +221,6 @@ export default class Dataset extends React.Component {
   }
 
   render () {
-    'use strict'
     let {viewDef} = this.state
     let {rowsUpdatedAt, name, license, metadata} = viewDef
     let dayUpdated = moment.unix(rowsUpdatedAt).format('MM/DD/YYYY hh:mm A')
@@ -230,7 +229,9 @@ export default class Dataset extends React.Component {
     let licenseLink = ''
 
     if (license) {
-      licenseLink = <a href={license.termsLink} target='_blank'>{license.name}</a>
+      licenseLink = <a href={license.termsLink} target='_blank'>
+                      {license.name}
+                    </a>
     }
 
     var active = _.indexOf(viewOptions, this.state.viewType)
@@ -238,29 +239,29 @@ export default class Dataset extends React.Component {
                                     Map
                                   </NavItem> : null
     var tabs = (
-      <Row>
-        <Col sm={12}>
-          <Nav
-            bsStyle='tabs'
-            justified
-            activeKey={active}
-            onSelect={this.handleTabSelect}>
-            <NavItem eventKey={0}>
-              Overview
-            </NavItem>
-            <NavItem eventKey={1}>
-              Dataset Details
-            </NavItem>
-            <NavItem eventKey={2}>
-              Charts
-            </NavItem>
-            {mapTab}
-            <NavItem eventKey={4}>
-              Table Preview
-            </NavItem>
-          </Nav>
-        </Col>
-      </Row>)
+    <Row>
+      <Col sm={12}>
+      <Nav
+        bsStyle='tabs'
+        justified
+        activeKey={active}
+        onSelect={this.handleTabSelect}>
+        <NavItem eventKey={0}>
+          Overview
+        </NavItem>
+        <NavItem eventKey={1}>
+          Dataset Details
+        </NavItem>
+        <NavItem eventKey={2}>
+          Charts
+        </NavItem>
+        {mapTab}
+        <NavItem eventKey={4}>
+          Table Preview
+        </NavItem>
+      </Nav>
+      </Col>
+    </Row>)
 
     var returnContent = function (params) {
       if (params.viewType === 'map') {
@@ -274,6 +275,10 @@ export default class Dataset extends React.Component {
       } else if (params.viewType === 'details') {
         return (
         <DataDictionary fieldDefs={this.state.fieldDefs} />
+        )
+      } else if (params.viewType === 'overview') {
+        return (
+        <Overview fieldDefs={this.state.fieldDefs} />
         )
       } else {
         return (
@@ -304,41 +309,41 @@ export default class Dataset extends React.Component {
       )
     } else {
       return (
-        <Grid fluid id='main-container'>
-          <Row id='header'>
-            <Col sm={12}>
-              <h1>{name}</h1>
-            </Col>
-            <Col sm={9}>
-              <DownloadLinks domain={this.state.domain} datasetId={this.state.datasetId} />
-              <Button bsStyle='primary' href={apiLink} target='_blank'>
-                API
-              </Button>
-              <p>
-                {this.state.viewDef.description}
-              </p>
-            </Col>
-            <Col sm={3}>
-              <b>Publishing Department:</b>
-              {metadata.custom_fields['Department Metrics']['Publishing Department']}
-              <br/>
-              <b>License:</b>
-              {licenseLink}
-              <br/>
-              <b>Number of Rows:</b>
-              {this.state.numRows}
-              <br/>
-              <b>Data Last Updated:</b>
-              {dayUpdated}
-            </Col>
-          </Row>
+      <Grid fluid id='main-container'>
+        <Row id='header'>
+          <Col sm={12}>
+          <h1>{name}</h1>
+          </Col>
+          <Col sm={9}>
+          <DownloadLinks domain={this.state.domain} datasetId={this.state.datasetId} />
+          <Button bsStyle='primary' href={apiLink} target='_blank'>
+            API
+          </Button>
+          <p>
+            {this.state.viewDef.description}
+          </p>
+          </Col>
+          <Col sm={3}>
+          <b>Publishing Department:</b>
+          {metadata.custom_fields['Department Metrics']['Publishing Department']}
+          <br/>
+          <b>License:</b>
+          {licenseLink}
+          <br/>
+          <b>Number of Rows:</b>
+          {this.state.numRows}
+          <br/>
+          <b>Data Last Updated:</b>
+          {dayUpdated}
+          </Col>
+        </Row>
         {tabs}
-          <Row>
-            <Col sm={12} id='content'>
-            {content}
-            </Col>
-          </Row>
-        </Grid>
+        <Row>
+          <Col sm={12} id='content'>
+          {content}
+          </Col>
+        </Row>
+      </Grid>
       )
     }
   }
