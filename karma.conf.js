@@ -1,54 +1,24 @@
-var webpack = require('webpack');
-
 module.exports = function (config) {
   config.set({
-    browsers: [ 'Chrome' ], //run in Chrome
-    singleRun: true, //just run once by default
-    frameworks: [ 'mocha' ], //use the mocha test framework
+    basePath: '',
+    frameworks: ['source-map-support', 'mocha', 'sinon'],
     files: [
-      'tests.webpack.js' //just load this file
+      'app/app.tests.js'
     ],
-    plugins: [ 'karma-chrome-launcher', 'karma-chai', 'karma-mocha',
-      'karma-sourcemap-loader', 'karma-webpack', 'karma-coverage',
-      'karma-mocha-reporter'
-    ],
+    exclude: [],
     preprocessors: {
-      'tests.webpack.js': [ 'webpack', 'sourcemap' ] //preprocess with webpack and our sourcemap loader
+      'app/app.tests.js': ['webpack', 'sourcemap']
     },
-    reporters: [ 'mocha', 'coverage' ], //report results in this format
-    webpack: { //kind of a copy of your webpack config
-      devtool: 'inline-source-map', //just do inline source maps instead of the default
-      module: {
-        loaders: [
-          { test: /\.jsx?$/, 
-            exclude: /node_modules/, 
-            loader: 'babel-loader' },
-          {
-            test: /\.css$/,
-            loader: 'style!' + 'css?sourceMap' + '!postcss?sourceMap'
-          },
-          {
-            test: /\.scss$/,
-            loader: 'style!' + 'css?sourceMap' + '!postcss?sourceMap' + '!sass?sourceMap'
-          }
-        ]/*,
-        preLoaders: [{
-          test: /\.jsx?$/,
-          exclude: /(node_modules|test)\//,
-          loader: 'isparta-instrumenter-loader'}]/*,
-        postLoaders: [ { //delays coverage til after tests are run, fixing transpiled source coverage error
-            test: /\.(js|jsx)$/,
-            exclude: /(test|node_modules|bower_components)\//,
-            loader: 'istanbul-instrumenter' } ]
-        }*/
-      }
-    },
-    webpackServer: {
-      noInfo: true //please don't spam the console when running in karma!
-    },
-    coverageReporter: {
-      type: 'html', //produces a html document after code is run
-      dir: 'coverage/' //path to created html doc
+    reporters: ['mocha'],
+    port: 9876,
+    colors: true,
+    logLevel: config.LOG_INFO,
+    autoWatch: true,
+    browsers: ['PhantomJS'],
+    singleRun: false,
+    webpack: require('./webpack/config.test'),
+    webpackMiddleware: {
+      noInfo: true
     }
-  });
-};
+  })
+}

@@ -150,7 +150,7 @@ let C3Chart = React.createClass({
 		if(this.props.data.length > 1) {
 			graphObjectData = {
 				x: 'x',
-				columns: this.multiDmsDataPreparator(this.props.data)
+				columns: Array.isArray(this.props.data) ? this.props.data : this.multiDmsDataPreparator(this.props.data)
 			}
 		} else {
 			graphObjectData = {
@@ -254,6 +254,7 @@ let C3Chart = React.createClass({
 			return row;
 		});
 		data.push(xLabels);
+		console.log(data)
 		return data;
 	},
 
