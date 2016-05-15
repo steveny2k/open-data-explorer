@@ -1,8 +1,8 @@
 {
-  "name": "react-seed",
-  "version": "0.0.16",
-  "description": "Seed project for React apps using ES6 & webpack.",
-  "repository": "https://github.com/badsyntax/react-seed",
+  "name": "open-data-explorer",
+  "version": "0.0.1",
+  "description": "React based application to explore open datasets interactively.",
+  "repository": "https://github.com/DataSF/open-data-explorer",
   "license": "MIT",
   "config": {
     "buildDir": "./build",
