@@ -3,6 +3,9 @@ import Select from 'react-select'
 import { Well, Button } from 'react-bootstrap'
 import _ from 'lodash'
 
+import FilterDateTime from './FilterDateTime'
+import FilterCategory from './FilterCategory'
+
 class ChartFilters extends Component {
   constructor (props) {
     super(props)
@@ -10,7 +13,7 @@ class ChartFilters extends Component {
   }
 
   renderFilterList () {
-    let { filters, columns, handleRemoveFilter } = this.props
+    let { filters, columns, handleRemoveFilter, applyFilter } = this.props
 
     let filterOptions = Object.keys(filters).map((key) => {
       let filter = columns[key]
@@ -19,10 +22,15 @@ class ChartFilters extends Component {
 
       switch (filterType) {
         case 'calendar_date':
-          filterContent = <div>calendar</div>
+          let startDate = filters[key].options ? filters[key].options.min : filter.min
+          let endDate = filters[key].options ? filters[key].options.max : filter.max
+          filterContent = <FilterDateTime key={filter.key} fieldKey={filter.key} startDate={startDate} endDate={endDate} applyFilter={applyFilter}/>
           break
         case 'category':
-          filterContent = <div>category</div>
+          let optionsForFilter = filter.categories.map(function (record) {
+            return { label: record.category, value: record.category }
+          })
+          filterContent = <FilterCategory key={filter.key} fieldKey={filter.key} options={optionsForFilter} applyFilter={applyFilter} filter={filters[key]} />
           break
         case 'checkbox':
           filterContent = <div>checkbox</div>

@@ -139,6 +139,14 @@ export function removeFilter (key) {
     key
   }
 }
+
+export function applyFilter (key, options) {
+  return {
+    type: APPLY_FILTER,
+    key,
+    options
+  }
+}
 // set selectCol to key
 // build query based on state including selectedCol
 //

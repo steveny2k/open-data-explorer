@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { selectColumn, groupBy, addFilter, removeFilter } from '../actions'
+import { selectColumn, groupBy, addFilter, removeFilter, applyFilter } from '../actions'
 import Charts from '../components/Charts'
 
 const mapStateToProps = (state, ownProps) => {
@@ -8,6 +8,10 @@ const mapStateToProps = (state, ownProps) => {
     dataset
   }
 }
+
+// Note: if we split up action creators, we can probably simplify the mapping, but for now this works
+// https://github.com/reactjs/react-redux/blob/master/docs/api.md
+// https://reactcommunity.org/redux/docs/api/bindActionCreators.html
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
@@ -22,6 +26,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     handleRemoveFilter: (key) => {
       return dispatch(removeFilter(key))
+    },
+    applyFilter: (key, options) => {
+      return dispatch(applyFilter(key, options))
     }
   }
 }

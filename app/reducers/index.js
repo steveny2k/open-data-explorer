@@ -1,4 +1,4 @@
-import { METADATA_SUCCESS, SELECT_COLUMN, COUNT_SUCCESS, MIGRATION_SUCCESS, COLPROPS_SUCCESS, DATA_SUCCESS, GROUP_BY, ADD_FILTER, REMOVE_FILTER } from '../actions'
+import { METADATA_SUCCESS, SELECT_COLUMN, COUNT_SUCCESS, MIGRATION_SUCCESS, COLPROPS_SUCCESS, DATA_SUCCESS, GROUP_BY, ADD_FILTER, REMOVE_FILTER, APPLY_FILTER } from '../actions'
 import { routerReducer as routing } from 'react-router-redux'
 import { combineReducers } from 'redux'
 import merge from 'lodash/merge'
@@ -6,6 +6,8 @@ import union from 'lodash/union'
 // import merge from 'lodash/merge'
 
 function dataset (state = { columns: {}, query: {} }, action) {
+  let copyState
+
   if (action.response) {
     switch (action.type) {
       case COUNT_SUCCESS:
@@ -49,10 +51,20 @@ function dataset (state = { columns: {}, query: {} }, action) {
         }
       })
     case REMOVE_FILTER:
-      let copyState = {...state}
+      copyState = {...state}
       delete copyState.query.filters[action.key]
-      console.log(state)
       return merge({}, state, copyState)
+    case APPLY_FILTER:
+      let updatedOptions = {
+        query: {
+          filters: {
+            [action.key]: {
+              options: action.options
+            }
+          }
+        }
+      }
+      return merge({}, state, updatedOptions)
     default:
       return state
   }
