@@ -36,7 +36,7 @@ class Charts extends Component {
   }
 
   renderChartArea (props) {
-    let { dataset, handleGroupBy, handleAddFilter, handleRemoveFilter, applyFilter } = this.props
+    let { dataset, handleGroupBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter } = this.props
     let { columns, query, ...other } = dataset
     let otherProps = {...other}
 
@@ -59,7 +59,8 @@ class Charts extends Component {
             handleGroupBy={handleGroupBy}
             handleAddFilter={handleAddFilter}
             handleRemoveFilter={handleRemoveFilter}
-            applyFilter={applyFilter} />
+            applyFilter={applyFilter}
+            updateFilter={updateFilter} />
         </Col>
       </Row>)
       : false

@@ -7,7 +7,7 @@ import ChartFilters from './ChartFilters'
 
 class ChartOptions extends Component {
   render () {
-    let {columns, groupBy, handleGroupBy, handleAddFilter, handleRemoveFilter, filters, applyFilter} = this.props
+    let {columns, groupBy, handleGroupBy, handleAddFilter, handleRemoveFilter, filters, applyFilter, updateFilter} = this.props
     let groupableColumns
 
     if (columns) {
@@ -32,7 +32,8 @@ class ChartOptions extends Component {
           filters={filters}
           handleAddFilter={handleAddFilter}
           handleRemoveFilter={handleRemoveFilter}
-          applyFilter={applyFilter}/>
+          applyFilter={applyFilter}
+          updateFilter={updateFilter}/>
       </div>
     )
   }

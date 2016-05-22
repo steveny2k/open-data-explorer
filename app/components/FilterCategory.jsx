@@ -11,7 +11,7 @@ class FilterCategory extends Component {
   onFilter (value) {
     value = value || []
     let options = {}
-    let { filter } = this.props
+    let { filter, applyFilter } = this.props
     let selected = filter.options ? filter.options.selected : null
 
     if (typeof value.multi !== 'undefined') {
@@ -24,7 +24,7 @@ class FilterCategory extends Component {
         return option.value
       }) : (!Array.isArray(value) ? value.value : null)
     }
-    this.props.applyFilter(this.props.fieldKey, options)
+    applyFilter(this.props.fieldKey, options)
   }
 
   render () {

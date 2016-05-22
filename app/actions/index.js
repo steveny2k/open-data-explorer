@@ -124,6 +124,7 @@ export function groupBy (key) {
 
 export const ADD_FILTER = 'ADD_FILTER'
 export const REMOVE_FILTER = 'REMOVE_FILTER'
+export const UPDATE_FILTER = 'UPDATE_FILTER'
 export const APPLY_FILTER = 'APPLY_FILTER'
 
 export function addFilter (key) {
@@ -137,6 +138,14 @@ export function removeFilter (key) {
   return {
     type: REMOVE_FILTER,
     key
+  }
+}
+
+export function updateFilter (key, options) {
+  return {
+    type: UPDATE_FILTER,
+    key,
+    options
   }
 }
 
