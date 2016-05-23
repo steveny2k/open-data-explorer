@@ -14,24 +14,34 @@ The very quick getting started guide
 The code structure reflects a [redux pattern for managing state in a javascript application](http://redux.js.org/).
 
 ### actions
+Actions are payloads of information that send data from your application to your store. They are the only source of information for the store. You send them to the store using store.dispatch()
 
-### components - components are similar to views in that they define the rendering of the app. These components are tied to root containers, which define the application logic.
+### components
+components are similar to views in that they define the rendering of the app. These components are tied to root containers, which define the application logic.
 
-### constants - app constants as needed, things like API roots, etc.
+### constants
+app constants as needed, things like API roots, etc.
 
-### containers - containers are a special kind of component. Some people call these smart components, skinny components, controller components. Whatever you call them, they basically define the application logic and pass actions and state down to the components.
+### containers
+containers are a special kind of component. Some people call these smart components, skinny components, controller components. Whatever you call them, they basically define the application logic and pass actions and state down to the components.
 
-### middleware - this is where all of the specific functions related to external API calls (e.g. Socrata) live.
+### middleware
+this is where all of the specific functions related to external API calls (e.g. Socrata) live.
 
-### reducers - per the redux approach, reducers change the state based on actions. All state change logic lives in reducers.
+### reducers
+per the redux approach, reducers change the state based on actions. All state change logic lives in reducers.
 
-### scss - styles
+### scss
+styles
 
-### store - the store holds the whole state tree of the application. A store is not a class; it's just an object with a few methods on it.
+### store
+the store holds the whole state tree of the application. A store is not a class; it's just an object with a few methods on it.
 
-### app.jsx - the entry point for the application
+### app.jsx
+the entry point for the application
 
-### routes.jsx -
+### routes.jsx
+the routes for the application, the routes point to containers, which then delegate props to their children
 
 
 ## Contributing
