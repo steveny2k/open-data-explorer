@@ -26,7 +26,7 @@ class ChartCanvas extends Component {
     return (<h2>{capitalize(title, true)}</h2>)
   }
 
-  rDateToggle () {
+  renderDateToggle () {
     let {dateBy, changeDateBy} = this.props
     let monthActive = dateBy === 'month' ? 'active' : ''
     let yearActive = dateBy === 'year' ? 'active' : ''
@@ -98,7 +98,7 @@ class ChartCanvas extends Component {
 
     if (type === 'calendar_date') {
       options.timeseries = true
-      toggle = this.rDateToggle()
+      toggle = this.renderDateToggle()
     } else if (type === 'checkbox') {
       options.stacked = true
     }
