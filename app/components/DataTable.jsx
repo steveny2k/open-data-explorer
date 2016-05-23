@@ -14,7 +14,7 @@ function reverseSortDirection (sortDir) {
   return sortDir === SortTypes.DESC ? SortTypes.ASC : SortTypes.DESC
 }
 
-class SortHeaderCell extends React.Component {
+class SortHeaderCell extends Component {
   constructor (props) {
     super(props)
 
@@ -47,7 +47,7 @@ class SortHeaderCell extends React.Component {
   }
 }
 
-class DynamicCell extends React.Component {
+class DynamicCell extends Component {
   render () {
     const { rowIndex, field, data, type, ...props } = this.props
     let content
@@ -128,7 +128,7 @@ class DataTable extends Component {
           ellipsis
           onSelect={this.props.handlePagination} />
       </div>
-			);
+			)
 	}
 }
 
