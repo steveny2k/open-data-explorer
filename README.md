@@ -9,6 +9,15 @@ The very quick getting started guide
 4. npm start
 5. http://localhost:8000
 
+## Libraries
+You can see all the libraries in use in package.json. Digging in, you should probably become familiar with the following:
+
+- [ReactJS](https://facebook.github.io/react/)
+- [ReduxJS](http://redux.js.org/)
+- [React-Router](https://github.com/reactjs/react-router)
+- [Webpack](https://webpack.github.io/)
+- [Babel](http://babeljs.io/)
+
 ## Code Structure
 
 The code structure reflects a [redux pattern for managing state in a javascript application](http://redux.js.org/).
@@ -73,3 +82,7 @@ The following are the **types** we use:
 - feature/: for adding features to the system
 - docs/: for making changes/updates to documentation
 
+
+### Tests
+
+Coming soon
