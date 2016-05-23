@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { selectColumn, groupBy, addFilter, removeFilter, applyFilter, updateFilter } from '../actions'
+import { selectColumn, groupBy, addFilter, removeFilter, applyFilter, updateFilter, changeDateBy } from '../actions'
 import Charts from '../components/Charts'
 
 const mapStateToProps = (state, ownProps) => {
@@ -32,6 +32,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     updateFilter: (key, options) => {
       return dispatch(updateFilter(key, options))
+    },
+    changeDateBy: (dateBy) => {
+      return dispatch(changeDateBy(dateBy))
     }
   }
 }

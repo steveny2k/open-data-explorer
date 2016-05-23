@@ -2,6 +2,7 @@ require('c3/c3.css')
 
 import React, { Component } from 'react'
 import Chart from './C3Chart'
+import { Button, ButtonGroup } from 'react-bootstrap'
 import { capitalize } from 'underscore.string'
 import pluralize from 'pluralize'
 import _ from 'lodash'
@@ -11,6 +12,11 @@ const colors = ['#a78ac6', '#04ae14', '#fb680e', '#fe32fe', '#a49659', '#ff5a8b'
 // defaults
 
 class ChartCanvas extends Component {
+  constructor (props) {
+    super(props)
+
+    this.rDateToggle = this.rDateToggle.bind(this)
+  }
   shouldComponentUpdate (nextProps, nextState) {
     return !_.isEqual(this.props.data, nextProps.data)
   }
@@ -18,6 +24,29 @@ class ChartCanvas extends Component {
   renderTitle (rowLabel, fieldName, groupName = null) {
     let title = pluralize(rowLabel) + ' by ' + fieldName
     return (<h2>{capitalize(title, true)}</h2>)
+  }
+
+  rDateToggle () {
+    let {dateBy, changeDateBy} = this.props
+    let monthActive = dateBy === 'month' ? 'active' : ''
+    let yearActive = dateBy === 'year' ? 'active' : ''
+    return (
+      <ButtonGroup className='toggle-time'>
+        <Button
+          bsStyle='success'
+          bsSize='small'
+          onClick={() => { changeDateBy('month') }}
+          className={monthActive}>
+          Month
+        </Button>
+        <Button
+          bsStyle='success'
+          bsSize='small'
+          onClick={() => { changeDateBy('year') }}
+          className={yearActive}>
+          Year
+        </Button>
+      </ButtonGroup>)
   }
 
   render () {
@@ -48,6 +77,7 @@ class ChartCanvas extends Component {
     let type = selectedColumnDef.type
     let fieldName = selectedColumnDef.name
     let labels = Array.isArray(data[0]) ? data[0] : data[0].values
+    let toggle = <span/>
 
     let maxLabelLength = labels.reduce((prev, curr, idx, array) => {
       if (Array.isArray(data[0])) {
@@ -68,13 +98,14 @@ class ChartCanvas extends Component {
 
     if (type === 'calendar_date') {
       options.timeseries = true
-    } else if(type === 'checkbox') {
+      toggle = this.rDateToggle()
+    } else if (type === 'checkbox') {
       options.stacked = true
     }
 
     return (
       <div id='C3Chart'>
-        {/*toggle*/}
+        {toggle}
         {this.renderTitle(rowLabel, fieldName)}
         <Chart
           data={data}

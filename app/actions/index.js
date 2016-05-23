@@ -98,7 +98,10 @@ function fetchData (state) {
   }
 }
 
+// query parameter related actions - these might be able to be collapsed to a single action creator that updates the query params - groupby, dateby, column selection
 export const SELECT_COLUMN = 'SELECT_COLUMN'
+export const CHANGE_DATEBY = 'CHANGE_DATEBY'
+export const GROUP_BY = 'GROUP_BY'
 
 export function selectColumn (column) {
   return (dispatch, getState) => {
@@ -110,7 +113,15 @@ export function selectColumn (column) {
   }
 }
 
-export const GROUP_BY = 'GROUP_BY'
+export function changeDateBy (dateBy) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: CHANGE_DATEBY,
+      dateBy
+    })
+    dispatch(fetchData(getState()))
+  }
+}
 
 export function groupBy (key) {
   return (dispatch, getState) => {

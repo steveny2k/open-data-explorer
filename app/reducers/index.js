@@ -1,4 +1,4 @@
-import { METADATA_SUCCESS, SELECT_COLUMN, COUNT_SUCCESS, MIGRATION_SUCCESS, COLPROPS_SUCCESS, DATA_SUCCESS, GROUP_BY, UPDATE_FILTER, ADD_FILTER, REMOVE_FILTER, APPLY_FILTER } from '../actions'
+import { METADATA_SUCCESS, SELECT_COLUMN, COUNT_SUCCESS, MIGRATION_SUCCESS, COLPROPS_SUCCESS, DATA_SUCCESS, GROUP_BY, UPDATE_FILTER, ADD_FILTER, REMOVE_FILTER, APPLY_FILTER, CHANGE_DATEBY } from '../actions'
 import { routerReducer as routing } from 'react-router-redux'
 import { combineReducers } from 'redux'
 import merge from 'lodash/merge'
@@ -40,6 +40,12 @@ function dataset (state = { columns: {}, query: {} }, action) {
       return merge({}, state, {
         query: {
           groupBy: groupKey
+        }
+      })
+    case CHANGE_DATEBY:
+      return merge({}, state, {
+        query: {
+          dateBy: action.dateBy
         }
       })
     case ADD_FILTER:
