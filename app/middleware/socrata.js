@@ -3,7 +3,6 @@ import soda from 'soda-js'
 import pluralize from 'pluralize'
 import { capitalize } from 'underscore.string'
 
-
 const API_ROOT = 'https://data.sfgov.org/'
 
 // Extracts the next page URL from Github API response.

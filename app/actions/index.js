@@ -135,9 +135,12 @@ export function addFilter (key) {
 }
 
 export function removeFilter (key) {
-  return {
-    type: REMOVE_FILTER,
-    key
+  return (dispatch, getState) => {
+    dispatch({
+      type: REMOVE_FILTER,
+      key
+    })
+    dispatch(fetchData(getState()))
   }
 }
 
