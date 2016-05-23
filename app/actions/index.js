@@ -150,10 +150,9 @@ export function updateFilter (key, options) {
 }
 
 export function applyFilter (key, options) {
-  return {
-    type: APPLY_FILTER,
-    key,
-    options
+  return (dispatch, getState) => {
+    dispatch(updateFilter(key, options))
+    dispatch(fetchData(getState()))
   }
 }
 // set selectCol to key

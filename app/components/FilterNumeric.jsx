@@ -11,6 +11,7 @@ class FilterNumeric extends Component {
 
     this.updateSliderRange = this.updateSliderRange.bind(this)
     this.updateInputRange = this.updateInputRange.bind(this)
+    this.applyUpdate = this.applyUpdate.bind(this)
     this.cancelUpdate = this.cancelUpdate.bind(this)
   }
 
@@ -27,6 +28,12 @@ class FilterNumeric extends Component {
     let options = {}
     options.nextRange = value
     this.props.updateFilter(this.props.fieldKey, options)
+  }
+
+  applyUpdate () {
+    let options = {}
+    options.currentRange = this.props.nextRange
+    this.props.applyFilter(this.props.fieldKey, options)
   }
 
   cancelUpdate () {

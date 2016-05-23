@@ -23,8 +23,9 @@ function getNextPageUrl (response) {
 
 function constructQuery (state) {
   let queryStack = state.dataset.query
-  let { selectedColumn, dateBy } = queryStack
-  let columnType = state.dataset.columns[selectedColumn].type
+  let columns = state.dataset.columns
+  let { selectedColumn, dateBy, filters } = queryStack
+  let columnType = columns[selectedColumn].type
 
   let consumerRoot = API_ROOT.split('/')[2]
   let consumer = new soda.Consumer(consumerRoot)
@@ -49,8 +50,34 @@ function constructQuery (state) {
 
   // Where (filter)
   query = query.where('label is not null')
-  //
-  //
+  if (filters) {
+    for (let key in filters) {
+      let column = key !== 'checkboxes' ? columns[key] : {type: 'checkbox'}
+      let filter = filters[key]
+
+      if (column.type === 'calendar_date') {
+        let start = filter.options.min.format('YYYY-MM-DD')
+        let end = filter.options.max.format('YYYY-MM-DD')
+        query.where(key + '>="' + start + '" and ' + key + '<="' + end + '"')
+      } else if (column.categories && filter.options && filter.options.selected) {
+        let enclose = '"'
+        let joined = filter.options.selected
+        if (Array.isArray(filter.options.selected)) {
+          joined = filter.options.selected.join(enclose + ' or ' + key + '=' + enclose)
+        }
+        query.where(key + '=' + enclose + joined + enclose)
+      } else if (column.type === 'checkbox' && filter.options && filter.options.selected) {
+        let join = filter.options.join || 'or'
+        let joined = filter.options.selected.join(' ' + join + ' ')
+        query.where(joined)
+      } else if (column.type === 'number' && !column.categories && filter.options && filter.options.currentRange) {
+        let first = parseInt(filter.options.currentRange[0])
+        let last = parseInt(filter.options.currentRange[1])
+        query.where(key + '>=' + first + ' and ' + key + '<=' + last)
+      }
+    }
+  }
+
   if (groupBy) {
     query.select(groupBy).group(groupBy).order(groupBy)
   }
@@ -107,7 +134,7 @@ function constructQuery (state) {
 
     query = query.limit(50000)
     */
-
+  query = query.limit(50000)
   return query.getURL()
 }
 

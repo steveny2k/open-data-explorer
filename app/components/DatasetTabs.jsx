@@ -34,9 +34,6 @@ class DatasetTabs extends Component {
             <NavItem eventKey={'charts'}>
               Charts
             </NavItem>
-            <NavItem eventKey={'map'}>
-              Map
-            </NavItem>
             <NavItem eventKey={'table'}>
               Table Preview
             </NavItem>
