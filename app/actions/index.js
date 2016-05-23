@@ -124,6 +124,7 @@ export function groupBy (key) {
 
 export const ADD_FILTER = 'ADD_FILTER'
 export const REMOVE_FILTER = 'REMOVE_FILTER'
+export const UPDATE_FILTER = 'UPDATE_FILTER'
 export const APPLY_FILTER = 'APPLY_FILTER'
 
 export function addFilter (key) {
@@ -134,9 +135,27 @@ export function addFilter (key) {
 }
 
 export function removeFilter (key) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: REMOVE_FILTER,
+      key
+    })
+    dispatch(fetchData(getState()))
+  }
+}
+
+export function updateFilter (key, options) {
   return {
-    type: REMOVE_FILTER,
-    key
+    type: UPDATE_FILTER,
+    key,
+    options
+  }
+}
+
+export function applyFilter (key, options) {
+  return (dispatch, getState) => {
+    dispatch(updateFilter(key, options))
+    dispatch(fetchData(getState()))
   }
 }
 // set selectCol to key
