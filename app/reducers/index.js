@@ -1,4 +1,4 @@
-import { METADATA_SUCCESS, SELECT_COLUMN, COUNT_SUCCESS, MIGRATION_SUCCESS, COLPROPS_SUCCESS, DATA_SUCCESS, GROUP_BY, UPDATE_FILTER, ADD_FILTER, REMOVE_FILTER, APPLY_FILTER, CHANGE_DATEBY } from '../actions'
+import { METADATA_REQUEST, METADATA_SUCCESS, SELECT_COLUMN, COUNT_SUCCESS, MIGRATION_SUCCESS, COLPROPS_SUCCESS, DATA_SUCCESS, GROUP_BY, UPDATE_FILTER, ADD_FILTER, REMOVE_FILTER, APPLY_FILTER, CHANGE_DATEBY } from '../actions'
 import { routerReducer as routing } from 'react-router-redux'
 import { combineReducers } from 'redux'
 import merge from 'lodash/merge'
@@ -28,6 +28,15 @@ function dataset (state = { columns: {}, query: {} }, action) {
   }
 
   switch (action.type) {
+    case METADATA_REQUEST:
+      let freshState = {
+        query: {
+          isFetching: false,
+          dateBy: 'year'
+        },
+        columns: {}
+      }
+      return merge({}, freshState)
     case SELECT_COLUMN:
       return merge({}, state, {
         query: {
