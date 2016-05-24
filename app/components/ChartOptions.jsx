@@ -7,13 +7,16 @@ import ChartFilters from './ChartFilters'
 
 class ChartOptions extends Component {
   render () {
-    let {columns, groupBy, handleGroupBy, handleAddFilter, handleRemoveFilter, filters, applyFilter, updateFilter} = this.props
+    let {columns, groupBy, handleGroupBy, handleAddFilter, handleRemoveFilter, filters, applyFilter, updateFilter, selectedColumn} = this.props
     let groupableColumns
 
     if (columns) {
       let columnKeys = Object.keys(columns)
       groupableColumns = columnKeys.filter((col) => {
-        return columns[col].categories || false
+        if (columns[col].categories) {
+          return columns[col].key !== selectedColumn
+        }
+        return false
       }).map((col) => {
         return {label: columns[col].name, value: columns[col].key}
       })
