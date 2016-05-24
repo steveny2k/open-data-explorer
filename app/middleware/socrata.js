@@ -173,12 +173,6 @@ function endpointGroupByQuery(id, key) {
 
 function transformMetadata(json) {
 
-    function isIDCol(col) {
-        //remove id columns as a choice; don't want to display these
-        var idRegex = /id+/g;
-        return idRegex.test(col['fieldName']);
-    }
-
     let shape = {
         id: json['id'],
         name: json['name'],
@@ -195,23 +189,21 @@ function transformMetadata(json) {
     }
 
     for (let column of json.columns) {
-        var isId = isIDCol(column);
-        if (!(isId)) {
-            let col = {
-                id: column['id'],
-                key: column['fieldName'],
-                name: column['name'],
-                description: column['description'] || '',
-                type: column['dataTypeName'],
-                format: column['format']['view'] || null,
-                non_null: column['cachedContents']['non_null'] || 0,
-                null: column['cachedContents']['null'] || 0,
-                count: column['cachedContents']['non_null'] + column['cachedContents']['null'] || null,
-                min: column['cachedContents']['smallest'] || null,
-                max: column['cachedContents']['largest'] || null
-            }
-            shape.columns[column['fieldName']] = col
+
+        let col = {
+            id: column['id'],
+            key: column['fieldName'],
+            name: column['name'],
+            description: column['description'] || '',
+            type: column['dataTypeName'],
+            format: column['format']['view'] || null,
+            non_null: column['cachedContents']['non_null'] || 0,
+            null: column['cachedContents']['null'] || 0,
+            count: column['cachedContents']['non_null'] + column['cachedContents']['null'] || null,
+            min: column['cachedContents']['smallest'] || null,
+            max: column['cachedContents']['largest'] || null
         }
+        shape.columns[column['fieldName']] = col
     }
 
     return shape
@@ -286,6 +278,7 @@ function transformGroupByQuery(json, state, params) {
     } else if (json[0].count === '1') {
         transformed.columns[params['key']].unique = true
     }
+    console.log(transformed);
     return transformed
 }
 

@@ -16,11 +16,31 @@ class Charts extends Component {
   }
 
   renderColumnButton (column, idx, columns) {
+
+
+    function removeIdKeys(obj){
+      //remove id fields from the buttons
+      var removedIdKeys = [];
+      var idRegex = /id+/g;
+      for (var key in obj) {
+        var isIdField = idRegex.test(key);
+        if(isIdField){
+          removedIdKeys.push(key);
+        }
+      }
+      return removedIdKeys
+    }
+
+    var removedIdKeys = removeIdKeys(columns);
+
+
     let col = columns[column]
+
+
     let { selectColumn } = this.props
     let categoryColumns = this.props.dataset.categoryColumns
     let colTypesAccepted = ['number', 'checkbox', 'calendar_date']
-    if (categoryColumns.indexOf(col.key) > -1 || colTypesAccepted.indexOf(col.type) > -1) {
+    if ( (categoryColumns.indexOf(col.key) > -1 || colTypesAccepted.indexOf(col.type) > -1) && (removedIdKeys.indexOf(col.key)  < 0)) {
       return (
         <Button
           key={idx}
