@@ -3,11 +3,11 @@ module.exports = function (config) {
     basePath: '',
     frameworks: ['source-map-support', 'mocha', 'sinon'],
     files: [
-      'app/app.tests.js'
+      'tests.webpack.js'
     ],
     exclude: [],
     preprocessors: {
-      'app/app.tests.js': ['webpack', 'sourcemap']
+      'tests.webpack.js': ['webpack', 'sourcemap']
     },
     reporters: ['mocha'],
     port: 9876,
