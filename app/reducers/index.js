@@ -29,14 +29,14 @@ function dataset (state = { columns: {}, query: {} }, action) {
 
   switch (action.type) {
     case METADATA_REQUEST:
-      copyState = {...state}
-      delete copyState.columns
-      delete copyState.categoryColumns
-      copyState.query = {
-        isFetching: false,
-        dateBy: 'year'
+      let freshState = {
+        query: {
+          isFetching: false,
+          dateBy: 'year'
+        },
+        columns: {}
       }
-      return merge({}, copyState)
+      return merge({}, freshState)
     case SELECT_COLUMN:
       return merge({}, state, {
         query: {
