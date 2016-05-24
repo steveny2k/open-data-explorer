@@ -46,7 +46,7 @@ if (DEBUG || TEST) {
     'postcss-loader'
   ].join('!')
 } else {
-  jsxLoader = ['babel-loader?optional[]=runtime&stage=0&plugins=rewire']
+  jsxLoader = ['babel-loader']
   sassLoader = ExtractTextPlugin.extract('style-loader', [
     'css-loader',
     'postcss-loader',
