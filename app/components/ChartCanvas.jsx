@@ -15,7 +15,7 @@ class ChartCanvas extends Component {
   constructor (props) {
     super(props)
 
-    this.rDateToggle = this.rDateToggle.bind(this)
+    this.renderDateToggle = this.renderDateToggle.bind(this)
   }
   shouldComponentUpdate (nextProps, nextState) {
     return !_.isEqual(this.props.data, nextProps.data)

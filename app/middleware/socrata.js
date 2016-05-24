@@ -32,7 +32,6 @@ function constructQuery (state) {
   let query = consumer.query().withDataset(id)
 
   let {groupBy} = state.dataset.query
-
   let dateAggregation = dateBy === 'month' ? 'date_trunc_ym' : 'date_trunc_y'
   let selectAsLabel = selectedColumn + ' as label'
   let orderBy = 'value desc'
