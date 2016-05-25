@@ -301,7 +301,6 @@ let C3Chart = React.createClass({
       var cols = chunk.slice(1, chunk.length+1);
       for (let i = 0; i < cols.length; i++) {
         if(notEmpty(cols[i])){
-          //console.log(cols[i]);
           newData.push(cols[i]);
         }
       }
