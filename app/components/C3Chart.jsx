@@ -189,6 +189,101 @@ let C3Chart = React.createClass({
     return chart
   },
 
+
+  dataPrepBarMulti: function(rawData){
+    function zip(arrays) {
+      return arrays[0].map(function(_, i) {
+            return arrays.map(function(array) {
+                return array[i]
+            })
+        });
+    }
+    function chunkIt(someArray){
+      //dont actually end up using this; could be useful later.
+      var groupSize = 2;
+      var groups = _.map(someArray, function(item, index){
+        return index % groupSize === 0 ? someArray.slice(index, index + groupSize) : null;
+      })
+      .filter(function(item){ return item;
+
+      });
+      return groups
+    }
+
+    function filerOutZeros(chunkVals, chunkKeys = false ){
+      //edits array directly
+      var index = 0;
+      while(index != -1){
+        var index = chunkVals.indexOf(0);
+        if(index != -1){
+          chunkVals.pop(index);
+          if(chunkKeys){
+            chunkKeys.pop(index);
+          }
+        }
+      }
+    }
+
+    function limitLongTail(chunk){
+      filerOutZeros( chunk[1], chunk[0]);
+      if (chunk[0].length > 8) {
+        var keys7 = chunk[0].slice(0, 8);
+        var counts7 = chunk[1].slice(0, 8);
+        var keysRest = chunk[0].slice(8, chunk[0].length);
+        var countsRest = chunk[1].slice(8, chunk[1].length);
+        ///stores all the k,v pairs of the longTail
+        var dataDictOther = zip([keysRest, countsRest])
+        var intCountsRest = countsRest.map(Number);
+        //reducer function to get sum
+        var total = intCountsRest.reduce((a, b) => a + b, 0);
+        keys7.push("other");
+        counts7.push(total);
+        var newData = [];
+        newData[0] = keys7,
+        newData[1] = counts7;
+        return newData
+      }
+      else{
+        return chunk
+      }
+    }
+
+    function notEmpty(col){
+      //var header = col.pop(0);
+      var colNums = col.slice(1,col.length)
+      colNums = colNums.map(Number);
+      var colSum  = 0;
+      colSum = colNums.reduce((a, b) => a + b, 0);
+      if(colSum> 5){
+        return true
+      }
+      return false
+    }
+
+    function limitLongTailGroupBy(chunk){
+      var newData = []
+      newData.push(chunk[0]);
+      var zeroIndexes = []
+      var cols = chunk.slice(1, chunk.length+1);
+      for (let i = 0; i < cols.length; i++) {
+        if(notEmpty(cols[i])){
+          newData.push(cols[i]);
+        }
+      }
+      return newData
+    }
+
+
+    if(this.props.data.length == 2){
+      var cleandedData = limitLongTail(rawData);
+    }
+    else{
+      var cleandedData = limitLongTailGroupBy(rawData);
+    }
+    return cleandedData
+  },
+
+
   drawGraphBar: function (multi) {
     let graphObject = this.graphObject()
     let graphObjectData = {
@@ -202,8 +297,12 @@ let C3Chart = React.createClass({
         names: { value: this.props.data[0].key }
       })
     } else {
+
+      let barData =[]
+      barData = this.dataPrepBarMulti(this.props.data);
       graphObjectData = _.merge(graphObjectData, {
-        columns: Array.isArray(this.props.data[0]) ? this.props.data : this.multiDmsDataPreparator(this.props.data)
+        columns: Array.isArray( barData[0]) ? barData : this.multiDmsDataPreparator(barData)
+
       })
     }
     let graphObjectAxis = {
@@ -227,13 +326,6 @@ let C3Chart = React.createClass({
     return chart
   },
 
-  pieChartDataPreparator: function (rawData) {
-    let data
-    data = _.map(rawData, (d) => {
-      return [d.label, d.value]
-    })
-    return data
-  },
 
   drawGraphPie: function () {
     let graphObject = this.graphObject()
@@ -247,6 +339,7 @@ let C3Chart = React.createClass({
     let chart = c3.generate(graphObject)
     return chart
   },
+
 
   multiDmsDataPreparator: function (rawData) {
     let xLabels = ['x'] // to make ['x', 'a', 'b', 'c' ...] for labels
@@ -275,6 +368,7 @@ let C3Chart = React.createClass({
     data.push(xLabels)
     return data
   },
+
 
   multiDmsGroups: function (rawData) {
     let groups
