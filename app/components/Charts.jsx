@@ -19,7 +19,7 @@ class Charts extends Component {
     let col = columns[column]
     let { selectColumn } = this.props
     let categoryColumns = this.props.dataset.categoryColumns
-    let colTypesAccepted = ['number', 'checkbox', 'calendar_date']
+    let colTypesAccepted = ['number', 'checkbox', 'date']
     if (categoryColumns.indexOf(col.key) > -1 || colTypesAccepted.indexOf(col.type) > -1) {
       return (
         <Button
@@ -43,7 +43,7 @@ class Charts extends Component {
     otherProps.selectedColumnDef = query.selectedColumn ? columns[query.selectedColumn] : null
     otherProps.chartType = 'bar'
 
-    if (otherProps.selectedColumnDef && otherProps.selectedColumnDef.type === 'calendar_date') {
+    if (otherProps.selectedColumnDef && otherProps.selectedColumnDef.type === 'date') {
       otherProps.chartType = 'area'
     }
     return (

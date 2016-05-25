@@ -91,7 +91,7 @@ class ChartCanvas extends Component {
       options.padding.left = (maxLabelLength * 4) + 50
     }
 
-    if (type === 'calendar_date') {
+    if (type === 'date') {
       options.timeseries = true
       toggle = this.renderDateToggle()
     } else if (type === 'checkbox') {

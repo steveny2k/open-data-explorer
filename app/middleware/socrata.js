@@ -161,7 +161,7 @@ function endpointGroupByQuery (id, key) {
 }
 
 function transformMetadata (json) {
-  let shape = {
+  let metadata = {
     id: json['id'],
     name: json['name'],
     description: json['description'],
@@ -177,12 +177,18 @@ function transformMetadata (json) {
   }
 
   for (let column of json.columns) {
+    let typeCast = {
+      'calendar_date': 'date',
+      'currency': 'number'
+    }
+    let type = typeCast[column['dataTypeName']] || column['dataTypeName']
+
     let col = {
       id: column['id'],
       key: column['fieldName'],
-      name: column['name'],
+      name: column['name'].replace(/[_-]/g, ' '),
       description: column['description'] || '',
-      type: column['dataTypeName'],
+      type: type,
       format: column['format']['view'] || null,
       non_null: column['cachedContents']['non_null'] || 0,
       null: column['cachedContents']['null'] || 0,
@@ -190,10 +196,10 @@ function transformMetadata (json) {
       min: column['cachedContents']['smallest'] || null,
       max: column['cachedContents']['largest'] || null
     }
-    shape.columns[column['fieldName']] = col
+    metadata.columns[column['fieldName']] = col
   }
 
-  return shape
+  return metadata
 }
 
 function transformQuery (json, state) {
@@ -277,7 +283,11 @@ export const Transforms = {
 }
 
 export const shouldRunColumnStats = (type, key) => {
-  const numericKeys = ['supervisor_district']
+  /*
+   * numericKeys is a bit of a hack to get around the fact that some categorical fields are encoded as numbers on the portal
+   * we don't want to run column stats against all numeric columns, so this allows us to control that
+  */
+  const numericKeys = ['supervisor_district', 'calendar_year']
   if (type === 'text' || numericKeys.indexOf(key) > -1) {
     return true
   } else {

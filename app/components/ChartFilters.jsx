@@ -35,7 +35,7 @@ class ChartFilters extends Component {
       }
 
       switch (filterType) {
-        case 'calendar_date':
+        case 'date':
           let startDate = filters[key].options ? filters[key].options.min : filter.min
           let endDate = filters[key].options ? filters[key].options.max : filter.max
           filterContent = <FilterDateTime key={filter.key} fieldKey={filter.key} startDate={startDate} endDate={endDate} applyFilter={applyFilter}/>
