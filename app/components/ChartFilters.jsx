@@ -42,6 +42,9 @@ class ChartFilters extends Component {
           break
         case 'category':
           let optionsForFilter = filter.categories.map(function (record) {
+            if (!record.category) {
+              return { label: 'Blank', value: 'blank' }
+            }
             return { label: record.category, value: record.category }
           })
           filterContent = <FilterCategory key={filter.key} fieldKey={filter.key} options={optionsForFilter} applyFilter={applyFilter} filter={filters[key]} />

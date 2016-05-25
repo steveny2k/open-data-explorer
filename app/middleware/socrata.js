@@ -35,9 +35,18 @@ function constructQuery (state) {
   let dateAggregation = dateBy === 'month' ? 'date_trunc_ym' : 'date_trunc_y'
   let selectAsLabel = selectedColumn + ' as label'
   let orderBy = 'value desc'
-  if (columnType === 'calendar_date') {
+  if (columnType === 'date') {
     selectAsLabel = dateAggregation + '(' + selectedColumn + ') as label'
     orderBy = 'label'
+  }
+
+  if (groupBy) {
+    orderBy = groupBy
+    if (columns[groupBy].type === 'date') {
+      groupBy = 'date_trunc_y(' + groupBy + ') as date_group_by'
+      orderBy = 'date_group_by'
+    }
+    query.select(groupBy).group(orderBy)
   }
 
   // base query
@@ -47,23 +56,36 @@ function constructQuery (state) {
     .order(orderBy)
 
   // Where (filter)
-  query = query.where('label is not null')
+  if (columnType === 'date') query = query.where('label is not null')
   if (filters) {
     for (let key in filters) {
       let column = key !== 'checkboxes' ? columns[key] : {type: 'checkbox'}
       let filter = filters[key]
 
-      if (column.type === 'calendar_date') {
+      if (column.type === 'date') {
         let start = filter.options.min.format('YYYY-MM-DD')
         let end = filter.options.max.format('YYYY-MM-DD')
         query.where(key + '>="' + start + '" and ' + key + '<="' + end + '"')
       } else if (column.categories && filter.options && filter.options.selected) {
         let enclose = '"'
-        let joined = filter.options.selected
-        if (Array.isArray(filter.options.selected)) {
-          joined = filter.options.selected.join(enclose + ' or ' + key + '=' + enclose)
+        let joined = [].concat(filter.options.selected)
+        let selectedCount = joined.length
+        let blankIdx = joined.indexOf('blank')
+        let queryNull = ''
+
+        if (blankIdx > -1) {
+          joined.splice(blankIdx, 1)
+          queryNull = key + ' is null'
         }
-        query.where(key + '=' + enclose + joined + enclose)
+
+        if (selectedCount > 1) {
+          queryNull = queryNull !== '' ? queryNull + ' or ' : ''
+          joined = joined.join(enclose + ' or ' + key + '=' + enclose)
+          query.where(queryNull + key + '=' + enclose + joined + enclose)
+        } else if (selectedCount === 1) {
+          let whereString = queryNull !== '' ? queryNull : key + '=' + enclose + joined + enclose
+          query.where(whereString)
+        }
       } else if (column.type === 'checkbox' && filter.options && filter.options.selected) {
         let join = filter.options.join || 'or'
         let joined = filter.options.selected.join(' ' + join + ' ')
@@ -74,10 +96,6 @@ function constructQuery (state) {
         query.where(key + '>=' + first + ' and ' + key + '<=' + last)
       }
     }
-  }
-
-  if (groupBy) {
-    query.select(groupBy).group(groupBy).order(groupBy)
   }
 /*
     if (fieldDef.type == 'calendar_date') {
@@ -208,19 +226,21 @@ function transformQuery (json, state) {
   let labels = ['x']
   let keys = []
   let data = []
+  let nullText = 'Blank'
   let isCheckbox = columns[selectedColumn].type === 'checkbox'
   let keyIdx = groupBy || 'label'
+  if (keyIdx !== 'label' && columns[keyIdx].type === 'date') keyIdx = 'date_group_by'
 
   rowLabel = pluralize(rowLabel)
 
   labels = labels.concat(isCheckbox ? rowLabel : json.map((row) => {
-    return typeof row.label === 'undefined' ? 'Unknown' : (row.label === 'Unknown' ? 'False' : capitalize(row.label.toString()))
+    return typeof row.label === 'undefined' ? nullText : (row.label === nullText ? 'False' : capitalize(row.label.toString()))
   }).filter((elem, index, array) => {
     return array.indexOf(elem) === index
   }))
 
   keys = keys.concat((!isCheckbox && !groupBy) ? rowLabel : json.map((row) => {
-    return typeof row[keyIdx] === 'undefined' ? 'Unknown' : (row[keyIdx] === 'Unknown' ? 'False' : capitalize(row[keyIdx].toString()))
+    return typeof row[keyIdx] === 'undefined' ? nullText : (row[keyIdx] === nullText ? 'False' : capitalize(row[keyIdx].toString()))
   }).filter((elem, index, array) => {
     return array.indexOf(elem) === index
   }))
@@ -230,8 +250,8 @@ function transformQuery (json, state) {
   )
 
   json.forEach((row) => {
-    let label = isCheckbox ? rowLabel : (typeof row.label === 'undefined' ? 'Unknown' : (row.label === 'Unknown' ? 'False' : capitalize(row.label.toString())))
-    let key = (!isCheckbox && !groupBy) ? rowLabel : (typeof row[keyIdx] === 'undefined' ? 'Unknown' : (row[keyIdx] === 'Unknown' ? 'False' : capitalize(row[keyIdx].toString())))
+    let label = isCheckbox ? rowLabel : (typeof row.label === 'undefined' ? nullText : (row.label === nullText ? 'False' : capitalize(row.label.toString())))
+    let key = (!isCheckbox && !groupBy) ? rowLabel : (typeof row[keyIdx] === 'undefined' ? nullText : (row[keyIdx] === nullText ? 'False' : capitalize(row[keyIdx].toString())))
     data[keys.indexOf(key)][labels.indexOf(label)] = row.value
   })
   data = [labels].concat(data)

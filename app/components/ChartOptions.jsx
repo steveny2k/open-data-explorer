@@ -13,8 +13,9 @@ class ChartOptions extends Component {
     if (columns) {
       let columnKeys = Object.keys(columns)
       groupableColumns = columnKeys.filter((col) => {
-        if (columns[col].categories) {
-          return columns[col].key !== selectedColumn
+        if (columns[col].key !== selectedColumn) {
+          if (columns[col].categories) return true
+          if (columns[col].type === 'date') return true
         }
         return false
       }).map((col) => {

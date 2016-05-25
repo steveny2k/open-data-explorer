@@ -70,7 +70,6 @@ function dataset (state = { columns: {}, query: {} }, action) {
       delete copyState.query.filters[action.key]
       return merge({}, state, copyState)
     case UPDATE_FILTER:
-    case APPLY_FILTER:
       let newOptions = action.options
       let copyState = Object.assign({}, state)
       let existingOptions = copyState.query.filters[action.key].options || ''
@@ -81,6 +80,7 @@ function dataset (state = { columns: {}, query: {} }, action) {
         (existingOptions.selected.length !== newOptions.selected.length || typeof newOptions.selected === 'string')) {
         copyState.query.filters[action.key].options.selected = action.options.selected
         newState = merge({}, copyState)
+        console.log(copyState)
       } else {
         let updatedOptions = {
           query: {
@@ -93,9 +93,11 @@ function dataset (state = { columns: {}, query: {} }, action) {
         }
         newState = merge({}, state, updatedOptions)
       }
+      console.log(newState)
       return newState
     default:
       return state
+
   }
 }
 
