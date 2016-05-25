@@ -84,6 +84,7 @@ class ChartFilters extends Component {
       if (option.type === 'checkbox') checkboxes = true
       if (notFilters.indexOf(option.type) > -1) return false
       if (!option.categories && option.type === 'text') return false
+      if (option.singleValue) return false
       return true
     }).map((column, i) => {
       let option = columns[column]

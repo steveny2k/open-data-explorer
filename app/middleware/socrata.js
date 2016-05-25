@@ -175,7 +175,7 @@ function endpointGroupByQuery (id, key) {
   if (key === 'category') {
     category = key
   }
-  return `resource/${id}.json?$select=${category},count(*)&$group=category&$order=count+desc`
+  return `resource/${id}.json?$select=${category},count(*)&$group=category&$order=category asc`
 }
 
 function transformMetadata (json) {
@@ -206,7 +206,7 @@ function transformMetadata (json) {
       key: column['fieldName'],
       name: column['name'].replace(/[_-]/g, ' '),
       description: column['description'] || '',
-      type: type,
+      type,
       format: column['format']['view'] || null,
       non_null: column['cachedContents']['non_null'] || 0,
       null: column['cachedContents']['null'] || 0,
@@ -283,6 +283,11 @@ function transformGroupByQuery (json, state, params) {
   } else if (json[0].count === '1') {
     transformed.columns[params['key']].unique = true
   }
+
+  if (checkFirst === 1) {
+    transformed.columns[params['key']].singleValue = true
+  }
+
   return transformed
 }
 
@@ -307,8 +312,8 @@ export const shouldRunColumnStats = (type, key) => {
    * numericKeys is a bit of a hack to get around the fact that some categorical fields are encoded as numbers on the portal
    * we don't want to run column stats against all numeric columns, so this allows us to control that
   */
-  const numericKeys = ['supervisor_district', 'calendar_year']
-  if (type === 'text' || numericKeys.indexOf(key) > -1) {
+  const numericKeys = ['supervisor_district', 'calendar_year', 'fiscal_year']
+  if (type === 'text' || (numericKeys.indexOf(key) > -1 && type === 'number')) {
     return true
   } else {
     return false
