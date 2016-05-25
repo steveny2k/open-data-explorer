@@ -313,7 +313,9 @@ export const shouldRunColumnStats = (type, key) => {
    * we don't want to run column stats against all numeric columns, so this allows us to control that
   */
   const numericKeys = ['supervisor_district', 'calendar_year', 'fiscal_year']
-  if (type === 'text' || (numericKeys.indexOf(key) > -1 && type === 'number')) {
+  let regex = /(year|day|date|month|district|yr)/g
+  let isCategorical = regex.test(key)
+  if (type === 'text' || (isCategorical && type === 'number')) {
     return true
   } else {
     return false
