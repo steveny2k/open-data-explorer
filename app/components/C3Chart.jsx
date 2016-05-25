@@ -254,22 +254,58 @@ let C3Chart = React.createClass({
       colNums = colNums.map(Number);
       var colSum  = 0;
       colSum = colNums.reduce((a, b) => a + b, 0);
-      if(colSum> 5){
+      //arbitrary lower limit of 15;
+      if(colSum > 15 ){
         return true
       }
       return false
     }
 
+    function removeZeroRows(newData){
+      var maxRowSum = 0;
+      var removeIndexes = []
+      for (let i = 1; i < newData[0].length; i++) {
+        var zeroRow = [];
+        for (let j = 1; j < newData.length; j++) {
+          zeroRow.push(newData[j][i]);
+        }
+        zeroRow = zeroRow.map(Number);
+        var rowSum = zeroRow.reduce((a, b) => a + b, 0);
+        if(rowSum > maxRowSum){
+          maxRowSum = rowSum;
+        }
+        if(rowSum == 0 ){
+          removeIndexes.push(i);
+        }
+        else{
+          //remove groups that are less than one percent of largest group.
+          var threshold = 0.01;
+          var zeroRowRatio = rowSum/maxRowSum;
+          if(zeroRowRatio < threshold){
+            removeIndexes.push(i);
+          }
+        }
+      }
+      for (let k = 0; k < removeIndexes.length; k++) {
+        var removedIndex = removeIndexes[k];
+        var removedHeader = newData[0].pop(removedIndex);
+        for (let z = 1; z < newData.length; z++) {
+            var popped = newData[z].pop(removedIndex);
+        }
+      }
+    }
+
     function limitLongTailGroupBy(chunk){
       var newData = []
       newData.push(chunk[0]);
-      var zeroIndexes = []
       var cols = chunk.slice(1, chunk.length+1);
       for (let i = 0; i < cols.length; i++) {
         if(notEmpty(cols[i])){
+          //console.log(cols[i]);
           newData.push(cols[i]);
         }
       }
+      removeZeroRows(newData);
       return newData
     }
 
