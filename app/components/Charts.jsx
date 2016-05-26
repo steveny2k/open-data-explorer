@@ -16,31 +16,25 @@ class Charts extends Component {
   }
 
   renderColumnButton (column, idx, columns) {
-
-
-    function removeIdKeys(obj){
-      //remove id fields from the buttons
-      var removedIdKeys = [];
-      var idRegex = /id+/g;
+    function removeIdKeys (obj) {
+      // remove id fields from the buttons
+      var removedIdKeys = []
+      var idRegex = /id+/g
       for (var key in obj) {
-        var isIdField = idRegex.test(key);
-        if(isIdField){
-          removedIdKeys.push(key);
+        var isIdField = idRegex.test(key)
+        if (isIdField) {
+          removedIdKeys.push(key)
         }
       }
       return removedIdKeys
     }
 
-    var removedIdKeys = removeIdKeys(columns);
-
-
+    var removedIdKeys = removeIdKeys(columns)
     let col = columns[column]
-
-
     let { selectColumn } = this.props
     let categoryColumns = this.props.dataset.categoryColumns
-    let colTypesAccepted = ['number', 'checkbox', 'calendar_date']
-    if ( (categoryColumns.indexOf(col.key) > -1 || colTypesAccepted.indexOf(col.type) > -1) && (removedIdKeys.indexOf(col.key)  < 0)) {
+    let colTypesAccepted = ['number', 'checkbox', 'date']
+    if ((categoryColumns.indexOf(col.key) > -1 || colTypesAccepted.indexOf(col.type) > -1) && (removedIdKeys.indexOf(col.key) < 0)) {
       return (
         <Button
           key={idx}
@@ -63,7 +57,7 @@ class Charts extends Component {
     otherProps.selectedColumnDef = query.selectedColumn ? columns[query.selectedColumn] : null
     otherProps.chartType = 'bar'
 
-    if (otherProps.selectedColumnDef && otherProps.selectedColumnDef.type === 'calendar_date') {
+    if (otherProps.selectedColumnDef && otherProps.selectedColumnDef.type === 'date') {
       otherProps.chartType = 'area'
     }
     return (

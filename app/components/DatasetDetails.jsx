@@ -13,7 +13,7 @@ var humanType = {
   'text': 'Text',
   'category': 'Category',
   'checkbox': 'True/False',
-  'calendar_date': 'Date/Time',
+  'date': 'Date/Time',
   'location': 'Latitude and Longitude',
   'number': 'Number'
 }

@@ -12,11 +12,6 @@ const colors = ['#a78ac6', '#04ae14', '#fb680e', '#fe32fe', '#a49659', '#ff5a8b'
 // defaults
 
 class ChartCanvas extends Component {
-  constructor (props) {
-    super(props)
-
-    this.renderDateToggle = this.renderDateToggle.bind(this)
-  }
   shouldComponentUpdate (nextProps, nextState) {
     return !_.isEqual(this.props.data, nextProps.data)
   }
@@ -96,7 +91,7 @@ class ChartCanvas extends Component {
       options.padding.left = (maxLabelLength * 4) + 50
     }
 
-    if (type === 'calendar_date') {
+    if (type === 'date') {
       options.timeseries = true
       toggle = this.renderDateToggle()
     } else if (type === 'checkbox') {

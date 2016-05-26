@@ -35,13 +35,16 @@ class ChartFilters extends Component {
       }
 
       switch (filterType) {
-        case 'calendar_date':
+        case 'date':
           let startDate = filters[key].options ? filters[key].options.min : filter.min
           let endDate = filters[key].options ? filters[key].options.max : filter.max
           filterContent = <FilterDateTime key={filter.key} fieldKey={filter.key} startDate={startDate} endDate={endDate} applyFilter={applyFilter}/>
           break
         case 'category':
           let optionsForFilter = filter.categories.map(function (record) {
+            if (!record.category) {
+              return { label: 'Blank', value: 'blank' }
+            }
             return { label: record.category, value: record.category }
           })
           filterContent = <FilterCategory key={filter.key} fieldKey={filter.key} options={optionsForFilter} applyFilter={applyFilter} filter={filters[key]} />
@@ -81,6 +84,7 @@ class ChartFilters extends Component {
       if (option.type === 'checkbox') checkboxes = true
       if (notFilters.indexOf(option.type) > -1) return false
       if (!option.categories && option.type === 'text') return false
+      if (option.singleValue) return false
       return true
     }).map((column, i) => {
       let option = columns[column]
