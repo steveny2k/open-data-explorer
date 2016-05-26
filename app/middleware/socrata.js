@@ -272,11 +272,12 @@ function transformApiMigration (json) {
 
 function transformGroupByQuery (json, state, params) {
   let checkFirst = parseInt(json[0].count) / state.dataset.rowCount
+  let checkNumCategories = json.length / state.dataset.rowCount
   let transformed = {
     columns: {}
   }
   transformed.columns[params['key']] = {}
-  if (checkFirst <= 0.95 && json[0].count !== '1' && json.length !== 1000) {
+  if (checkFirst <= 0.95 && checkNumCategories <= 0.95 && json[0].count !== '1' && json.length !== 1000) {
     transformed.columns[params['key']].categories = json
     transformed.categoryColumns = [params['key']]
   } else if (json[0].count === '1') {
