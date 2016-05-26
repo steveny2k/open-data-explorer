@@ -97,59 +97,59 @@ function constructQuery (state) {
       }
     }
   }
-/*
-    if (fieldDef.type == 'calendar_date') {
-      query = query
-        .select('count(*) as value')
-        .select(dateAggregation + '(' + selectedCol + ') as label')
-        .where('label is not null')
-        .group('label')
-        .order('label')
-    } else if (fieldDef.type === 'category' || fieldDef.type === 'number') {
-      query = query
-        .select('count(*) as value')
-        .select(selectedCol + ' as label')
-        .group('label')
-        .order('value desc')
-    } else if (fieldDef.type === 'checkbox') {
-      query = query
-        .select('sum(case(' + selectedCol + '=false,1,true,0)) as ' + selectedCol + '_false')
-        .select('sum(case(' + selectedCol + '=true,1,true,0)) as ' + selectedCol + '_true')
-        .select('count(*) as total')
-        .order('total desc')
-    }
+  /*
+      if (fieldDef.type == 'calendar_date') {
+        query = query
+          .select('count(*) as value')
+          .select(dateAggregation + '(' + selectedCol + ') as label')
+          .where('label is not null')
+          .group('label')
+          .order('label')
+      } else if (fieldDef.type === 'category' || fieldDef.type === 'number') {
+        query = query
+          .select('count(*) as value')
+          .select(selectedCol + ' as label')
+          .group('label')
+          .order('value desc')
+      } else if (fieldDef.type === 'checkbox') {
+        query = query
+          .select('sum(case(' + selectedCol + '=false,1,true,0)) as ' + selectedCol + '_false')
+          .select('sum(case(' + selectedCol + '=true,1,true,0)) as ' + selectedCol + '_true')
+          .select('count(*) as total')
+          .order('total desc')
+      }
 
-    if (this.groupBy) {
-      query.select(this.groupBy).group(this.groupBy).order(this.groupBy)
-    }
+      if (this.groupBy) {
+        query.select(this.groupBy).group(this.groupBy).order(this.groupBy)
+      }
 
-    if (this.state.filters.length > 0) {
-      for (var filter of this.state.filters) {
-        if (filter.type === 'calendar_date') {
-          let start = filter.startDate.format('YYYY-MM-DD'),
-            end = filter.endDate.format('YYYY-MM-DD')
-          query.where(filter.key + '>="' + start + '" and ' + filter.key + '<="' + end + '"')
-        } else if (filter.type === 'category' && filter.selected) {
-          let enclose = '"',
-            joined = filter.selected
-          if (Array.isArray(filter.selected)) {
-            joined = filter.selected.join(enclose + ' or ' + filter.key + '=' + enclose)
+      if (this.state.filters.length > 0) {
+        for (var filter of this.state.filters) {
+          if (filter.type === 'calendar_date') {
+            let start = filter.startDate.format('YYYY-MM-DD'),
+              end = filter.endDate.format('YYYY-MM-DD')
+            query.where(filter.key + '>="' + start + '" and ' + filter.key + '<="' + end + '"')
+          } else if (filter.type === 'category' && filter.selected) {
+            let enclose = '"',
+              joined = filter.selected
+            if (Array.isArray(filter.selected)) {
+              joined = filter.selected.join(enclose + ' or ' + filter.key + '=' + enclose)
+            }
+            query.where(filter.key + '=' + enclose + joined + enclose)
+          } else if (filter.type === 'checkbox' && filter.selected && filter.selected.length > 0) {
+            let join = filter.join || 'or',
+              joined = filter.selected.join(' ' + join + ' ')
+            query.where(joined)
+          } else if (filter.type === 'number') {
+            let first = parseInt(filter.range[0]) - 1
+            let last = parseInt(filter.range[1]) + 1
+            query.where(filter.key + ' between "' + first + '" and "' + last + '"')
           }
-          query.where(filter.key + '=' + enclose + joined + enclose)
-        } else if (filter.type === 'checkbox' && filter.selected && filter.selected.length > 0) {
-          let join = filter.join || 'or',
-            joined = filter.selected.join(' ' + join + ' ')
-          query.where(joined)
-        } else if (filter.type === 'number') {
-          let first = parseInt(filter.range[0]) - 1
-          let last = parseInt(filter.range[1]) + 1
-          query.where(filter.key + ' between "' + first + '" and "' + last + '"')
         }
       }
-    }
 
-    query = query.limit(50000)
-    */
+      query = query.limit(50000)
+      */
   query = query.limit(50000)
   return query.getURL()
 }
@@ -245,8 +245,7 @@ function transformQuery (json, state) {
     return array.indexOf(elem) === index
   }))
 
-  keys.forEach((key, index, array) =>
-    data.push([key].concat(Array.apply(null, new Array(labels.length - 1)).map(Number.prototype.valueOf, 0)))
+  keys.forEach((key, index, array) => data.push([key].concat(Array.apply(null, new Array(labels.length - 1)).map(Number.prototype.valueOf, 0)))
   )
 
   json.forEach((row) => {
@@ -328,20 +327,19 @@ function callApi (endpoint, transform, state, params) {
   const fullUrl = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint
 
   return fetch(fullUrl)
-    .then((response) =>
-      response.json().then((json) => ({ json, response }))
-    ).then(({ json, response }) => {
-      if (!response.ok) {
-        return Promise.reject(json)
-      }
+    .then((response) => response.json().then((json) => ({ json, response}))
+  ).then(({ json, response }) => {
+    if (!response.ok) {
+      return Promise.reject(json)
+    }
 
-      const transformed = transform(json, state, params)
-      // const nextPageUrl = null // getNextPageUrl(response)
+    const transformed = transform(json, state, params)
+    // const nextPageUrl = null // getNextPageUrl(response)
 
-      return Object.assign({},
-        transformed
-      )
-    })
+    return Object.assign({},
+      transformed
+    )
+  })
 }
 
 export const CALL_API = Symbol('Call API')
@@ -376,7 +374,7 @@ export default (store) => (next) => (action) => {
     return finalAction
   }
 
-  const [ requestType, successType, failureType ] = types
+  const [requestType, successType, failureType] = types
   next(actionWith({ type: requestType }))
 
   return callApi(endpoint, transform, store.getState(), params).then(

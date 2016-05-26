@@ -71,7 +71,7 @@ function dataset (state = { columns: {}, query: {} }, action) {
       return merge({}, state, copyState)
     case UPDATE_FILTER:
       let newOptions = action.options
-      let copyState = Object.assign({}, state)
+      copyState = Object.assign({}, state)
       let existingOptions = copyState.query.filters[action.key].options || ''
       let isSelected = (newOptions.selected)
       let newState
