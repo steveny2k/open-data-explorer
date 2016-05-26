@@ -18,7 +18,7 @@ let C3Chart = React.createClass({
       }),
       size: React.PropTypes.shape({
         width: React.PropTypes.number,
-        height: React.PropTypes.number,
+        height: React.PropTypes.number
       }),
       labels: React.PropTypes.bool,
       onclick: React.PropTypes.func,
@@ -107,7 +107,7 @@ let C3Chart = React.createClass({
       }
       graphObject.data.xFormat = '%Y-%m-%dT%H:%M:%S.%L'
       graphObject.axis.x =
-        {type: 'timeseries', tick: { culling: true, format: format}
+        {type: 'timeseries', tick: {culling: true, format: format}
       }
     }
     if (options.subchart) {
@@ -189,6 +189,130 @@ let C3Chart = React.createClass({
     return chart
   },
 
+  dataPrepBarMulti: function (rawData) {
+    function zip (arrays) {
+      return arrays[0].map(function (_, i) {
+        return arrays.map(function (array) {
+          return array[i]
+        })
+      })
+    }
+    function chunkIt (someArray) {
+      // dont actually end up using this; could be useful later.
+      var groupSize = 2
+      var groups = _.map(someArray, function (item, index) {
+        return index % groupSize === 0 ? someArray.slice(index, index + groupSize) : null
+      })
+        .filter(function (item) {
+          return item
+        })
+      return groups
+    }
+
+    function filerOutZeros (chunkVals, chunkKeys = false) {
+      // edits array directly
+      var index = 0
+      while (index !== -1) {
+        index = chunkVals.indexOf(0)
+        if (index !== -1) {
+          chunkVals.pop(index)
+          if (chunkKeys) {
+            chunkKeys.pop(index)
+          }
+        }
+      }
+    }
+
+    function limitLongTail (chunk) {
+      filerOutZeros(chunk[1], chunk[0])
+      if (chunk[0].length > 11) {
+        var keys7 = chunk[0].slice(0, 11)
+        var counts7 = chunk[1].slice(0, 11)
+        var keysRest = chunk[0].slice(11, chunk[0].length)
+        var countsRest = chunk[1].slice(11, chunk[1].length)
+        // /stores all the k,v pairs of the longTail
+        var dataDictOther = zip([keysRest, countsRest])
+        var intCountsRest = countsRest.map(Number)
+        // reducer function to get sum
+        var total = intCountsRest.reduce((a, b) => a + b, 0)
+        keys7.push('Other')
+        counts7.push(total)
+        var newData = []
+        newData[0] = keys7
+        newData[1] = counts7
+        return newData
+      } else {
+        return chunk
+      }
+    }
+
+    function notEmpty (col) {
+      // var header = col.pop(0)
+      var colNums = col.slice(1, col.length)
+      colNums = colNums.map(Number)
+      var colSum = 0
+      colSum = colNums.reduce((a, b) => a + b, 0)
+      // arbitrary lower limit of 15
+      if (colSum > 15) {
+        return true
+      }
+      return false
+    }
+
+    function removeZeroRows (newData) {
+      var maxRowSum = 0
+      var removeIndexes = []
+      for (let i = 1; i < newData[0].length; i++) {
+        var zeroRow = []
+        for (let j = 1; j < newData.length; j++) {
+          zeroRow.push(newData[j][i])
+        }
+        zeroRow = zeroRow.map(Number)
+        var rowSum = zeroRow.reduce((a, b) => a + b, 0)
+        if (rowSum > maxRowSum) {
+          maxRowSum = rowSum
+        }
+        if (rowSum === 0) {
+          removeIndexes.push(i)
+        } else {
+          // remove groups that are less than one percent of largest group.
+          var threshold = 0.01
+          var zeroRowRatio = rowSum / maxRowSum
+          if (zeroRowRatio < threshold) {
+            removeIndexes.push(i)
+          }
+        }
+      }
+      for (let k = 0; k < removeIndexes.length; k++) {
+        var removedIndex = removeIndexes[k]
+        var removedHeader = newData[0].pop(removedIndex)
+        for (let z = 1; z < newData.length; z++) {
+          var popped = newData[z].pop(removedIndex)
+        }
+      }
+    }
+
+    function limitLongTailGroupBy (chunk) {
+      var newData = []
+      newData.push(chunk[0])
+      var cols = chunk.slice(1, chunk.length + 1)
+      for (let i = 0; i < cols.length; i++) {
+        if (notEmpty(cols[i])) {
+          newData.push(cols[i])
+        }
+      }
+      removeZeroRows(newData)
+      return newData
+    }
+    var cleanedData
+    if (this.props.data.length === 2) {
+      cleanedData = limitLongTail(rawData)
+    } else {
+      cleanedData = limitLongTailGroupBy(rawData)
+    }
+    return cleanedData
+  },
+
   drawGraphBar: function (multi) {
     let graphObject = this.graphObject()
     let graphObjectData = {
@@ -202,8 +326,11 @@ let C3Chart = React.createClass({
         names: { value: this.props.data[0].key }
       })
     } else {
+      let barData = []
+      barData = this.dataPrepBarMulti(this.props.data)
       graphObjectData = _.merge(graphObjectData, {
-        columns: Array.isArray(this.props.data[0]) ? this.props.data : this.multiDmsDataPreparator(this.props.data)
+        columns: Array.isArray(barData[0]) ? barData : this.multiDmsDataPreparator(barData)
+
       })
     }
     let graphObjectAxis = {
@@ -227,14 +354,6 @@ let C3Chart = React.createClass({
     return chart
   },
 
-  pieChartDataPreparator: function (rawData) {
-    let data
-    data = _.map(rawData, (d) => {
-      return [d.label, d.value]
-    })
-    return data
-  },
-
   drawGraphPie: function () {
     let graphObject = this.graphObject()
     let graphObjectData = {
@@ -254,10 +373,8 @@ let C3Chart = React.createClass({
       xLabels.push(d.label)
     })
 
-    let data, total
-
-    // total for % calcs
-    total = rawData.reduce((prev, curr) => {
+    let data
+    let total = rawData.reduce((prev, curr) => {
       let sum = 0
       curr.values.reduce((p, c) => {
         sum += parseInt(c.value)
@@ -352,13 +469,13 @@ let C3Chart = React.createClass({
 
   componentDidUpdate: function () {
     this.drawGraph()
-    /*
-    let chart = this.getChart()
-    if (this.props.order.length > 0) {
-      let show = (this.props.viewOption === 'top' ? this.props.order.slice(0, 5) : (this.props.viewOption === 'bottom' ? this.props.order.slice(-5) : this.props.order))
-      chart.hide()
-      this.props.viewOption === 'compare' ? chart.show() : chart.show(show)
-    }*/
+  /*
+  let chart = this.getChart()
+  if (this.props.order.length > 0) {
+    let show = (this.props.viewOption === 'top' ? this.props.order.slice(0, 5) : (this.props.viewOption === 'bottom' ? this.props.order.slice(-5) : this.props.order))
+    chart.hide()
+    this.props.viewOption === 'compare' ? chart.show() : chart.show(show)
+  }*/
   },
 
   render: function () {
