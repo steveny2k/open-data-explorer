@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import { Well, Button } from 'react-bootstrap'
-import _ from 'lodash'
 
 import FilterDateTime from './FilterDateTime'
 import FilterCategory from './FilterCategory'
@@ -38,7 +37,12 @@ class ChartFilters extends Component {
         case 'date':
           let startDate = filters[key].options ? filters[key].options.min : filter.min
           let endDate = filters[key].options ? filters[key].options.max : filter.max
-          filterContent = <FilterDateTime key={filter.key} fieldKey={filter.key} startDate={startDate} endDate={endDate} applyFilter={applyFilter}/>
+          filterContent = <FilterDateTime
+            key={filter.key}
+            fieldKey={filter.key}
+            startDate={startDate}
+            endDate={endDate}
+            applyFilter={applyFilter} />
           break
         case 'category':
           let optionsForFilter = filter.categories.map(function (record) {
@@ -47,26 +51,47 @@ class ChartFilters extends Component {
             }
             return { label: record.category, value: record.category }
           })
-          filterContent = <FilterCategory key={filter.key} fieldKey={filter.key} options={optionsForFilter} applyFilter={applyFilter} filter={filters[key]} />
+          filterContent = <FilterCategory
+            key={filter.key}
+            fieldKey={filter.key}
+            options={optionsForFilter}
+            applyFilter={applyFilter}
+            filter={filters[key]} />
           break
         case 'checkbox':
-          filterContent = <FilterBoolean key={filter.key} fieldKey={filter.key} options={checkboxOptions} applyFilter={applyFilter} filter={filters[key]}/>
+          filterContent = <FilterBoolean
+            key={filter.key}
+            fieldKey={filter.key}
+            options={checkboxOptions}
+            applyFilter={applyFilter}
+            filter={filters[key]} />
           break
         case 'number':
           let nextRange = filters[key].options ? filters[key].options.nextRange : [parseInt(filter.min), parseInt(filter.max)]
           let currentRange = filters[key].options ? (filters[key].options.currentRange ? filters[key].options.currentRange : [parseInt(filter.min), parseInt(filter.max)]) : [parseInt(filter.min), parseInt(filter.max)]
-          filterContent = <FilterNumeric key={filter.key} fieldKey={filter.key} min={parseInt(filter.min)} max={parseInt(filter.max)} currentRange={currentRange} nextRange={nextRange} filter={filters[key]} applyFilter={applyFilter} updateFilter={updateFilter}/>
+          filterContent = <FilterNumeric
+            key={filter.key}
+            fieldKey={filter.key}
+            min={parseInt(filter.min)}
+            max={parseInt(filter.max)}
+            currentRange={currentRange}
+            nextRange={nextRange}
+            filter={filters[key]}
+            applyFilter={applyFilter}
+            updateFilter={updateFilter} />
           break
       }
 
       let filterOption = (
-        <Well bsSize='small' className='filter' key={filter.key}>
-          <div className='filter-content'>
-            <Button className='close' onClick={handleRemoveFilter.bind(this, filter.key)}>&times;</Button>
-            <h4>{filter.name}</h4>
-              {filterContent}
-          </div>
-        </Well>)
+      <Well bsSize='small' className='filter' key={filter.key}>
+        <div className='filter-content'>
+          <Button className='close' onClick={handleRemoveFilter.bind(this, filter.key)}>
+            &times
+          </Button>
+          <h4>{filter.name}</h4>
+          {filterContent}
+        </div>
+      </Well>)
 
       return filterOption
     })
@@ -104,7 +129,7 @@ class ChartFilters extends Component {
           name='filters'
           placeholder="Select fields you'd like to filter by"
           options={options}
-          onChange={handleAddFilter}/>
+          onChange={handleAddFilter} />
         {filters ? this.renderFilterList() : false}
       </div>
 

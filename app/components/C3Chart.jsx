@@ -225,11 +225,11 @@ let C3Chart = React.createClass({
 
     function limitLongTail (chunk) {
       filerOutZeros(chunk[1], chunk[0])
-      if (chunk[0].length > 11) {
-        var keys7 = chunk[0].slice(0, 11)
-        var counts7 = chunk[1].slice(0, 11)
-        var keysRest = chunk[0].slice(11, chunk[0].length)
-        var countsRest = chunk[1].slice(11, chunk[1].length)
+      if (chunk[0].length > 12) {
+        var keys7 = chunk[0].slice(0, 12)
+        var counts7 = chunk[1].slice(0, 12)
+        var keysRest = chunk[0].slice(12, chunk[0].length)
+        var countsRest = chunk[1].slice(12, chunk[1].length)
         // /stores all the k,v pairs of the longTail
         var dataDictOther = zip([keysRest, countsRest])
         var intCountsRest = countsRest.map(Number)
