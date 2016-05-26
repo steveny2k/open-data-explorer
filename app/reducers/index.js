@@ -38,12 +38,16 @@ function dataset (state = { columns: {}, query: {} }, action) {
       }
       return merge({}, freshState)
     case SELECT_COLUMN:
-      return merge({}, state, {
+      let updatedQuery = {
         query: {
           isFetching: true,
           selectedColumn: action.column
         }
-      })
+      }
+      if (state.query.groupBy === action.column) {
+        updatedQuery.query.groupBy = null
+      }
+      return merge({}, state, updatedQuery)
     case GROUP_BY:
       let groupKey = action.key ? action.key.value : null
       return merge({}, state, {

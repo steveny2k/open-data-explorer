@@ -2,6 +2,7 @@ import fetch from 'isomorphic-fetch'
 import soda from 'soda-js'
 import pluralize from 'pluralize'
 import { capitalize } from 'underscore.string'
+import _ from 'lodash'
 
 const API_ROOT = 'https://data.sfgov.org/'
 
@@ -97,59 +98,6 @@ function constructQuery (state) {
       }
     }
   }
-  /*
-      if (fieldDef.type == 'calendar_date') {
-        query = query
-          .select('count(*) as value')
-          .select(dateAggregation + '(' + selectedCol + ') as label')
-          .where('label is not null')
-          .group('label')
-          .order('label')
-      } else if (fieldDef.type === 'category' || fieldDef.type === 'number') {
-        query = query
-          .select('count(*) as value')
-          .select(selectedCol + ' as label')
-          .group('label')
-          .order('value desc')
-      } else if (fieldDef.type === 'checkbox') {
-        query = query
-          .select('sum(case(' + selectedCol + '=false,1,true,0)) as ' + selectedCol + '_false')
-          .select('sum(case(' + selectedCol + '=true,1,true,0)) as ' + selectedCol + '_true')
-          .select('count(*) as total')
-          .order('total desc')
-      }
-
-      if (this.groupBy) {
-        query.select(this.groupBy).group(this.groupBy).order(this.groupBy)
-      }
-
-      if (this.state.filters.length > 0) {
-        for (var filter of this.state.filters) {
-          if (filter.type === 'calendar_date') {
-            let start = filter.startDate.format('YYYY-MM-DD'),
-              end = filter.endDate.format('YYYY-MM-DD')
-            query.where(filter.key + '>="' + start + '" and ' + filter.key + '<="' + end + '"')
-          } else if (filter.type === 'category' && filter.selected) {
-            let enclose = '"',
-              joined = filter.selected
-            if (Array.isArray(filter.selected)) {
-              joined = filter.selected.join(enclose + ' or ' + filter.key + '=' + enclose)
-            }
-            query.where(filter.key + '=' + enclose + joined + enclose)
-          } else if (filter.type === 'checkbox' && filter.selected && filter.selected.length > 0) {
-            let join = filter.join || 'or',
-              joined = filter.selected.join(' ' + join + ' ')
-            query.where(joined)
-          } else if (filter.type === 'number') {
-            let first = parseInt(filter.range[0]) - 1
-            let last = parseInt(filter.range[1]) + 1
-            query.where(filter.key + ' between "' + first + '" and "' + last + '"')
-          }
-        }
-      }
-
-      query = query.limit(50000)
-      */
   query = query.limit(50000)
   return query.getURL()
 }
@@ -170,12 +118,12 @@ function endpointQuery (state) {
   return constructQuery(state)
 }
 
-function endpointGroupByQuery (id, key) {
+function endpointColumnProperties (id, key) {
   let category = key + ' as category'
   if (key === 'category') {
     category = key
   }
-  return `resource/${id}.json?$select=${category},count(*)&$group=category&$order=category asc`
+  return `resource/${id}.json?$select=${category},count(*)&$group=category&$order=category asc&$limit=50000`
 }
 
 function transformMetadata (json) {
@@ -270,14 +218,15 @@ function transformApiMigration (json) {
   return {migrationId: json.nbeId}
 }
 
-function transformGroupByQuery (json, state, params) {
-  let checkFirst = parseInt(json[0].count) / state.dataset.rowCount
+function transformColumnProperties (json, state, params) {
+  let maxRecord = parseInt(_.maxBy(json, function (o) { return parseInt(o.count) }).count)
+  let checkFirst = maxRecord / state.dataset.rowCount
   let checkNumCategories = json.length / state.dataset.rowCount
   let transformed = {
     columns: {}
   }
   transformed.columns[params['key']] = {}
-  if (checkFirst <= 0.95 && checkNumCategories <= 0.95 && json[0].count !== '1' && json.length !== 1000) {
+  if ((checkFirst <= 0.95 && checkNumCategories <= 0.95) && maxRecord !== '1' && json.length !== 50000) {
     transformed.columns[params['key']].categories = json
     transformed.categoryColumns = [params['key']]
   } else if (json[0].count === '1') {
@@ -288,6 +237,10 @@ function transformGroupByQuery (json, state, params) {
     transformed.columns[params['key']].singleValue = true
   }
 
+  if (params['key'] === 'zip') {
+    debugger
+  }
+
   return transformed
 }
 
@@ -296,7 +249,7 @@ export const Endpoints = {
   QUERY: endpointQuery,
   COUNT: endpointCount,
   MIGRATION: endpointApiMigration,
-  COLPROPS: endpointGroupByQuery
+  COLPROPS: endpointColumnProperties
 }
 
 export const Transforms = {
@@ -304,7 +257,7 @@ export const Transforms = {
   QUERY: transformQuery,
   COUNT: transformCount,
   MIGRATION: transformApiMigration,
-  COLPROPS: transformGroupByQuery
+  COLPROPS: transformColumnProperties
 }
 
 export const shouldRunColumnStats = (type, key) => {
@@ -312,7 +265,6 @@ export const shouldRunColumnStats = (type, key) => {
    * numericKeys is a bit of a hack to get around the fact that some categorical fields are encoded as numbers on the portal
    * we don't want to run column stats against all numeric columns, so this allows us to control that
   */
-  const numericKeys = ['supervisor_district', 'calendar_year', 'fiscal_year']
   let regex = /(year|day|date|month|district|yr)/g
   let isCategorical = regex.test(key)
   if (type === 'text' || (isCategorical && type === 'number')) {
