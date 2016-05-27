@@ -36,6 +36,15 @@ class ChartOptions extends Component {
   renderSumByOptions () {
     let {columns, handleSumBy, sumBy} = this.props
     let sumableColumns
+
+    let isNumericForSum = function (col) {
+      let numberFields = ['double', 'money', 'number']
+      if (numberFields.indexOf(col['type']) > -1) {
+        return true
+      }
+      return false
+    }
+
     // for SUM_BY
     if (columns) {
       let columnKeys = Object.keys(columns)
@@ -44,14 +53,6 @@ class ChartOptions extends Component {
       }).map((col) => {
         return {label: columns[col].name, value: columns[col].key}
       })
-    }
-
-    let isNumericForSum = function (col) {
-      let numberFields = ['double', 'money', 'number']
-      if (numberFields.indexOf(col['type']) > -1) {
-        return true
-      }
-      return false
     }
 
     return (
