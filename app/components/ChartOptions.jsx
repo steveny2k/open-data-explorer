@@ -39,6 +39,7 @@ class ChartOptions extends Component {
     let isNumericForSum = function (col) {
       let numberFields = ['double', 'money', 'number']
       if (col.unique) return false
+      if (col.categories) return false
       if (numberFields.indexOf(col['type']) > -1) {
         return true
       }
@@ -54,13 +55,18 @@ class ChartOptions extends Component {
         return {label: columns[col].name, value: columns[col].key}
       })
     }
-    return (
-      <Select
-        name='sumby'
-        placeholder='Select a field to sum by'
-        options={sumableColumns}
-        value={sumBy}
-        onChange={handleSumBy}/>)
+
+    if (sumableColumns.length === 0) {
+      return false
+    } else {
+      return (
+        <Select
+          name='sumby'
+          placeholder='Select a field to sum by'
+          options={sumableColumns}
+          value={sumBy}
+          onChange={handleSumBy}/>)
+    }
   }
 
   render () {

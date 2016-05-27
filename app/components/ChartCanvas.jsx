@@ -69,7 +69,7 @@ class ChartCanvas extends Component {
         y: 'Number of ' + pluralize(rowLabel)
       },
       tickFormat: {
-        x: d3.format(','),
+        x: null,
         y: d3.format(',')
       },
       timeseries: false,
@@ -115,8 +115,15 @@ class ChartCanvas extends Component {
       options.axisLabel.y = columns[sumBy].name
       switch (columns[sumBy].format) {
         case 'money':
-          options.tickFormat.y = d3.format('$,')
+          options.tickFormat.y = d3.format('$,.2f')
       }
+    }
+
+    switch (selectedColumnDef.format) {
+      case 'number':
+        if (!selectedColumnDef.categories) {
+          options.tickFormat.x = d3.format(',.2f')
+        }
     }
 
     return (

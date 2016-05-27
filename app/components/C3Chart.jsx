@@ -102,10 +102,14 @@ let C3Chart = React.createClass({
       graphObject.axis.x = {label: {text: options.axisLabel.x, position: 'outer-center'}}
       graphObject.axis.y = {label: {text: options.axisLabel.y, position: 'outer-middle'}}
     }
-    if (options.tickFormat) {
+    if (options.tickFormat.x) {
       graphObject.axis.x.tick = {format: options.tickFormat.x}
+    }
+    if (options.tickFormat.y) {
       graphObject.axis.y.tick = {format: options.tickFormat.y}
     }
+
+    graphObject.axis.y.tick = {format: options.tickFormat.y}
     if (options.timeseries) {
       let format = '%Y'
       if (Array.isArray(data[0])) {
