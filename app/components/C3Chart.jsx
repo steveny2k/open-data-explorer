@@ -223,9 +223,10 @@ let C3Chart = React.createClass({
       }
     }
 
-    function limitLongTail (chunk) {
+    let limitLongTail = (chunk) => {
+      let {dataType} = this.props
       filterOutZeros(chunk[1], chunk[0])
-      if (chunk[0].length > 12) {
+      if (chunk[0].length > 12 && dataType !== 'number') {
         var keys7 = chunk[0].slice(0, 12)
         var counts7 = chunk[1].slice(0, 12)
         var keysRest = chunk[0].slice(12, chunk[0].length)
@@ -311,6 +312,7 @@ let C3Chart = React.createClass({
     } else {
       cleanedData = limitLongTailGroupBy(rawData)
     }
+    console.log(cleanedData)
     return cleanedData
   },
 

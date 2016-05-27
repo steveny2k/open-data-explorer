@@ -84,15 +84,15 @@ class ChartFilters extends Component {
       }
 
       let filterOption = (
-      <Well bsSize='small' className='filter' key={filter.key}>
-        <div className='filter-content'>
-          <Button className='close' onClick={handleRemoveFilter.bind(this, filter.key)}>
-            &times
-          </Button>
-          <h4>{filter.name}</h4>
-          {filterContent}
-        </div>
-      </Well>)
+        <Well bsSize='small' className='filter' key={filter.key}>
+          <div className='filter-content'>
+            <Button className='close' onClick={handleRemoveFilter.bind(this, filter.key)}>
+              &times;
+            </Button>
+            <h4>{filter.name}</h4>
+            {filterContent}
+          </div>
+        </Well>)
 
       return filterOption
     })

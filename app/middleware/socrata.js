@@ -216,19 +216,17 @@ function transformQuery (json, state) {
       return a - b
     })
 
-    let s = vector
-
-    let quantile = (p) => {
-      let idx = 1 + (s.length - 1) * p
+    let quantile = (p, vector) => {
+      let idx = 1 + (vector.length - 1) * p
       let lo = Math.floor(idx)
       let hi = Math.ceil(idx)
       let h = idx - lo
-      return (1 - h) * s[lo] + h * s[hi]
+      return (1 - h) * vector[lo] + h * vector[hi]
     }
 
-    let freedmanDiaconis = () => {
-      let iqr = quantile(0.75) - quantile(0.25)
-      return 2 * iqr * Math.pow(s.length, -1 / 3)
+    let freedmanDiaconis = (vector) => {
+      let iqr = quantile(0.75, vector) - quantile(0.25, vector)
+      return 2 * iqr * Math.pow(vector.length, -1 / 3)
     }
 
     let pretty = (x) => {
@@ -240,9 +238,12 @@ function transformQuery (json, state) {
       return scale * 10
     }
 
-    let binSize = freedmanDiaconis()
+    let binSize = freedmanDiaconis(vector)
+    if (binSize === 0) {
+      let vector2 = vector.slice(vector.lastIndexOf(0))
+      binSize = freedmanDiaconis(vector2)
+    }
     binSize = pretty(binSize)
-
     let binNumbers = (values, binWidth, array = [], index = 0) => {
       if (index < values.length) {
         let bin = Math.floor(values[index] / binWidth)
