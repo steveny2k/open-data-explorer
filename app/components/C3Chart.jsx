@@ -2,7 +2,7 @@ const React = require('react')
 const _ = require('lodash')
 
 const c3 = require('c3')
-// const d3 = require("d3")
+const d3 = require("d3")
 
 let C3Chart = React.createClass({
   displayName: 'C3Chart',

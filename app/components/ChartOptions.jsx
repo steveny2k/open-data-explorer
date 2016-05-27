@@ -28,7 +28,9 @@ class ChartOptions extends Component {
         placeholder='Select a field to group by'
         options={groupableColumns}
         value={groupBy}
-        onChange={handleGroupBy}/>
+        onChange={handleGroupBy}
+        className={'filterF'}
+        />
       )
   }
 
@@ -65,7 +67,9 @@ class ChartOptions extends Component {
           placeholder='Select a field to sum by'
           options={sumableColumns}
           value={sumBy}
-          onChange={handleSumBy}/>)
+          onChange={handleSumBy}
+          className={'filterF'}
+          />)
     }
   }
 
@@ -80,7 +84,7 @@ class ChartOptions extends Component {
     }
 
     return (
-      <div>
+      <div className={'chartFiltersStyle'}>
         {groupByOptions}
         <ChartFilters
           columns={columns}
@@ -88,7 +92,8 @@ class ChartOptions extends Component {
           handleAddFilter={handleAddFilter}
           handleRemoveFilter={handleRemoveFilter}
           applyFilter={applyFilter}
-          updateFilter={updateFilter}/>
+          updateFilter={updateFilter}
+          className={'filterF'}/>
         {sumByOptions}
       </div>
     )

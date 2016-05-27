@@ -150,7 +150,7 @@ input-mysize{
 
 .chartButtons{
   font-size:110%;
-  padding:0.75%;
+  padding:0.50%;
   border-radius: 0.10 !important;
   border:0.001;
   margin-left:0.01%;
@@ -166,4 +166,29 @@ input-mysize{
 
 .c3chart{
   margin-top:3%;
+}
+
+
+.chartFiltersStyle{
+  font-size:115%;
+  padding-right:5%;
+  margin-top:8%;
+}
+
+.filterF{
+  margin-top:2%;
+  margin-bottom:2%;
+  margin-right:3%;
+  font-size:115%;
+  min-width:320px;
+  height:40px;
+}
+h2.chartTitle{
+  margin-top:4%;
+  margin-left:3%;
+}
+
+h3.chartTitle{
+  margin-left:3%;
+  padding-bottom:0.5%;
 }
