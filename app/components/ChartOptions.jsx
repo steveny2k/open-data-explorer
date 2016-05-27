@@ -15,7 +15,6 @@ class ChartOptions extends Component {
       groupableColumns = columnKeys.filter((col) => {
         if (columns[col].key !== selectedColumn) {
           if (columns[col].categories) return true
-          if (columns[col].type === 'date') return true
         }
         return false
       }).map((col) => {
@@ -39,6 +38,7 @@ class ChartOptions extends Component {
 
     let isNumericForSum = function (col) {
       let numberFields = ['double', 'money', 'number']
+      if (col.unique) return false
       if (numberFields.indexOf(col['type']) > -1) {
         return true
       }
@@ -68,7 +68,7 @@ class ChartOptions extends Component {
     let groupByOptions = null
     let sumByOptions = null
 
-    if (columns[selectedColumn].type !== 'number') {
+    if (columns[selectedColumn].type !== 'number' || columns[selectedColumn].categories) {
       groupByOptions = this.renderGroupByOptions()
       sumByOptions = this.renderSumByOptions()
     }

@@ -107,6 +107,7 @@ class ChartFilters extends Component {
 
     let options = Object.keys(columns).filter((column) => {
       let option = columns[column]
+      if (option.unique) return false
       if (option.type === 'checkbox') checkboxes = true
       if (notFilters.indexOf(option.type) > -1) return false
       if (!option.categories && option.type === 'text') return false

@@ -195,7 +195,7 @@ function transformQuery (json, state) {
     data[keys.indexOf(key)][labels.indexOf(label)] = row.value
   })
 
-  if (columns[selectedColumn].type === 'number') {
+  if (columns[selectedColumn].type === 'number' && !columns[selectedColumn].categories) {
     let counts = [].concat(data[0])
     let numbers = [].concat(labels)
     counts.shift()
@@ -319,10 +319,11 @@ export const Transforms = {
 
 export const shouldRunColumnStats = (type, key) => {
   /*
-   * numericKeys is a bit of a hack to get around the fact that some categorical fields are encoded as numbers on the portal
-   * we don't want to run column stats against all numeric columns, so this allows us to control that
+   * below is a bit of a hack to get around the fact that some categorical fields are encoded as numbers on the portal
+   * we don't want to run column stats against all numeric columns, so this allows us to control that, the regex below may need to be
+   * tuned as is, it could create false positives. This is okay for now, something we can optimize later
   */
-  let regex = /(year|day|date|month|district|yr)/g
+  let regex = /(year|day|date|month|district|yr|id|code)/g
   let isCategorical = regex.test(key)
   if (type === 'text' || (isCategorical && type === 'number')) {
     return true
