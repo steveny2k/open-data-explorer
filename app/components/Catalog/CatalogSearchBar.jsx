@@ -16,8 +16,8 @@ export default class CatalogSearchBar extends React.Component {
   render () {
     let {handleSearch} = this.props
     return (
-    <div>
-      <Input type="text" placeholder="Search" onKeyUp={this.handleSearch} />
+    <div className={'catalogMainSearchBox'}>
+      <Input type="text" placeholder="Search" onKeyUp={this.handleSearch}/>
     </div>
     )
   }

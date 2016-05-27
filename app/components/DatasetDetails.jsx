@@ -6,7 +6,7 @@ var labelStyle = {
 }
 
 var defStyle = {
-  minHeight: '200px'
+  minHeight: '200px',
 }
 
 var humanType = {
@@ -25,10 +25,10 @@ class DatasetDetails extends Component {
     let title = <h2>{column.name}</h2>
     return (
       <Col md={4} key={idx}>
-        <Panel header={title} style={defStyle}>
-          <p>{column.description}</p>
-          <Label bsStyle='info' style={labelStyle}>Field type: {humanType[column.type]}</Label>
-          <Label bsStyle='info' style={labelStyle}>API name: {column.key}</Label>
+        <Panel header={title} className={'descriptionPanel'}>
+          <p> {column.description}</p>
+          <Label bsStyle='info' style={labelStyle} className={'descriptionPanelField'}>Field type: {humanType[column.type]} </Label>
+          <Label bsStyle='info' style={labelStyle} className={'descriptionPanelField'}>API name: {column.key}</Label>
         </Panel>
       </Col>
       )
@@ -53,7 +53,7 @@ class DatasetDetails extends Component {
     }
 
     return (
-      <div>
+      <div className={'descriptionPanelHead'}>
         {rows}
       </div>
       )

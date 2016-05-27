@@ -263,7 +263,6 @@ function transformQuery (json, state) {
     data[keys.indexOf(key)][labels.indexOf(label)] = row.value
   })
   data = [labels].concat(data)
-  debugger
   return {
     query: {
       isFetching: false,

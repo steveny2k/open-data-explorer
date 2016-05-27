@@ -16,7 +16,9 @@ export default class CatalogFacets extends React.Component {
                label={`${cat.name}` + ` (${cat.count})`}
                onClick={this.props.handleCategorySelect.bind(this, cat.name, 'categories')}
                key={i}
-               checked={cat.isRefined} />
+               checked={cat.isRefined}
+               className={'facetCategories'}
+               />
     }.bind(this))
 
     var departments = facets.departments.map(function (cat, i) {
@@ -33,11 +35,11 @@ export default class CatalogFacets extends React.Component {
     return (
     <div className='facets'>
       <div className='facet'>
-        <h3>Categories</h3>
+        <h3 className={'categories'}>Categories</h3>
         {categories}
       </div>
       <div className='facet'>
-        <h3>Departments</h3>
+        <h3 className = {'categories'}>Departments</h3>
         {departments}
       </div>
     </div>

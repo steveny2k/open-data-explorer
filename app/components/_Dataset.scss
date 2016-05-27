@@ -57,3 +57,75 @@
 .toggle-time {
 	float: right;
 }
+
+.homepage{
+  margin:10%
+}
+
+#search-catalog-input::-webkit-input-placeholder {
+    color:    #99b5c3;
+ }
+search-catalog-input:-moz-placeholder {
+    color:    #99b5c3;
+}
+#search-catalog-input::-moz-placeholder {
+    color:    #99b5c3;
+  }
+
+.search-input {
+ font-size: 120%;
+      height: 60px;
+
+    padding-right:2%;
+    margin-right:0.5%;
+}
+
+
+.glyphicon.glyphicon-search {
+    font-size: 28px;
+}
+
+input-mysize{
+  width: 550px;
+}
+
+.tabSelected{
+  font-size:150%;
+}
+
+.chartTabs{
+  margin-top:2%;
+  margin-right:1%;
+  margin-left:1%;
+}
+
+.descriptionPanel{
+  font-size:115%;
+  minHeight: '200px',
+}
+.descriptionPanelHead{
+  margin-top:3%;
+  margin-left:2%;
+  margin-right:2%;
+}
+.descriptionPanelField{
+  font-size:108%;
+}
+
+.dataSetInfo{
+  font-size:110%;
+  margin-top:2%;
+}
+
+.dataSetInfoDescription{
+  font-size:130%;
+}
+
+.datasetOverview{
+  margin-top: 5%;
+}
+.datasetName{
+  margin-top:10%;
+  margin-right:2%;
+}
+
