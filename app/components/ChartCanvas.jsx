@@ -59,7 +59,7 @@ class ChartCanvas extends Component {
     if (groupBy) {
       title += ' and ' + columns[groupBy].name
     }
-    return (<h2>{title.toTitleCase()}</h2>)
+    return (<h2 className={'chartTitle'}>{title.toTitleCase()}</h2>)
   }
 
   renderSubTitle () {
@@ -78,7 +78,7 @@ class ChartCanvas extends Component {
         }
       }
     }
-    return subtitle === '' ? false : (<h3>{subtitle}</h3>)
+    return subtitle === '' ? false : (<h3 className={'chartTitle'}>{subtitle}</h3>)
   }
 
   renderDateToggle () {
