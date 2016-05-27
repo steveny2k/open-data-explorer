@@ -90,6 +90,10 @@ class ChartCanvas extends Component {
       options.padding.left = (maxLabelLength * 4) + 50
     }
 
+    if (type === 'number') {
+      options.rotated = false
+    }
+
     if (type === 'date') {
       options.timeseries = true
       toggle = this.renderDateToggle()
@@ -104,6 +108,7 @@ class ChartCanvas extends Component {
         <Chart
           data={data}
           type={chartType}
+          dataType={type}
           options={options}
           colors={colors} />
       </div>

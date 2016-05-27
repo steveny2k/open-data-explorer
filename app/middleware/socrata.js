@@ -1,11 +1,8 @@
-require('histogram-pretty/histogram-pretty.js')
-
 import fetch from 'isomorphic-fetch'
 import soda from 'soda-js'
 import pluralize from 'pluralize'
 import { capitalize } from 'underscore.string'
 import _ from 'lodash'
-import d3 from 'd3'
 
 const API_ROOT = 'https://data.sfgov.org/'
 
@@ -204,14 +201,11 @@ function transformQuery (json, state) {
     let numbers = [].concat(labels)
     counts.shift()
     numbers.shift()
-    console.log(numbers)
 
     let vector = numbers.map((number, idx, arr) => {
       let expand = []
-      if (number !== '0') {
-        for (let i = 0; i < parseInt(counts[idx]); i++) {
-          expand.push(parseInt(number))
-        }
+      for (let i = 0; i < parseInt(counts[idx]); i++) {
+        expand.push(parseInt(number))
       }
       return expand
     }).reduce((a, b) => {
@@ -222,23 +216,49 @@ function transformQuery (json, state) {
       return a - b
     })
 
-    let hist = histogram(vector)
+    let s = vector
 
-    let binNumbers = (values, binWidth, index = 0, array = []) => {
-      let lastIdx = values.lastIndexOf(binWidth + (index * binWidth))
-      if (lastIdx !== -1) {
-        let slice = values.slice((index * binWidth), lastIdx)
-        array.push(slice.length)
-        binNumbers(values, binWidth, index + 1, array)
+    let quantile = (p) => {
+      let idx = 1 + (s.length - 1) * p
+      let lo = Math.floor(idx)
+      let hi = Math.ceil(idx)
+      let h = idx - lo
+      return (1 - h) * s[lo] + h * s[hi]
+    }
+
+    let freedmanDiaconis = () => {
+      let iqr = quantile(0.75) - quantile(0.25)
+      return 2 * iqr * Math.pow(s.length, -1 / 3)
+    }
+
+    let pretty = (x) => {
+      let scale = Math.pow(10, Math.floor(Math.log(x / 10) / Math.LN10))
+      let err = 10 / x * scale
+      if (err <= 0.15) scale *= 10
+      else if (err <= 0.35) scale *= 5
+      else if (err <= 0.75) scale *= 2
+      return scale * 10
+    }
+
+    let binSize = freedmanDiaconis()
+    binSize = pretty(binSize)
+
+    let binNumbers = (values, binWidth, array = [], index = 0) => {
+      if (index < values.length) {
+        let bin = Math.floor(values[index] / binWidth)
+        array[bin] = array[bin] ? array[bin] + 1 : 1
+        binNumbers(values, binWidth, array, index + 1)
       }
       return array
     }
 
-    let binFreq = binNumbers(vector, hist.size)
+    let maxBins = Math.floor(vector[vector.length - 1] / binSize)
+    let emptyBins = Array(maxBins).fill(0)
+    let binFreq = binNumbers(vector, binSize, emptyBins)
 
     data[0] = ['Count of ' + rowLabel].concat(binFreq)
     labels = ['x'].concat(binFreq.map((d, idx) => {
-      return hist.size * idx + ' to ' + hist.size * (idx + 1)
+      return binSize * idx + ' to ' + binSize * (idx + 1)
     }))
   }
 
@@ -277,8 +297,6 @@ function transformColumnProperties (json, state, params) {
   if (checkFirst === 1) {
     transformed.columns[params['key']].singleValue = true
   }
-
-
 
   return transformed
 }
