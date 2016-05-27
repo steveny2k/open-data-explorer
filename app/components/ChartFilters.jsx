@@ -10,6 +10,7 @@ import FilterBoolean from './FilterBoolean'
 class ChartFilters extends Component {
   constructor (props) {
     super(props)
+
     this.renderFilterList = this.renderFilterList.bind(this)
   }
 
