@@ -18,11 +18,13 @@ class Charts extends Component {
   renderColumnButton (column, idx, columns) {
     function setButtonColors (col) {
       let buttonColors = function () {
-        let bColorsFxn = d3.scale.category10()
+        let bColorsFxn = d3.scale.category30()
         let buttonColors = bColorsFxn.range()
         return buttonColors
       }
-      let btnColors = buttonColors()
+      //let btnColors = buttonColors()
+      let btnColors = [ '#3498db','#27ae60', '#16a085', '#7986cb', '#d35400', '#c0392b',  '#a97964', '#8e44ad', '#f39c12']
+
       let numberFields = ['double', 'money', 'number']
       let textFields = ['text']
       let dateFields = ['date', 'calendar_date']
@@ -37,7 +39,7 @@ class Charts extends Component {
           return false
         }
       };
-      let allFields = [numberFields, categoryFields, textFields, dateFields, contactFields, locationFields, booleanFields]
+      let allFields = [ categoryFields, numberFields, textFields, dateFields, contactFields, locationFields, booleanFields]
 
       let isType = function(col, fieldList){
         if(typeof fieldList === "function") {
@@ -51,7 +53,7 @@ class Charts extends Component {
         return false
       }
 
-      for (let i = 1; i < allFields.length; i++) {
+      for (let i = 0; i < allFields.length; i++) {
         if(isType(col, allFields[i])){
           return btnColors[i]
         }
