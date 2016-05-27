@@ -50,8 +50,8 @@
 }
 
 .c3 svg {
-    font: 12px "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    line-height: 1.4;
+     line-height: 1.4;
+    font-family: 'Lato', sans-serif;
 }
 
 .toggle-time {
@@ -94,14 +94,14 @@ input-mysize{
 }
 
 .chartTabs{
-  margin-top:2%;
+  margin-top:1.75%;
   margin-right:1%;
   margin-left:1%;
 }
 
 .descriptionPanel{
-  font-size:115%;
-  minHeight: '200px',
+  minHeight: '200px';
+  font-size:105%;
 }
 .descriptionPanelHead{
   margin-top:3%;
@@ -109,16 +109,20 @@ input-mysize{
   margin-right:2%;
 }
 .descriptionPanelField{
-  font-size:108%;
+  font-size:85%;
 }
 
 .dataSetInfo{
   font-size:110%;
-  margin-top:2%;
+  margin-top:-0.25%;
+  margin-left:-2%;
+  font-family: 'Lato', sans-serif;
 }
 
 .dataSetInfoDescription{
   font-size:130%;
+  margin-right:10%;
+  font-family: 'Lato', sans-serif;
 }
 
 .datasetOverview{
@@ -127,12 +131,35 @@ input-mysize{
 .datasetName{
 }
 
+.datasetLinks{
+  font-size:130%;
+}
+
 .datasetDownLoadButtons{
-  margin-top:2%;
-  margin-bottom:-2%;
+  margin-top:1%;
+  margin-left:-2%;
+  font-family: 'Lato', sans-serif;
 }
 
 
 .dataSetTitle{
    margin-top:6%;
+   margin-right:3%;
+   font-family: 'Lato', sans-serif;
+}
+
+.chartButtons{
+  font-size:110%;
+  padding:0.75%;
+  border-radius: 0.10 !important;
+  border:0.001;
+  margin-left:0.01%;
+  margin-right:0.01%;
+  margin-bottom:0.01%;
+  font-family: 'Lato', sans-serif;
+}
+
+.chartButtonRow{
+  margin-right:2%;
+  margin-top:2%;
 }
