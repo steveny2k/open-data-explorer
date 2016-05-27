@@ -164,7 +164,7 @@ function transformMetadata (json) {
 
 function transformQuery (json, state) {
   let { columns, query, rowLabel } = state.dataset
-  let { selectedColumn, groupBy } = query
+  let { selectedColumn, groupBy, sumBy } = query
   let labels = ['x']
   let keys = []
   let data = []
@@ -173,7 +173,7 @@ function transformQuery (json, state) {
   let keyIdx = groupBy || 'label'
   if (keyIdx !== 'label' && columns[keyIdx].type === 'date') keyIdx = 'date_group_by'
 
-  rowLabel = pluralize(rowLabel)
+  rowLabel = !sumBy ? pluralize(rowLabel) : 'Sum of ' + columns[sumBy].name
 
   labels = labels.concat(isCheckbox ? rowLabel : json.map((row) => {
     return typeof row.label === 'undefined' ? nullText : (row.label === nullText ? 'False' : capitalize(row.label.toString()))
@@ -187,8 +187,7 @@ function transformQuery (json, state) {
     return array.indexOf(elem) === index
   }))
 
-  keys.forEach((key, index, array) => data.push([key].concat(Array.apply(null, new Array(labels.length - 1)).map(Number.prototype.valueOf, 0)))
-  )
+  keys.forEach((key, index, array) => data.push([key].concat(Array.apply(null, new Array(labels.length - 1)).map(Number.prototype.valueOf, 0))))
 
   json.forEach((row) => {
     let label = isCheckbox ? rowLabel : (typeof row.label === 'undefined' ? nullText : (row.label === nullText ? 'False' : capitalize(row.label.toString())))

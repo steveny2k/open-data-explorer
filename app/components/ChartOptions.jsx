@@ -54,7 +54,6 @@ class ChartOptions extends Component {
         return {label: columns[col].name, value: columns[col].key}
       })
     }
-
     return (
       <Select
         name='sumby'
