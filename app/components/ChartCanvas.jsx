@@ -17,7 +17,11 @@ class ChartCanvas extends Component {
   }
 
   renderTitle (rowLabel, fieldName, groupName = null) {
-    let title = pluralize(rowLabel) + ' by ' + fieldName
+    function toTitleCase(str){
+      return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    }
+
+    let title = toTitleCase(pluralize(rowLabel) + ' by ' + fieldName)
     return (<h2>{capitalize(title, true)}</h2>)
   }
 
@@ -127,7 +131,7 @@ class ChartCanvas extends Component {
     }
 
     return (
-      <div id='C3Chart'>
+      <div id='C3Chart'className={'container-fluid'}>
         {toggle}
         {this.renderTitle(rowLabel, fieldName)}
         <Chart

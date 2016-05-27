@@ -34,7 +34,7 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic"
 // Buttons ====================================================================
 
 .btn {
-  border-width: 2px;
+  border-width: 1px;
 }
 
 .btn:active {
@@ -292,7 +292,7 @@ a.list-group-item {
     &.active {
       background-color: $state-warning-bg;
     }
-    
+
     &.active:hover,
     &.active:focus {
       background-color: darken($state-warning-bg, 5%);
@@ -303,7 +303,7 @@ a.list-group-item {
     &.active {
       background-color: $state-danger-bg;
     }
-    
+
     &.active:hover,
     &.active:focus {
       background-color: darken($state-danger-bg, 5%);
@@ -328,3 +328,6 @@ a.list-group-item {
 .popover {
   color: $text-color;
 }
+
+
+

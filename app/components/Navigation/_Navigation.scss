@@ -1,16 +1,39 @@
 @import "toolkit";
 
-.navigation {
-  margin: 0;
-  padding: 0;
-  li {
-    display: inline-block;
-    margin-right: 10px;
-    a {
-      text-decoration: none;
-    }
-    &.-selected {
-      text-decoration: underline;
-    }
-  }
+
+.myNav .navbar-brand {
+  height: 50px;
+}
+
+.myNav.nav >li >a {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+.myNav .navbar-toggle {
+  padding: 10px;
+  margin: 25px 15px 25px 0;
+}
+
+
+
+.navLogo{
+  font-size:260%;
+  font-family: 'Lato', sans-serif;
+  padding-top:14%;
+  margin-left:5%;
+}
+
+
+.navTotal{
+  width:100%;
+  padding-bottom:0.5%;
+  margin-top:-1%;
+  padding-left:2%;
+  padding-right:2%;
+}
+.navLi {
+  padding-top:2%;
+  font-size:150%;
+  padding-right:2%;
+  font-family: 'Lato', sans-serif;
 }

@@ -51,13 +51,15 @@ let C3Chart = React.createClass({
 
   // color theme
   colors: function (count) {
-    let colors = []
-    // let color = d3.scale.category10()
-    let color = this.props.colors
-    for (let i = 0; i < count; i++) {
-      colors.push(color[i])
-    }
-    return colors
+
+    let makeColors = function(){
+        let bColorsFxn = d3.scale.category20();
+        let colors = bColorsFxn.range();
+        return colors;
+      }
+
+    let colors = makeColors()
+
   },
 
   // apply props.options to graph json

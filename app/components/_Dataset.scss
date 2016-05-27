@@ -50,10 +50,120 @@
 }
 
 .c3 svg {
-    font: 12px "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    line-height: 1.4;
+     line-height: 1.4;
+    font-family: 'Lato', sans-serif;
 }
 
 .toggle-time {
 	float: right;
+}
+
+.homepage{
+  margin:10%
+}
+
+#search-catalog-input::-webkit-input-placeholder {
+    color:    #99b5c3;
+ }
+search-catalog-input:-moz-placeholder {
+    color:    #99b5c3;
+}
+#search-catalog-input::-moz-placeholder {
+    color:    #99b5c3;
+  }
+
+.search-input {
+ font-size: 120%;
+      height: 60px;
+
+    padding-right:2%;
+    margin-right:0.5%;
+}
+
+
+.glyphicon.glyphicon-search {
+    font-size: 28px;
+}
+
+input-mysize{
+  width: 550px;
+}
+
+.tabSelected{
+  font-size:150%;
+}
+
+.chartTabs{
+  margin-top:1.75%;
+  margin-right:1%;
+  margin-left:1%;
+}
+
+.descriptionPanel{
+  minHeight: '200px';
+  font-size:105%;
+}
+.descriptionPanelHead{
+  margin-top:3%;
+  margin-left:2%;
+  margin-right:2%;
+}
+.descriptionPanelField{
+  font-size:85%;
+}
+
+.dataSetInfo{
+  font-size:110%;
+  margin-top:-0.25%;
+  margin-left:-2%;
+  font-family: 'Lato', sans-serif;
+}
+
+.dataSetInfoDescription{
+  font-size:130%;
+  margin-right:10%;
+  font-family: 'Lato', sans-serif;
+}
+
+.datasetOverview{
+  margin-top: 2%;
+}
+.datasetName{
+}
+
+.datasetLinks{
+  font-size:130%;
+}
+
+.datasetDownLoadButtons{
+  margin-top:1%;
+  margin-left:-2%;
+  font-family: 'Lato', sans-serif;
+}
+
+
+.dataSetTitle{
+   margin-top:6%;
+   margin-right:3%;
+   font-family: 'Lato', sans-serif;
+}
+
+.chartButtons{
+  font-size:110%;
+  padding:0.75%;
+  border-radius: 0.10 !important;
+  border:0.001;
+  margin-left:0.01%;
+  margin-right:0.01%;
+  margin-bottom:0.01%;
+  font-family: 'Lato', sans-serif;
+}
+
+.chartButtonRow{
+  margin-right:2%;
+  margin-top:2%;
+}
+
+.c3chart{
+  margin-top:3%;
 }

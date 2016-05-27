@@ -28,15 +28,31 @@ class Charts extends Component {
       let dateFields = ['date', 'calendar_date']
       let contactFields = ['email', 'phone', 'url']
       let locationFields = ['location']
-      let allFields = [numberFields, textFields, dateFields, contactFields, locationFields]
-      let isType = function (col, fieldList) {
-        if (fieldList.indexOf(col['type']) > -1) {
+      let booleanFields = ['checkbox']
+      let categoryFields = function(col){
+        if (col['categories']){
           return true
+        }
+        else{
+          return false
+        }
+      };
+      let allFields = [numberFields, categoryFields, textFields, dateFields, contactFields, locationFields, booleanFields]
+
+      let isType = function(col, fieldList){
+        if(typeof fieldList === "function") {
+          return fieldList(col)
+        }
+        else{
+          if(fieldList.indexOf(col['type']) > -1){
+            return true
+          }
         }
         return false
       }
-      for (let i = 0; i < allFields.length; i++) {
-        if (isType(col, allFields[i])) {
+
+      for (let i = 1; i < allFields.length; i++) {
+        if(isType(col, allFields[i])){
           return btnColors[i]
         }
       }
@@ -76,8 +92,10 @@ class Charts extends Component {
           key={idx}
           bsSize='small'
           bsStyle='primary'
+          className={'chartButtons'}
           onClick={selectColumn.bind(this, col.key)}>
           {col.name}
+
         </Button>
       )
     } else {
@@ -127,8 +145,8 @@ class Charts extends Component {
       })
     }
     return (
-      <div>
-        <Row>
+      <div className={'container-fluid'}>
+        <Row className={'chartButtonRow'}>
           <Col md={12}>
             {cols}
           </Col>
