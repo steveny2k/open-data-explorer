@@ -15,28 +15,67 @@ class Charts extends Component {
     return !nextProps.dataset.query.isFetching
   }
 
+
   renderColumnButton (column, idx, columns) {
-    function removeIdKeys (obj) {
-      // remove id fields from the buttons
-      var removedIdKeys = []
-      var idRegex = /id+/g
+
+    function setButtonColors(col) {
+
+      let buttonColors = function(){
+        let bColorsFxn = d3.scale.category10();
+        let buttonColors = bColorsFxn.range();
+        return buttonColors;
+      }
+      let btnColors = buttonColors();
+      let numberFields = ['double', 'money','number']
+      let textFields = ['text']
+      let dateFields = ['date', 'calendar_date']
+      let contactFields = ['email', 'phone', 'url']
+      let locationFields = ['location']
+      let allFields = [numberFields, textFields, dateFields, contactFields, locationFields]
+      let isType = function(col, fieldList){
+        if(fieldList.indexOf(col['type']) > -1){
+          return true
+        }
+        return false
+      }
+      for (let i = 0; i < allFields.length; i++) {
+        if(isType(col, allFields[i])){
+          return btnColors[i]
+        }
+      }
+    }
+
+    function removeIdKeys(obj){
+      //remove id fields from the buttons
+      var removedIdKeys = [];
+      var idRegex = /id+/g;
+      var numIDRegex = /number+/g;
       for (var key in obj) {
-        var isIdField = idRegex.test(key)
-        if (isIdField) {
-          removedIdKeys.push(key)
+        var isIdField = idRegex.test(key);
+        var isNumberIdField = numIDRegex.test(key);
+        if(isIdField || isNumberIdField ) {
+          removedIdKeys.push(key);
         }
       }
       return removedIdKeys
     }
+    function isNotNull(col){
+      if(col["count"] != col['null']){
+        return true
+      }
+      return false
+    }
 
-    var removedIdKeys = removeIdKeys(columns)
+    let removedIdKeys = removeIdKeys(columns)
     let col = columns[column]
+    let buttonColor = setButtonColors(col)
     let { selectColumn } = this.props
     let categoryColumns = this.props.dataset.categoryColumns
     let colTypesAccepted = ['number', 'checkbox', 'date']
-    if ((categoryColumns.indexOf(col.key) > -1 || colTypesAccepted.indexOf(col.type) > -1) && (removedIdKeys.indexOf(col.key) < 0)) {
+    if ( (categoryColumns.indexOf(col.key) > -1 || colTypesAccepted.indexOf(col.type) > -1) && (removedIdKeys.indexOf(col.key)  < 0)  &&  (isNotNull(col)) ) {
       return (
         <Button
+          style={{backgroundColor: buttonColor}}
           key={idx}
           bsSize='small'
           bsStyle='primary'
@@ -50,7 +89,7 @@ class Charts extends Component {
   }
 
   renderChartArea (props) {
-    let { dataset, handleGroupBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy } = this.props
+    let { dataset, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy } = this.props
     let { columns, query, ...other } = dataset
     let otherProps = {...other}
 
@@ -74,7 +113,8 @@ class Charts extends Component {
             handleAddFilter={handleAddFilter}
             handleRemoveFilter={handleRemoveFilter}
             applyFilter={applyFilter}
-            updateFilter={updateFilter} />
+            updateFilter={updateFilter}
+            handleSumBy={ handleSumBy} />
         </Col>
       </Row>)
       : false

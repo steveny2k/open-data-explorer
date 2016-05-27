@@ -31,7 +31,7 @@ function constructQuery (state) {
   let id = state.dataset.migrationId || state.dataset.id
   let query = consumer.query().withDataset(id)
 
-  let {groupBy} = state.dataset.query
+  let {groupBy, sumBy} = state.dataset.query
   let dateAggregation = dateBy === 'month' ? 'date_trunc_ym' : 'date_trunc_y'
   let selectAsLabel = selectedColumn + ' as label'
   let orderBy = 'value desc'
@@ -49,11 +49,20 @@ function constructQuery (state) {
     query.select(groupBy).group(orderBy)
   }
 
-  // base query
-  query = query.select('count(*) as value')
-    .select(selectAsLabel)
-    .group('label')
-    .order(orderBy)
+  let base = 'count(*) as value'
+  let sumByQry = selectAsLabel + ', sum(' + sumBy + ') as value'
+
+  if (sumBy) {
+    query.select(sumByQry)
+      .group('label')
+      .order(orderBy)
+      .where(sumBy + ' is not null')
+  } else {
+    query = query.select(base)
+      .select(selectAsLabel)
+      .group('label')
+      .order(orderBy)
+  }
 
   // Where (filter)
   if (columnType === 'date') query = query.where('label is not null')
@@ -254,6 +263,7 @@ function transformQuery (json, state) {
     data[keys.indexOf(key)][labels.indexOf(label)] = row.value
   })
   data = [labels].concat(data)
+  debugger
   return {
     query: {
       isFetching: false,
