@@ -6,8 +6,8 @@ import Select from 'react-select'
 import ChartFilters from './ChartFilters'
 
 class ChartOptions extends Component {
-  render () {
-    let {columns, groupBy, handleGroupBy, handleAddFilter, handleRemoveFilter, filters, applyFilter, updateFilter, selectedColumn} = this.props
+  renderGroupByOptions () {
+    let {columns, groupBy, handleGroupBy, selectedColumn} = this.props
     let groupableColumns
 
     if (columns) {
@@ -24,13 +24,24 @@ class ChartOptions extends Component {
     }
 
     return (
+      <Select
+        name='groupby'
+        placeholder='Select a field to group by'
+        options={groupableColumns}
+        value={groupBy}
+        onChange={handleGroupBy}/>
+      )
+  }
+
+  render () {
+    let {columns, handleAddFilter, handleRemoveFilter, filters, applyFilter, updateFilter, selectedColumn} = this.props
+    let groupByOptions = null
+    if (columns[selectedColumn].type !== 'number') {
+      groupByOptions = this.renderGroupByOptions()
+    }
+    return (
       <div>
-        <Select
-          name='groupby'
-          placeholder='Select a field to group by'
-          options={groupableColumns}
-          value={groupBy}
-          onChange={handleGroupBy}/>
+        {groupByOptions}
         <ChartFilters
           columns={columns}
           filters={filters}

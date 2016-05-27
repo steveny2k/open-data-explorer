@@ -1,25 +1,13 @@
+require('histogram-pretty/histogram-pretty.js')
+
 import fetch from 'isomorphic-fetch'
 import soda from 'soda-js'
 import pluralize from 'pluralize'
 import { capitalize } from 'underscore.string'
 import _ from 'lodash'
+import d3 from 'd3'
 
 const API_ROOT = 'https://data.sfgov.org/'
-
-// Extracts the next page URL from Github API response.
-function getNextPageUrl (response) {
-  /* const link = response.headers.get('link')
-  if (!link) {
-    return null
-  }
-
-  const nextLink = link.split(',').find(s => s.indexOf('rel="next"') > -1)
-  if (!nextLink) {
-    return null
-  }
-
-  return nextLink.split(';')[0].slice(1, -1)*/
-}
 
 function constructQuery (state) {
   let queryStack = state.dataset.query
@@ -201,6 +189,50 @@ function transformQuery (json, state) {
     let key = (!isCheckbox && !groupBy) ? rowLabel : (typeof row[keyIdx] === 'undefined' ? nullText : (row[keyIdx] === nullText ? 'False' : capitalize(row[keyIdx].toString())))
     data[keys.indexOf(key)][labels.indexOf(label)] = row.value
   })
+
+  if (columns[selectedColumn].type === 'number') {
+    let counts = [].concat(data[0])
+    let numbers = [].concat(labels)
+    counts.shift()
+    numbers.shift()
+    console.log(numbers)
+
+    let vector = numbers.map((number, idx, arr) => {
+      let expand = []
+      if (number !== '0') {
+        for (let i = 0; i < parseInt(counts[idx]); i++) {
+          expand.push(parseInt(number))
+        }
+      }
+      return expand
+    }).reduce((a, b) => {
+      return a.concat(b)
+    }, [])
+
+    vector.sort((a, b) => {
+      return a - b
+    })
+
+    let hist = histogram(vector)
+
+    let binNumbers = (values, binWidth, index = 0, array = []) => {
+      let lastIdx = values.lastIndexOf(binWidth + (index * binWidth))
+      if (lastIdx !== -1) {
+        let slice = values.slice((index * binWidth), lastIdx)
+        array.push(slice.length)
+        binNumbers(values, binWidth, index + 1, array)
+      }
+      return array
+    }
+
+    let binFreq = binNumbers(vector, hist.size)
+
+    data[0] = ['Count of ' + rowLabel].concat(binFreq)
+    labels = ['x'].concat(binFreq.map((d, idx) => {
+      return hist.size * idx + ' to ' + hist.size * (idx + 1)
+    }))
+  }
+
   data = [labels].concat(data)
   return {
     query: {
@@ -229,7 +261,7 @@ function transformColumnProperties (json, state, params) {
   if ((checkFirst <= 0.95 && checkNumCategories <= 0.95) && maxRecord !== '1' && json.length !== 50000) {
     transformed.columns[params['key']].categories = json
     transformed.categoryColumns = [params['key']]
-  } else if (json[0].count === '1') {
+  } else if (maxRecord === 1) {
     transformed.columns[params['key']].unique = true
   }
 
@@ -237,9 +269,7 @@ function transformColumnProperties (json, state, params) {
     transformed.columns[params['key']].singleValue = true
   }
 
-  if (params['key'] === 'zip') {
-    debugger
-  }
+
 
   return transformed
 }
@@ -280,7 +310,7 @@ function callApi (endpoint, transform, state, params) {
   const fullUrl = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint
 
   return fetch(fullUrl)
-    .then((response) => response.json().then((json) => ({ json, response}))
+    .then((response) => response.json().then((json) => ({json, response}))
   ).then(({ json, response }) => {
     if (!response.ok) {
       return Promise.reject(json)
