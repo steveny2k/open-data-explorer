@@ -21,7 +21,7 @@ export default class CatalogItem extends React.Component {
     return (
     <Row>
       <Col sm={12}>
-      <Panel header={link}>
+      <Panel header={link} className="panelItem">
         <p>
           {description}
         </p>

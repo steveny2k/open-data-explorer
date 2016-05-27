@@ -18,23 +18,23 @@ class DatasetTabs extends Component {
   render () {
     let active = this.props.routes[2].path
     return (
-      <Row>
+      <Row className={'chartTabs'}>
         <Col sm={12}>
           <Nav
             bsStyle='tabs'
             justified
             activeKey={active}
             onSelect={this.handleTabSelect}>
-            <NavItem eventKey={'overview'}>
+            <NavItem eventKey={'overview'} className={'tabSelected'}>
               Overview
             </NavItem>
-            <NavItem eventKey={'details'}>
+            <NavItem eventKey={'details'} className={'tabSelected'}>
               Dataset Details
             </NavItem>
-            <NavItem eventKey={'charts'}>
+            <NavItem eventKey={'charts'} className={'tabSelected'}>
               Charts
             </NavItem>
-            <NavItem eventKey={'table'}>
+            <NavItem eventKey={'table'} className={'tabSelected'}>
               Table Preview
             </NavItem>
           </Nav>

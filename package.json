@@ -42,6 +42,7 @@
     "react-addons-update": "^15.1.0",
     "react-bootstrap": "^0.29.4",
     "react-bootstrap-daterangepicker": "^3.0.0",
+    "react-button": "^1.2.1",
     "react-date-range": "^0.2.4",
     "react-dom": "^15.1.0",
     "react-redux": "^4.4.1",

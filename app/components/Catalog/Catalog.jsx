@@ -132,8 +132,8 @@ export default class CatalogBrowse extends React.Component {
 
 
 		return(
-			<Grid fluid id="main-container">
-				<Row>
+			<Grid fluid id="main-container" className={'catalogMain'}>
+				<Row className={'catalogMainFacets'}>
 					<Col sm={3}>
 						<CatalogFacets facets={facets} handleCategorySelect={this.handleFacetSelections}/>
 					</Col>
@@ -141,7 +141,7 @@ export default class CatalogBrowse extends React.Component {
 						<CatalogSearchBar helper={helper} handleSearch={this.handleSearch}/>
 						{listItems}
 						<Pagination
-		          bsSize="medium"
+		          bsSize="large"
 		          items={this.state.pages}
 		          activePage={this.state.activePage}
 		          onSelect={this.handleSelect} />
