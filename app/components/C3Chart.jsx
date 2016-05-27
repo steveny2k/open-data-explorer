@@ -95,8 +95,8 @@ let C3Chart = React.createClass({
       graphObject.data.onclick = options.onClick
     }
     if (options.axisLabel) {
-      graphObject.axis.x = {label: options.axisLabel.x}
-      graphObject.axis.y = {label: options.axisLabel.y}
+      graphObject.axis.x = {label: {text: options.axisLabel.x, position: 'outer-center'}}
+      graphObject.axis.y = {label: {text: options.axisLabel.y, position: 'outer-middle'}}
     }
     if (options.timeseries) {
       let format = '%Y'

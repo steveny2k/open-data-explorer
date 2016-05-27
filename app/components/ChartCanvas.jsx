@@ -44,7 +44,14 @@ class ChartCanvas extends Component {
   }
 
   render () {
-    // defaults
+    let chartType = this.props.chartType || 'bar'
+    let { rowLabel, selectedColumnDef, data, columns, sumBy } = this.props
+    let type = selectedColumnDef.type
+    let fieldName = selectedColumnDef.name
+    let labels = Array.isArray(data[0]) ? data[0] : data[0].values
+    let toggle = <span/>
+
+    // chart defaults
     let options = {
       padding: {
         top: 20,
@@ -56,6 +63,10 @@ class ChartCanvas extends Component {
         x: false,
         y: true
       },
+      axisLabel: {
+        x: selectedColumnDef.name,
+        y: 'Number of ' + pluralize(rowLabel)
+      },
       timeseries: false,
       rotated: false,
       stacked: false,
@@ -66,12 +77,6 @@ class ChartCanvas extends Component {
         console.log('you clicked {' + d.name + ': ' + categories[d.x] + ': ' + d.value + '}')
       }
     }
-    let chartType = this.props.chartType || 'bar'
-    let { rowLabel, selectedColumnDef, data } = this.props
-    let type = selectedColumnDef.type
-    let fieldName = selectedColumnDef.name
-    let labels = Array.isArray(data[0]) ? data[0] : data[0].values
-    let toggle = <span/>
 
     let maxLabelLength = labels.reduce((prev, curr, idx, array) => {
       if (Array.isArray(data[0])) {
@@ -87,7 +92,7 @@ class ChartCanvas extends Component {
 
     if (((data[0].values && data[0].values.length > 10) || (Array.isArray(data[0]) && data[0].length > 11)) && chartType === 'bar') {
       options.rotated = true
-      options.padding.left = (maxLabelLength * 4) + 50
+      options.padding.left = (maxLabelLength * 4) + 55
     }
 
     if (type === 'number') {
@@ -99,6 +104,10 @@ class ChartCanvas extends Component {
       toggle = this.renderDateToggle()
     } else if (type === 'checkbox') {
       options.stacked = true
+    }
+
+    if (sumBy) {
+      options.axisLabel.y = columns[sumBy].name
     }
 
     return (

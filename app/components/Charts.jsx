@@ -100,7 +100,7 @@ class Charts extends Component {
       query && query.data
       ? (<Row>
         <Col md={9}>
-          <ChartCanvas data={query.data} dateBy={query.dateBy} changeDateBy={changeDateBy} {...otherProps} />
+          <ChartCanvas data={query.data} dateBy={query.dateBy} changeDateBy={changeDateBy} {...otherProps} sumBy={query.sumBy} columns={columns} />
         </Col>
         <Col md={3}>
           <ChartOptions
