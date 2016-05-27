@@ -9,7 +9,7 @@ export const METADATA_FAILURE = 'METADATA_FAILURE'
 function fetchMetadata (id) {
   return {
     [CALL_API]: {
-      types: [ METADATA_REQUEST, METADATA_SUCCESS, METADATA_FAILURE ],
+      types: [METADATA_REQUEST, METADATA_SUCCESS, METADATA_FAILURE],
       endpoint: Endpoints.METADATA(id),
       transform: Transforms.METADATA
     }
@@ -23,7 +23,7 @@ export const MIGRATION_SUCCESS = 'MIGRATION_SUCCESS'
 function fetchMigrationId (id) {
   return {
     [CALL_API]: {
-      types: [ MIGRATION_REQUEST, MIGRATION_SUCCESS, MIGRATION_FAILURE ],
+      types: [MIGRATION_REQUEST, MIGRATION_SUCCESS, MIGRATION_FAILURE],
       endpoint: Endpoints.MIGRATION(id),
       transform: Transforms.MIGRATION
     }
@@ -37,7 +37,7 @@ export const COUNT_FAILURE = 'COUNT_FAILURE'
 function countRows (id) {
   return {
     [CALL_API]: {
-      types: [ COUNT_REQUEST, COUNT_SUCCESS, COUNT_FAILURE ],
+      types: [COUNT_REQUEST, COUNT_SUCCESS, COUNT_FAILURE],
       endpoint: Endpoints.COUNT(id),
       transform: Transforms.COUNT
     }
@@ -51,10 +51,12 @@ export const COLPROPS_FAILURE = 'COLPROPS_FAILURE'
 function fetchColumnProps (id, key) {
   return {
     [CALL_API]: {
-      types: [ COLPROPS_REQUEST, COLPROPS_SUCCESS, COLPROPS_FAILURE ],
+      types: [COLPROPS_REQUEST, COLPROPS_SUCCESS, COLPROPS_FAILURE],
       endpoint: Endpoints.COLPROPS(id, key),
       transform: Transforms.COLPROPS,
-      params: {key: key}
+      params: {
+        key: key
+      }
     }
   }
 }
@@ -91,7 +93,7 @@ export const DATA_FAILURE = 'DATA_FAILURE'
 function fetchData (state) {
   return {
     [CALL_API]: {
-      types: [ DATA_REQUEST, DATA_SUCCESS, DATA_FAILURE ],
+      types: [DATA_REQUEST, DATA_SUCCESS, DATA_FAILURE],
       endpoint: Endpoints.QUERY(state),
       transform: Transforms.QUERY
     }
@@ -102,13 +104,12 @@ function fetchData (state) {
 export const SELECT_COLUMN = 'SELECT_COLUMN'
 export const CHANGE_DATEBY = 'CHANGE_DATEBY'
 export const GROUP_BY = 'GROUP_BY'
-
+export const SUM_BY = 'SUM_BY'
 export function selectColumn (column) {
   return (dispatch, getState) => {
     dispatch({
       type: SELECT_COLUMN,
-      column
-    })
+    column})
     dispatch(fetchData(getState()))
   }
 }
@@ -117,8 +118,7 @@ export function changeDateBy (dateBy) {
   return (dispatch, getState) => {
     dispatch({
       type: CHANGE_DATEBY,
-      dateBy
-    })
+    dateBy})
     dispatch(fetchData(getState()))
   }
 }
@@ -127,8 +127,16 @@ export function groupBy (key) {
   return (dispatch, getState) => {
     dispatch({
       type: GROUP_BY,
-      key
-    })
+    key})
+    dispatch(fetchData(getState()))
+  }
+}
+
+export function sumBy (key) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: SUM_BY,
+    key})
     dispatch(fetchData(getState()))
   }
 }
@@ -141,16 +149,14 @@ export const APPLY_FILTER = 'APPLY_FILTER'
 export function addFilter (key) {
   return {
     type: ADD_FILTER,
-    key
-  }
+  key}
 }
 
 export function removeFilter (key) {
   return (dispatch, getState) => {
     dispatch({
       type: REMOVE_FILTER,
-      key
-    })
+    key})
     dispatch(fetchData(getState()))
   }
 }
@@ -159,8 +165,7 @@ export function updateFilter (key, options) {
   return {
     type: UPDATE_FILTER,
     key,
-    options
-  }
+  options}
 }
 
 export function applyFilter (key, options) {

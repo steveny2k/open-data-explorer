@@ -176,6 +176,7 @@ let C3Chart = React.createClass({
     }
 
     let graphObjectAxis = {
+
       x: { type: 'category' } // this needed to load string x value
     }
     if (graphObject.axis.x.type && graphObject.axis.x.type === 'timeseries') {
@@ -184,7 +185,6 @@ let C3Chart = React.createClass({
 
     graphObject.data = _.merge(graphObjectData, graphObject.data)
     graphObject.axis = _.merge(graphObjectAxis, graphObject.axis)
-
     let chart = c3.generate(graphObject)
     return chart
   },
@@ -321,7 +321,6 @@ let C3Chart = React.createClass({
 
     graphObject.data = _.merge(graphObjectData, graphObject.data)
     graphObject.axis = _.merge(graphObjectAxis, graphObject.axis)
-
     let chart = c3.generate(graphObject)
     return chart
   },
@@ -435,7 +434,6 @@ let C3Chart = React.createClass({
 
     graphObject.data = _.merge(graphObjectData, graphObject.data)
     graphObject.axis = _.merge(graphObjectAxis, graphObject.axis)
-
     let chart = c3.generate(graphObject)
     return chart
   },
