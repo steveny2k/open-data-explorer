@@ -2,23 +2,9 @@ import fetch from 'isomorphic-fetch'
 import soda from 'soda-js'
 import pluralize from 'pluralize'
 import { capitalize } from 'underscore.string'
+import _ from 'lodash'
 
 const API_ROOT = 'https://data.sfgov.org/'
-
-// Extracts the next page URL from Github API response.
-function getNextPageUrl (response) {
-  /* const link = response.headers.get('link')
-  if (!link) {
-    return null
-  }
-
-  const nextLink = link.split(',').find(s => s.indexOf('rel="next"') > -1)
-  if (!nextLink) {
-    return null
-  }
-
-  return nextLink.split(';')[0].slice(1, -1)*/
-}
 
 function constructQuery (state) {
   let queryStack = state.dataset.query
@@ -106,59 +92,6 @@ function constructQuery (state) {
       }
     }
   }
-  /*
-      if (fieldDef.type == 'calendar_date') {
-        query = query
-          .select('count(*) as value')
-          .select(dateAggregation + '(' + selectedCol + ') as label')
-          .where('label is not null')
-          .group('label')
-          .order('label')
-      } else if (fieldDef.type === 'category' || fieldDef.type === 'number') {
-        query = query
-          .select('count(*) as value')
-          .select(selectedCol + ' as label')
-          .group('label')
-          .order('value desc')
-      } else if (fieldDef.type === 'checkbox') {
-        query = query
-          .select('sum(case(' + selectedCol + '=false,1,true,0)) as ' + selectedCol + '_false')
-          .select('sum(case(' + selectedCol + '=true,1,true,0)) as ' + selectedCol + '_true')
-          .select('count(*) as total')
-          .order('total desc')
-      }
-
-      if (this.groupBy) {
-        query.select(this.groupBy).group(this.groupBy).order(this.groupBy)
-      }
-
-      if (this.state.filters.length > 0) {
-        for (var filter of this.state.filters) {
-          if (filter.type === 'calendar_date') {
-            let start = filter.startDate.format('YYYY-MM-DD'),
-              end = filter.endDate.format('YYYY-MM-DD')
-            query.where(filter.key + '>="' + start + '" and ' + filter.key + '<="' + end + '"')
-          } else if (filter.type === 'category' && filter.selected) {
-            let enclose = '"',
-              joined = filter.selected
-            if (Array.isArray(filter.selected)) {
-              joined = filter.selected.join(enclose + ' or ' + filter.key + '=' + enclose)
-            }
-            query.where(filter.key + '=' + enclose + joined + enclose)
-          } else if (filter.type === 'checkbox' && filter.selected && filter.selected.length > 0) {
-            let join = filter.join || 'or',
-              joined = filter.selected.join(' ' + join + ' ')
-            query.where(joined)
-          } else if (filter.type === 'number') {
-            let first = parseInt(filter.range[0]) - 1
-            let last = parseInt(filter.range[1]) + 1
-            query.where(filter.key + ' between "' + first + '" and "' + last + '"')
-          }
-        }
-      }
-
-      query = query.limit(50000)
-      */
   query = query.limit(50000)
   return query.getURL()
 }
@@ -179,12 +112,12 @@ function endpointQuery (state) {
   return constructQuery(state)
 }
 
-function endpointGroupByQuery (id, key) {
+function endpointColumnProperties (id, key) {
   let category = key + ' as category'
   if (key === 'category') {
     category = key
   }
-  return `resource/${id}.json?$select=${category},count(*)&$group=category&$order=category asc`
+  return `resource/${id}.json?$select=${category},count(*)&$group=category&$order=category asc&$limit=50000`
 }
 
 function transformMetadata (json) {
@@ -206,9 +139,11 @@ function transformMetadata (json) {
   for (let column of json.columns) {
     let typeCast = {
       'calendar_date': 'date',
-      'currency': 'number'
+      'currency': 'number',
+      'money': 'number'
     }
     let type = typeCast[column['dataTypeName']] || column['dataTypeName']
+    let format = column['dataTypeName']
 
     let col = {
       id: column['id'],
@@ -216,7 +151,7 @@ function transformMetadata (json) {
       name: column['name'].replace(/[_-]/g, ' '),
       description: column['description'] || '',
       type,
-      format: column['format']['view'] || null,
+      format,
       non_null: column['cachedContents']['non_null'] || 0,
       null: column['cachedContents']['null'] || 0,
       count: column['cachedContents']['non_null'] + column['cachedContents']['null'] || null,
@@ -231,7 +166,7 @@ function transformMetadata (json) {
 
 function transformQuery (json, state) {
   let { columns, query, rowLabel } = state.dataset
-  let { selectedColumn, groupBy } = query
+  let { selectedColumn, groupBy, sumBy } = query
   let labels = ['x']
   let keys = []
   let data = []
@@ -240,7 +175,7 @@ function transformQuery (json, state) {
   let keyIdx = groupBy || 'label'
   if (keyIdx !== 'label' && columns[keyIdx].type === 'date') keyIdx = 'date_group_by'
 
-  rowLabel = pluralize(rowLabel)
+  rowLabel = !sumBy ? pluralize(rowLabel) : 'Sum of ' + columns[sumBy].name
 
   labels = labels.concat(isCheckbox ? rowLabel : json.map((row) => {
     return typeof row.label === 'undefined' ? nullText : (row.label === nullText ? 'False' : capitalize(row.label.toString()))
@@ -254,14 +189,81 @@ function transformQuery (json, state) {
     return array.indexOf(elem) === index
   }))
 
-  keys.forEach((key, index, array) => data.push([key].concat(Array.apply(null, new Array(labels.length - 1)).map(Number.prototype.valueOf, 0)))
-  )
+  keys.forEach((key, index, array) => data.push([key].concat(Array.apply(null, new Array(labels.length - 1)).map(Number.prototype.valueOf, 0))))
 
   json.forEach((row) => {
     let label = isCheckbox ? rowLabel : (typeof row.label === 'undefined' ? nullText : (row.label === nullText ? 'False' : capitalize(row.label.toString())))
     let key = (!isCheckbox && !groupBy) ? rowLabel : (typeof row[keyIdx] === 'undefined' ? nullText : (row[keyIdx] === nullText ? 'False' : capitalize(row[keyIdx].toString())))
     data[keys.indexOf(key)][labels.indexOf(label)] = row.value
   })
+
+  if (columns[selectedColumn].type === 'number' && !columns[selectedColumn].categories) {
+    let counts = [].concat(data[0])
+    let numbers = [].concat(labels)
+    counts.shift()
+    numbers.shift()
+
+    let vector = numbers.map((number, idx, arr) => {
+      let expand = []
+      for (let i = 0; i < parseInt(counts[idx]); i++) {
+        expand.push(parseInt(number))
+      }
+      return expand
+    }).reduce((a, b) => {
+      return a.concat(b)
+    }, [])
+
+    vector.sort((a, b) => {
+      return a - b
+    })
+
+    let quantile = (p, vector) => {
+      let idx = 1 + (vector.length - 1) * p
+      let lo = Math.floor(idx)
+      let hi = Math.ceil(idx)
+      let h = idx - lo
+      return (1 - h) * vector[lo] + h * vector[hi]
+    }
+
+    let freedmanDiaconis = (vector) => {
+      let iqr = quantile(0.75, vector) - quantile(0.25, vector)
+      return 2 * iqr * Math.pow(vector.length, -1 / 3)
+    }
+
+    let pretty = (x) => {
+      let scale = Math.pow(10, Math.floor(Math.log(x / 10) / Math.LN10))
+      let err = 10 / x * scale
+      if (err <= 0.15) scale *= 10
+      else if (err <= 0.35) scale *= 5
+      else if (err <= 0.75) scale *= 2
+      return scale * 10
+    }
+
+    let binSize = freedmanDiaconis(vector)
+    if (binSize === 0) {
+      let vector2 = vector.slice(vector.lastIndexOf(0))
+      binSize = freedmanDiaconis(vector2)
+    }
+    binSize = pretty(binSize)
+    let binNumbers = (values, binWidth, array = [], index = 0) => {
+      if (index < values.length) {
+        let bin = Math.floor(values[index] / binWidth)
+        array[bin] = array[bin] ? array[bin] + 1 : 1
+        binNumbers(values, binWidth, array, index + 1)
+      }
+      return array
+    }
+
+    let maxBins = Math.floor(vector[vector.length - 1] / binSize)
+    let emptyBins = Array(maxBins).fill(0)
+    let binFreq = binNumbers(vector, binSize, emptyBins)
+
+    data[0] = ['Count of ' + rowLabel].concat(binFreq)
+    labels = ['x'].concat(binFreq.map((d, idx) => {
+      return binSize * idx + ' to ' + binSize * (idx + 1)
+    }))
+  }
+
   data = [labels].concat(data)
   return {
     query: {
@@ -279,16 +281,18 @@ function transformApiMigration (json) {
   return {migrationId: json.nbeId}
 }
 
-function transformGroupByQuery (json, state, params) {
-  let checkFirst = parseInt(json[0].count) / state.dataset.rowCount
+function transformColumnProperties (json, state, params) {
+  let maxRecord = parseInt(_.maxBy(json, function (o) { return parseInt(o.count) }).count)
+  let checkFirst = maxRecord / state.dataset.rowCount
+  let checkNumCategories = json.length / state.dataset.rowCount
   let transformed = {
     columns: {}
   }
   transformed.columns[params['key']] = {}
-  if (checkFirst <= 0.95 && json[0].count !== '1' && json.length !== 1000) {
+  if ((checkFirst <= 0.95 && checkNumCategories <= 0.95) && maxRecord !== '1' && json.length !== 50000) {
     transformed.columns[params['key']].categories = json
     transformed.categoryColumns = [params['key']]
-  } else if (json[0].count === '1') {
+  } else if (maxRecord === 1) {
     transformed.columns[params['key']].unique = true
   }
 
@@ -304,7 +308,7 @@ export const Endpoints = {
   QUERY: endpointQuery,
   COUNT: endpointCount,
   MIGRATION: endpointApiMigration,
-  COLPROPS: endpointGroupByQuery
+  COLPROPS: endpointColumnProperties
 }
 
 export const Transforms = {
@@ -312,16 +316,16 @@ export const Transforms = {
   QUERY: transformQuery,
   COUNT: transformCount,
   MIGRATION: transformApiMigration,
-  COLPROPS: transformGroupByQuery
+  COLPROPS: transformColumnProperties
 }
 
 export const shouldRunColumnStats = (type, key) => {
   /*
-   * numericKeys is a bit of a hack to get around the fact that some categorical fields are encoded as numbers on the portal
-   * we don't want to run column stats against all numeric columns, so this allows us to control that
+   * below is a bit of a hack to get around the fact that some categorical fields are encoded as numbers on the portal
+   * we don't want to run column stats against all numeric columns, so this allows us to control that, the regex below may need to be
+   * tuned as is, it could create false positives. This is okay for now, something we can optimize later
   */
-  const numericKeys = ['supervisor_district', 'calendar_year', 'fiscal_year']
-  let regex = /(year|day|date|month|district|yr)/g
+  let regex = /(year|day|date|month|district|yr|id|code)/g
   let isCategorical = regex.test(key)
   if (type === 'text' || (isCategorical && type === 'number')) {
     return true
@@ -336,7 +340,7 @@ function callApi (endpoint, transform, state, params) {
   const fullUrl = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint
 
   return fetch(fullUrl)
-    .then((response) => response.json().then((json) => ({ json, response}))
+    .then((response) => response.json().then((json) => ({json, response}))
   ).then(({ json, response }) => {
     if (!response.ok) {
       return Promise.reject(json)

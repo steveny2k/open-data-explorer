@@ -6,35 +6,47 @@ import Select from 'react-select'
 import ChartFilters from './ChartFilters'
 
 class ChartOptions extends Component {
-  render () {
-
-    let {columns, sumBy, handleSumBy, groupBy, handleGroupBy, handleAddFilter, handleRemoveFilter, filters, applyFilter, updateFilter, selectedColumn} = this.props
-
+  renderGroupByOptions () {
+    let {columns, groupBy, handleGroupBy, selectedColumn} = this.props
     let groupableColumns
-    let sumableColumns
-
-    let isNumericForSum = function(col){
-      let numberFields = ['double', 'money','number']
-      if(numberFields.indexOf(col['type']) > -1){
-        return true
-      }
-      return false
-    }
-
-     //for GROUP_BY
+     // for GROUP_BY
     if (columns) {
       let columnKeys = Object.keys(columns)
       groupableColumns = columnKeys.filter((col) => {
         if (columns[col].key !== selectedColumn) {
           if (columns[col].categories) return true
-          if (columns[col].type === 'date') return true
         }
         return false
       }).map((col) => {
         return {label: columns[col].name, value: columns[col].key}
       })
     }
-    //for SUM_BY
+
+    return (
+      <Select
+        name='groupby'
+        placeholder='Select a field to group by'
+        options={groupableColumns}
+        value={groupBy}
+        onChange={handleGroupBy}/>
+      )
+  }
+
+  renderSumByOptions () {
+    let {columns, handleSumBy, sumBy} = this.props
+    let sumableColumns
+
+    let isNumericForSum = function (col) {
+      let numberFields = ['double', 'money', 'number']
+      if (col.unique) return false
+      if (col.categories) return false
+      if (numberFields.indexOf(col['type']) > -1) {
+        return true
+      }
+      return false
+    }
+
+    // for SUM_BY
     if (columns) {
       let columnKeys = Object.keys(columns)
       sumableColumns = columnKeys.filter((col) => {
@@ -44,14 +56,32 @@ class ChartOptions extends Component {
       })
     }
 
+    if (sumableColumns.length === 0) {
+      return false
+    } else {
+      return (
+        <Select
+          name='sumby'
+          placeholder='Select a field to sum by'
+          options={sumableColumns}
+          value={sumBy}
+          onChange={handleSumBy}/>)
+    }
+  }
+
+  render () {
+    let {columns, handleAddFilter, handleRemoveFilter, filters, applyFilter, updateFilter, selectedColumn} = this.props
+    let groupByOptions = null
+    let sumByOptions = null
+
+    if (columns[selectedColumn].type !== 'number' || columns[selectedColumn].categories) {
+      groupByOptions = this.renderGroupByOptions()
+      sumByOptions = this.renderSumByOptions()
+    }
+
     return (
       <div>
-        <Select
-          name='groupby'
-          placeholder='Select a field to group by'
-          options={groupableColumns}
-          value={groupBy}
-          onChange={handleGroupBy}/>
+        {groupByOptions}
         <ChartFilters
           columns={columns}
           filters={filters}
@@ -59,12 +89,7 @@ class ChartOptions extends Component {
           handleRemoveFilter={handleRemoveFilter}
           applyFilter={applyFilter}
           updateFilter={updateFilter}/>
-        <Select
-          name='sumby'
-          placeholder='Select a field to sum by'
-          options={sumableColumns}
-          value={sumBy}
-          onChange={handleSumBy}/>
+        {sumByOptions}
       </div>
     )
   }

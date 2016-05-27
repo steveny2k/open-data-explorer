@@ -26,6 +26,10 @@ let C3Chart = React.createClass({
         x: React.PropTypes.string,
         y: React.PropTypes.string
       }),
+      tickFormat: React.PropTypes.shape({
+        x: React.PropTypes.func,
+        y: React.PropTypes.func
+      }),
       subchart: React.PropTypes.bool,
       zoom: React.PropTypes.bool,
       grid: React.PropTypes.shape({
@@ -97,9 +101,17 @@ let C3Chart = React.createClass({
       graphObject.data.onclick = options.onClick
     }
     if (options.axisLabel) {
-      graphObject.axis.x = {label: options.axisLabel.x}
-      graphObject.axis.y = {label: options.axisLabel.y}
+      graphObject.axis.x = {label: {text: options.axisLabel.x, position: 'outer-center'}}
+      graphObject.axis.y = {label: {text: options.axisLabel.y, position: 'outer-middle'}}
     }
+    if (options.tickFormat.x) {
+      graphObject.axis.x.tick = {format: options.tickFormat.x}
+    }
+    if (options.tickFormat.y) {
+      graphObject.axis.y.tick = {format: options.tickFormat.y}
+    }
+
+    graphObject.axis.y.tick = {format: options.tickFormat.y}
     if (options.timeseries) {
       let format = '%Y'
       if (Array.isArray(data[0])) {
@@ -211,7 +223,7 @@ let C3Chart = React.createClass({
       return groups
     }
 
-    function filerOutZeros (chunkVals, chunkKeys = false) {
+    function filterOutZeros (chunkVals, chunkKeys = false) {
       // edits array directly
       var index = 0
       while (index !== -1) {
@@ -225,13 +237,14 @@ let C3Chart = React.createClass({
       }
     }
 
-    function limitLongTail (chunk) {
-      filerOutZeros(chunk[1], chunk[0])
-      if (chunk[0].length > 11) {
-        var keys7 = chunk[0].slice(0, 11)
-        var counts7 = chunk[1].slice(0, 11)
-        var keysRest = chunk[0].slice(11, chunk[0].length)
-        var countsRest = chunk[1].slice(11, chunk[1].length)
+    let limitLongTail = (chunk) => {
+      let {dataType} = this.props
+      filterOutZeros(chunk[1], chunk[0])
+      if (chunk[0].length > 12 && dataType !== 'number') {
+        var keys7 = chunk[0].slice(0, 12)
+        var counts7 = chunk[1].slice(0, 12)
+        var keysRest = chunk[0].slice(12, chunk[0].length)
+        var countsRest = chunk[1].slice(12, chunk[1].length)
         // /stores all the k,v pairs of the longTail
         var dataDictOther = zip([keysRest, countsRest])
         var intCountsRest = countsRest.map(Number)
@@ -306,12 +319,14 @@ let C3Chart = React.createClass({
       removeZeroRows(newData)
       return newData
     }
+
     var cleanedData
     if (this.props.data.length === 2) {
       cleanedData = limitLongTail(rawData)
     } else {
       cleanedData = limitLongTailGroupBy(rawData)
     }
+    console.log(cleanedData)
     return cleanedData
   },
 
