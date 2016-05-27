@@ -31,22 +31,20 @@ class Charts extends Component {
       let contactFields = ['email', 'phone', 'url']
       let locationFields = ['location']
       let booleanFields = ['checkbox']
-      let categoryFields = function(col){
-        if (col['categories']){
+      let categoryFields = function (col) {
+        if (col['categories']) {
           return true
-        }
-        else{
+        } else {
           return false
         }
       };
-      let allFields = [ categoryFields, numberFields, textFields, dateFields, contactFields, locationFields, booleanFields]
+      let allFields = [categoryFields, numberFields, textFields, dateFields, contactFields, locationFields, booleanFields]
 
-      let isType = function(col, fieldList){
-        if(typeof fieldList === "function") {
+      let isType = function (col, fieldList) {
+        if (typeof fieldList === 'function') {
           return fieldList(col)
-        }
-        else{
-          if(fieldList.indexOf(col['type']) > -1){
+        } else {
+          if (fieldList.indexOf(col['type']) > -1) {
             return true
           }
         }
@@ -120,7 +118,15 @@ class Charts extends Component {
       query && query.data
       ? (<Row>
         <Col md={9}>
-          <ChartCanvas data={query.data} dateBy={query.dateBy} changeDateBy={changeDateBy} {...otherProps} sumBy={query.sumBy} columns={columns} />
+          <ChartCanvas
+            data={query.data}
+            dateBy={query.dateBy}
+            changeDateBy={changeDateBy}
+            groupBy={query.groupBy}
+            sumBy={query.sumBy}
+            filters={query.filters}
+            columns={columns}
+            {...otherProps} />
         </Col>
         <Col md={3}>
           <ChartOptions
