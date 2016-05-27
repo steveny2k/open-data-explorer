@@ -139,9 +139,11 @@ function transformMetadata (json) {
   for (let column of json.columns) {
     let typeCast = {
       'calendar_date': 'date',
-      'currency': 'number'
+      'currency': 'number',
+      'money': 'number'
     }
     let type = typeCast[column['dataTypeName']] || column['dataTypeName']
+    let format = column['dataTypeName']
 
     let col = {
       id: column['id'],
@@ -149,7 +151,7 @@ function transformMetadata (json) {
       name: column['name'].replace(/[_-]/g, ' '),
       description: column['description'] || '',
       type,
-      format: column['format']['view'] || null,
+      format,
       non_null: column['cachedContents']['non_null'] || 0,
       null: column['cachedContents']['null'] || 0,
       count: column['cachedContents']['non_null'] + column['cachedContents']['null'] || null,

@@ -26,6 +26,10 @@ let C3Chart = React.createClass({
         x: React.PropTypes.string,
         y: React.PropTypes.string
       }),
+      tickFormat: React.PropTypes.shape({
+        x: React.PropTypes.func,
+        y: React.PropTypes.func
+      }),
       subchart: React.PropTypes.bool,
       zoom: React.PropTypes.bool,
       grid: React.PropTypes.shape({
@@ -97,6 +101,10 @@ let C3Chart = React.createClass({
     if (options.axisLabel) {
       graphObject.axis.x = {label: {text: options.axisLabel.x, position: 'outer-center'}}
       graphObject.axis.y = {label: {text: options.axisLabel.y, position: 'outer-middle'}}
+    }
+    if (options.tickFormat) {
+      graphObject.axis.x.tick = {format: options.tickFormat.x}
+      graphObject.axis.y.tick = {format: options.tickFormat.y}
     }
     if (options.timeseries) {
       let format = '%Y'
