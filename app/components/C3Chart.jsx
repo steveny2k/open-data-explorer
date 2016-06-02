@@ -204,6 +204,7 @@ let C3Chart = React.createClass({
   },
 
   dataPrepBarMulti: function (rawData) {
+
     function zip (arrays) {
       return arrays[0].map(function (_, i) {
         return arrays.map(function (array) {
@@ -211,6 +212,7 @@ let C3Chart = React.createClass({
         })
       })
     }
+
     function chunkIt (someArray) {
       // dont actually end up using this; could be useful later.
       var groupSize = 2
@@ -261,14 +263,16 @@ let C3Chart = React.createClass({
       }
     }
 
-    function notEmpty (col) {
+    function notEmpty (col, data) {
       // var header = col.pop(0)
       var colNums = col.slice(1, col.length)
       colNums = colNums.map(Number)
       var colSum = 0
       colSum = colNums.reduce((a, b) => a + b, 0)
       // arbitrary lower limit of 15
-      if (colSum > 15) {
+      if (colSum > 0 && data.length < 25) {
+        return true
+      } else if (colSum > 15) {
         return true
       }
       return false
@@ -280,7 +284,7 @@ let C3Chart = React.createClass({
       for (let i = 1; i < newData[0].length; i++) {
         var zeroRow = []
         for (let j = 1; j < newData.length; j++) {
-          zeroRow.push(newData[j][i])
+          zeroRow = zeroRow.concat(newData[j][i])
         }
         zeroRow = zeroRow.map(Number)
         var rowSum = zeroRow.reduce((a, b) => a + b, 0)
@@ -309,11 +313,11 @@ let C3Chart = React.createClass({
 
     function limitLongTailGroupBy (chunk) {
       var newData = []
-      newData.push(chunk[0])
+      newData = newData.concat([chunk[0]])
       var cols = chunk.slice(1, chunk.length + 1)
       for (let i = 0; i < cols.length; i++) {
-        if (notEmpty(cols[i])) {
-          newData.push(cols[i])
+        if (notEmpty(cols[i], chunk)) {
+          newData = newData.concat([cols[i]])
         }
       }
       removeZeroRows(newData)

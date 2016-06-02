@@ -109,7 +109,6 @@ class ChartCanvas extends Component {
     let chartType = this.props.chartType || 'bar'
     let { rowLabel, selectedColumnDef, data, columns, sumBy } = this.props
     let type = selectedColumnDef.type
-    let fieldName = selectedColumnDef.name
     let labels = Array.isArray(data[0]) ? data[0] : data[0].values
     let toggle = <span/>
 
@@ -180,12 +179,13 @@ class ChartCanvas extends Component {
       }
     }
 
+    /*
     switch (selectedColumnDef.format) {
       case 'number':
         if (!selectedColumnDef.categories) {
           options.tickFormat.x = d3.format(',.2f')
         }
-    }
+    }*/
 
     return (
       <div id='C3Chart'className={'container-fluid'}>

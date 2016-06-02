@@ -51,7 +51,7 @@ function constructQuery (state) {
   }
 
   // Where (filter)
-  if (columnType === 'date') query = query.where('label is not null')
+  if (columnType === 'date' || columnType === 'number') query = query.where('label is not null')
   if (filters) {
     for (let key in filters) {
       let column = key !== 'checkboxes' ? columns[key] : {type: 'checkbox'}
@@ -265,6 +265,7 @@ function transformQuery (json, state) {
   }
 
   data = [labels].concat(data)
+  console.log(data)
   return {
     query: {
       isFetching: false,
