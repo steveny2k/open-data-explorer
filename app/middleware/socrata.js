@@ -265,7 +265,6 @@ function transformQuery (json, state) {
   }
 
   data = [labels].concat(data)
-  console.log(data)
   return {
     query: {
       isFetching: false,
@@ -290,7 +289,7 @@ function transformColumnProperties (json, state, params) {
     columns: {}
   }
   transformed.columns[params['key']] = {}
-  if ((checkFirst <= 0.95 && checkNumCategories <= 0.95) && maxRecord !== '1' && json.length !== 50000) {
+  if ((checkFirst <= 0.95 && checkFirst >= 0.05 && checkNumCategories <= 0.95) && maxRecord !== '1' && json.length !== 50000) {
     transformed.columns[params['key']].categories = json
     transformed.categoryColumns = [params['key']]
   } else if (maxRecord === 1) {

@@ -3,38 +3,13 @@ require('c3/c3.css')
 import React, { Component } from 'react'
 import Chart from './C3Chart'
 import { Button, ButtonGroup } from 'react-bootstrap'
-import { titleize } from 'underscore.string'
+import { toTitleCase } from '../helpers'
 import pluralize from 'pluralize'
 import _ from 'lodash'
 import d3 from 'd3'
 
-
 const colors = ['#a78ac6', '#04ae14', '#fb680e', '#fe32fe', '#a49659', '#ff5a8b', '#29a5ae', '#0eab6f', '#b479fc', '#de7b5c', '#89a004', '#3599fc', '#c68a13', '#f459c7', '#a99090', '#d47aa0', '#379fd4', '#76a080', '#77a250', '#fd634e', '#c579d6', '#8d8af4', '#df5ef5', '#8199ae', '#e37a31', '#40aa46', '#ea6f7b', '#c8884b', '#c18972', '#0fa98f', '#a4982b', '#fe43de', '#e06eb8', '#65a718', '#7994dd', '#b688a7', '#fd56a9', '#9b9779', '#ff5f6d', '#c88389', '#7d9c97', '#dd67de', '#5fa570', '#9292be', '#b79037', '#929c48', '#899d69', '#c57fb7', '#a985dd', '#e96c99', '#58a0b6', '#df7d02', '#f46d33', '#5ca297', '#9f91a7', '#ee6e65', '#d47f73', '#7da234', '#ec724d', '#54a857', '#2b9cec', '#b98e5a', '#d1842f', '#b4930e', '#af7fed', '#7298cd', '#db788a', '#18ac57', '#f447f6', '#cc855b', '#c773ed', '#4ea587', '#da7e4c', '#ff50b8', '#6a93f4', '#e06ac7', '#28a2c5', '#69a53d', '#ac9172', '#c98199', '#a78cb6']
 // defaults
-
-/*
-  * To Title Case 2.1 – http://individed.com/code/to-title-case/
-  * Copyright © 2008–2013 David Gouch. Licensed under the MIT License.
- */
-
-String.prototype.toTitleCase = function(){
-  var smallWords = /^(a|an|and|as|at|but|by|en|for|if|in|nor|of|on|or|per|the|to|vs?\.?|via)$/i;
-
-  return this.replace(/[A-Za-z0-9\u00C0-\u00FF]+[^\s-]*/g, function(match, index, title){
-    if (index > 0 && index + match.length !== title.length &&
-      match.search(smallWords) > -1 && title.charAt(index - 2) !== ":" &&
-      (title.charAt(index + match.length) !== '-' || title.charAt(index - 1) === '-') &&
-      title.charAt(index - 1).search(/[^\s-]/) < 0) {
-      return match.toLowerCase();
-    }
-
-    if (match.substr(1).search(/[A-Z]|\../) > -1) {
-      return match;
-    }
-
-    return match.charAt(0).toUpperCase() + match.substr(1);
-  });
-};
 
 class ChartCanvas extends Component {
   constructor (props) {
@@ -60,7 +35,7 @@ class ChartCanvas extends Component {
     if (groupBy) {
       title += ' and ' + columns[groupBy].name
     }
-    return (<h2 className={'chartTitle'}>{title.toTitleCase()}</h2>)
+    return (<h2 className={'chartTitle'}>{toTitleCase(title)}</h2>)
   }
 
   renderSubTitle () {
