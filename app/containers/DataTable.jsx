@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
-import { loadMetadata, loadColumnProps, loadTable } from '../actions'
-import Dataset from '../components/Dataset'
+import { loadTable } from '../actions'
+import DataTable from '../components/DataTable'
 
 const mapStateToProps = (state, ownProps) => {
   const { dataset } = state
@@ -11,12 +11,6 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    onLoad: () => {
-      return dispatch(loadMetadata(ownProps.params.id))
-    },
-    loadColumnProps: () => {
-      return dispatch(loadColumnProps())
-    },
     loadTable: () => {
       return dispatch(loadTable())
     }
@@ -26,4 +20,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Dataset)
+)(DataTable)

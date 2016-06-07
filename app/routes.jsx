@@ -9,6 +9,7 @@ import Dataset from './containers/Dataset'
 import DatasetOverview from './containers/DatasetOverview'
 import DatasetDetails from './containers/DatasetDetails'
 import Charts from './containers/Charts'
+import DataTable from './containers/DataTable'
 
 export default (
   <Route component={App} path='/'>
@@ -20,7 +21,7 @@ export default (
       <Route path='details' component={DatasetDetails} />
       <Route path='charts' component={Charts} />
       <Route path='map' component={Dataset} />
-      <Route path='table' component={Dataset} />
+      <Route path='table' component={DataTable} />
     </Route>
   </Route>
 )

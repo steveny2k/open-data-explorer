@@ -90,13 +90,33 @@ export const DATA_REQUEST = 'DATA_REQUEST'
 export const DATA_SUCCESS = 'DATA_SUCCESS'
 export const DATA_FAILURE = 'DATA_FAILURE'
 
-function fetchData (state) {
+function fetchData (state, isForTable = false) {
+  let endpoint
+  let transform
+  if (!isForTable) {
+    endpoint = Endpoints.QUERY(state)
+    transform = Transforms.QUERY
+  } else {
+    endpoint = Endpoints.TABLEQUERY(state)
+    transform = Transforms.TABLEQUERY
+  }
   return {
     [CALL_API]: {
       types: [DATA_REQUEST, DATA_SUCCESS, DATA_FAILURE],
-      endpoint: Endpoints.QUERY(state),
-      transform: Transforms.QUERY
+      endpoint: endpoint,
+      transform: transform
     }
+  }
+}
+
+export const LOAD_TABLE = 'LOAD_TABLE'
+
+export function loadTable () {
+  return (dispatch, getState) => {
+    dispatch({
+      type: LOAD_TABLE
+    })
+    dispatch(fetchData(getState(), true))
   }
 }
 
@@ -109,7 +129,7 @@ export function selectColumn (column) {
   return (dispatch, getState) => {
     dispatch({
       type: SELECT_COLUMN,
-    column})
+      column})
     dispatch(fetchData(getState()))
   }
 }
@@ -118,7 +138,7 @@ export function changeDateBy (dateBy) {
   return (dispatch, getState) => {
     dispatch({
       type: CHANGE_DATEBY,
-    dateBy})
+      dateBy})
     dispatch(fetchData(getState()))
   }
 }
@@ -127,7 +147,7 @@ export function groupBy (key) {
   return (dispatch, getState) => {
     dispatch({
       type: GROUP_BY,
-    key})
+      key})
     dispatch(fetchData(getState()))
   }
 }
@@ -136,7 +156,7 @@ export function sumBy (key) {
   return (dispatch, getState) => {
     dispatch({
       type: SUM_BY,
-    key})
+      key})
     dispatch(fetchData(getState()))
   }
 }
@@ -149,14 +169,14 @@ export const APPLY_FILTER = 'APPLY_FILTER'
 export function addFilter (key) {
   return {
     type: ADD_FILTER,
-  key}
+    key}
 }
 
 export function removeFilter (key) {
   return (dispatch, getState) => {
     dispatch({
       type: REMOVE_FILTER,
-    key})
+      key})
     dispatch(fetchData(getState()))
   }
 }
@@ -165,7 +185,7 @@ export function updateFilter (key, options) {
   return {
     type: UPDATE_FILTER,
     key,
-  options}
+    options}
 }
 
 export function applyFilter (key, options) {

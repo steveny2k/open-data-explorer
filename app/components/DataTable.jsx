@@ -4,6 +4,8 @@ import React, { Component } from 'react'
 import {Pagination} from 'react-bootstrap'
 import {Table, Column, Cell} from 'fixed-data-table'
 import moment from 'moment'
+import Dimensions from 'react-dimensions'
+import d3 from 'd3'
 
 var SortTypes = {
   ASC: 'asc',
@@ -49,16 +51,19 @@ class SortHeaderCell extends Component {
 
 class DynamicCell extends Component {
   render () {
-    const { rowIndex, field, data, type, ...props } = this.props
+    const { rowIndex, field, data, format, ...props } = this.props
     let content
-    if (type === 'location' && data[rowIndex][field]) {
-      content = data[rowIndex][field].coordinates[1] + ", " + data[rowIndex][field].coordinates[0]
-    } else if(type == 'checkbox') {
-    	content = data[rowIndex][field] ? 'Yes' : 'No'
-    } else if(type == 'calendar_date' && data[rowIndex][field]) {
-    	content = moment(data[rowIndex][field]).format("MM/DD/YYYY")
+    if (format === 'location' && data[rowIndex][field]) {
+      content = data[rowIndex][field].coordinates[1] + ', ' + data[rowIndex][field].coordinates[0]
+    } else if (format === 'checkbox') {
+      content = data[rowIndex][field] ? 'Yes' : 'No'
+    } else if (format === 'calendar_date' && data[rowIndex][field]) {
+      content = moment(data[rowIndex][field]).format('MM/DD/YYYY')
+    } else if (format === 'money' && data[rowIndex][field]) {
+      let dollars = d3.format('$,')
+      content = dollars(data[rowIndex][field])
     } else {
-    	content = data[rowIndex][field]
+      content = data[rowIndex][field]
     }
 
     return (
@@ -71,65 +76,61 @@ class DynamicCell extends Component {
 
 class DataTable extends Component {
   render () {
-    let columns = null
-    if (this.props.data.length > 0) {
-      columns = this.props.fieldDefs.map((colDef, i) => {
-        return <Column columnKey={colDef.key}
-          key={colDef.key}
+    let { dataset } = this.props
+    let { columns, table, rowCount } = dataset
+    let perPage = 1000
+    let tableRows = table && table.data ? table.data.length : 0
+    let tableContainer = null
+    let items = Math.ceil(parseInt(rowCount) / perPage)
+    if (table && table.data && table.data.length > 0) {
+      columns = Object.keys(columns).map((key, i) => {
+        let column = columns[key]
+        return <Column columnKey={key}
+          key={key}
           header={
             <SortHeaderCell
               onSortChange={this.props.onSortChange}
-              sortDir={this.props.colSortDirs[colDef.key]}>
-              {colDef.name}
+              sortDir={'asc'}>
+              {column.name}
             </SortHeaderCell>
           }
-			allowCellsRecycling={true}
-			cell={
-        <DynamicCell
-          data={this.props.data}
-          field={colDef.key}
-          type={colDef.type} />
-      }
-			width={200}/>
-		})
+          allowCellsRecycling
+          cell={
+            <DynamicCell
+              data={table.data}
+              field={key}
+              format={column.format} />
+          }
+          width={200}/>
+      })
+
+      tableContainer = (
+        <div id='data-table'>
+          <Table
+            rowsCount={tableRows}
+            rowHeight={50}
+            headerHeight={50}
+            width={this.props.containerWidth}
+            height={500}>
+            {columns}
+          </Table>
+          <Pagination
+            bsSize='small'
+            items={items}
+            activePage={table.tablePage + 1}
+            maxButtons={10}
+            first
+            last
+            prev
+            next
+            ellipsis
+            onSelect={this.handlePagination} />
+        </div>
+      )
     }
 
-		let items = Math.ceil(this.props.totalRows/this.props.perPage)
-		return (
-			<div id='data-table'>
-				<Pagination
-          bsSize="small"
-          items={items}
-          activePage={this.props.currentPage}
-          maxButtons={10}
-          first
-          last
-          prev
-          next
-          ellipsis
-          onSelect={this.props.handlePagination} />
-				<Table
-				rowsCount={this.props.data.length}
-				rowHeight={50}
-				headerHeight={50}
-				width={this.props.width}
-				height={500}>
-				{columns}
-				</Table>
-				<Pagination
-          bsSize="small"
-          items={items}
-          activePage={this.props.currentPage}
-          maxButtons={10}
-          first
-          last
-          prev
-          next
-          ellipsis
-          onSelect={this.props.handlePagination} />
-      </div>
-			)
-	}
+    return tableContainer
+  }
 }
 
-export default DataTable
+export default Dimensions()(DataTable)

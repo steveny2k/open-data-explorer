@@ -12,6 +12,9 @@ const initialState = {
   dataset: {
     query: {
       dateBy: 'year'
+    },
+    table: {
+      tablePage: 0
     }
   }
 }

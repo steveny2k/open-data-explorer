@@ -1,11 +1,10 @@
-import { METADATA_REQUEST, METADATA_SUCCESS, SELECT_COLUMN, COUNT_SUCCESS, MIGRATION_SUCCESS, COLPROPS_SUCCESS, DATA_SUCCESS, GROUP_BY, UPDATE_FILTER, ADD_FILTER, REMOVE_FILTER, APPLY_FILTER, CHANGE_DATEBY, SUM_BY } from '../actions'
+import { METADATA_REQUEST, METADATA_SUCCESS, SELECT_COLUMN, COUNT_SUCCESS, LOAD_TABLE, MIGRATION_SUCCESS, COLPROPS_SUCCESS, DATA_SUCCESS, GROUP_BY, UPDATE_FILTER, ADD_FILTER, REMOVE_FILTER, APPLY_FILTER, CHANGE_DATEBY, SUM_BY } from '../actions'
 import { routerReducer as routing } from 'react-router-redux'
 import { combineReducers } from 'redux'
 import merge from 'lodash/merge'
 import union from 'lodash/union'
-// import merge from 'lodash/merge'
 
-function dataset (state = { columns: {}, query: {} }, action) {
+function dataset (state = { columns: {}, query: {}, table: { tablePage: 0 } }, action) {
   let copyState
 
   if (action.response) {
@@ -20,7 +19,11 @@ function dataset (state = { columns: {}, query: {} }, action) {
         return merge({}, state, action.response)
       case DATA_SUCCESS:
         let merged = merge({}, state, action.response)
-        merged.query.data = action.response.query.data
+        if (action.response.query) {
+          merged.query.data = action.response.query.data
+        } else {
+          merged.table.data = action.response.table.data
+        }
         return Object.assign({}, state, merged)
       default:
         return state
@@ -28,6 +31,12 @@ function dataset (state = { columns: {}, query: {} }, action) {
   }
 
   switch (action.type) {
+    case LOAD_TABLE:
+      return merge({}, state, {
+        table: {
+          tablePage: 0
+        }
+      })
     case METADATA_REQUEST:
       let freshState = {
         query: {
@@ -112,8 +121,13 @@ function dataset (state = { columns: {}, query: {} }, action) {
   }
 }
 
+function messages (state = null, action) {
+  return state
+}
+
 const rootReducer = combineReducers({
   dataset,
+  messages,
   routing
 })
 
