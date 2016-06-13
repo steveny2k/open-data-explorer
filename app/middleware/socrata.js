@@ -118,12 +118,19 @@ function endpointTableQuery (state) {
   let consumerRoot = API_ROOT.split('/')[2]
   let consumer = new soda.Consumer(consumerRoot)
   let id = state.dataset.migrationId || state.dataset.id
-  let page = state.dataset.table.tablePage || 0
+  let table = state.dataset.table
+  let page = table.tablePage || 0
 
   let query = consumer.query()
     .withDataset(id)
     .limit(1000)
     .offset(1000 * page)
+
+  if (table.sorted && table.sorted.length > 0) {
+    table.sorted.forEach((key) => {
+      query.order(key + ' ' + state.dataset.columns[key].sortDir)
+    })
+  }
 
   return query.getURL()
 }

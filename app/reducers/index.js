@@ -1,8 +1,9 @@
-import { METADATA_REQUEST, METADATA_SUCCESS, SELECT_COLUMN, COUNT_SUCCESS, LOAD_TABLE, MIGRATION_SUCCESS, COLPROPS_SUCCESS, DATA_SUCCESS, GROUP_BY, UPDATE_FILTER, ADD_FILTER, REMOVE_FILTER, APPLY_FILTER, CHANGE_DATEBY, SUM_BY } from '../actions'
+import { METADATA_REQUEST, METADATA_SUCCESS, SELECT_COLUMN, SORT_COLUMN, COUNT_SUCCESS, LOAD_TABLE, MIGRATION_SUCCESS, COLPROPS_SUCCESS, DATA_SUCCESS, GROUP_BY, UPDATE_FILTER, ADD_FILTER, REMOVE_FILTER, APPLY_FILTER, CHANGE_DATEBY, SUM_BY } from '../actions'
 import { routerReducer as routing } from 'react-router-redux'
 import { combineReducers } from 'redux'
 import merge from 'lodash/merge'
 import union from 'lodash/union'
+import uniq from 'lodash/uniq'
 
 function dataset (state = { columns: {}, query: {}, table: { tablePage: 0 } }, action) {
   let copyState
@@ -46,6 +47,18 @@ function dataset (state = { columns: {}, query: {}, table: { tablePage: 0 } }, a
         columns: {}
       }
       return merge({}, freshState)
+    case SORT_COLUMN:
+      let updatedState = {
+        table: {
+          sorted: state.table.sorted ? uniq([action.key].concat(state.table.sorted)) : [action.key]
+        },
+        columns: {
+          [action.key]: {
+            sortDir: action.dir
+          }
+        }
+      }
+      return merge({}, state, updatedState)
     case SELECT_COLUMN:
       let updatedQuery = {
         query: {

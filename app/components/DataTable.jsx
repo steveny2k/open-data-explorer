@@ -39,12 +39,8 @@ class SortHeaderCell extends Component {
     e.preventDefault()
 
     if (this.props.onSortChange) {
-      this.props.onSortChange(
-        this.props.columnKey,
-        this.props.sortDir ?
-          reverseSortDirection(this.props.sortDir) :
-          SortTypes.DESC
-      );
+      this.props.onSortChange(this.props.columnKey, this.props.sortDir ? reverseSortDirection(this.props.sortDir) : SortTypes.DESC
+      )
     }
   }
 }
@@ -89,8 +85,8 @@ class DataTable extends Component {
           key={key}
           header={
             <SortHeaderCell
-              onSortChange={this.props.onSortChange}
-              sortDir={'asc'}>
+              onSortChange={this.props.sortColumn}
+              sortDir={columns[key].sortDir}>
               {column.name}
             </SortHeaderCell>
           }

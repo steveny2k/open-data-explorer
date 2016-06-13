@@ -125,6 +125,8 @@ export const SELECT_COLUMN = 'SELECT_COLUMN'
 export const CHANGE_DATEBY = 'CHANGE_DATEBY'
 export const GROUP_BY = 'GROUP_BY'
 export const SUM_BY = 'SUM_BY'
+export const SORT_COLUMN = 'SORT_COLUMN'
+
 export function selectColumn (column) {
   return (dispatch, getState) => {
     dispatch({
@@ -158,6 +160,16 @@ export function sumBy (key) {
       type: SUM_BY,
       key})
     dispatch(fetchData(getState()))
+  }
+}
+
+export function sortColumn (key, dir) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: SORT_COLUMN,
+      key,
+      dir})
+    dispatch(fetchData(getState(), true))
   }
 }
 
