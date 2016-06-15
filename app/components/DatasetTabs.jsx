@@ -25,14 +25,11 @@ class DatasetTabs extends Component {
             justified
             activeKey={active}
             onSelect={this.handleTabSelect}>
-            <NavItem eventKey={'overview'} className={'tabSelected'}>
-              Overview
+            <NavItem eventKey={'charts'} className={'tabSelected'}>
+              Charts
             </NavItem>
             <NavItem eventKey={'details'} className={'tabSelected'}>
               Dataset Details
-            </NavItem>
-            <NavItem eventKey={'charts'} className={'tabSelected'}>
-              Charts
             </NavItem>
             <NavItem eventKey={'table'} className={'tabSelected'}>
               Table Preview

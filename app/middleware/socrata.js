@@ -6,6 +6,8 @@ import _ from 'lodash'
 
 const API_ROOT = 'https://data.sfgov.org/'
 
+// Construct URL based on chart options
+
 function constructQuery (state) {
   let queryStack = state.dataset.query
   let columns = state.dataset.columns
@@ -51,7 +53,7 @@ function constructQuery (state) {
   }
 
   // Where (filter)
-  if (columnType === 'date') query = query.where('label is not null')
+  if (columnType === 'date' || columnType === 'number') query = query.where('label is not null')
   if (filters) {
     for (let key in filters) {
       let column = key !== 'checkboxes' ? columns[key] : {type: 'checkbox'}
@@ -112,6 +114,27 @@ function endpointQuery (state) {
   return constructQuery(state)
 }
 
+function endpointTableQuery (state) {
+  let consumerRoot = API_ROOT.split('/')[2]
+  let consumer = new soda.Consumer(consumerRoot)
+  let id = state.dataset.migrationId || state.dataset.id
+  let table = state.dataset.table
+  let page = table.tablePage || 0
+
+  let query = consumer.query()
+    .withDataset(id)
+    .limit(1000)
+    .offset(1000 * page)
+
+  if (table.sorted && table.sorted.length > 0) {
+    table.sorted.forEach((key) => {
+      query.order(key + ' ' + state.dataset.columns[key].sortDir)
+    })
+  }
+
+  return query.getURL()
+}
+
 function endpointColumnProperties (id, key) {
   let category = key + ' as category'
   if (key === 'category') {
@@ -119,6 +142,8 @@ function endpointColumnProperties (id, key) {
   }
   return `resource/${id}.json?$select=${category},count(*)&$group=category&$order=category asc&$limit=50000`
 }
+
+// Transforms
 
 function transformMetadata (json) {
   let metadata = {
@@ -151,13 +176,17 @@ function transformMetadata (json) {
       name: column['name'].replace(/[_-]/g, ' '),
       description: column['description'] || '',
       type,
-      format,
-      non_null: column['cachedContents']['non_null'] || 0,
-      null: column['cachedContents']['null'] || 0,
-      count: column['cachedContents']['non_null'] + column['cachedContents']['null'] || null,
-      min: column['cachedContents']['smallest'] || null,
-      max: column['cachedContents']['largest'] || null
+      format
     }
+
+    if (column['cachedContents']) {
+      col.non_null = column['cachedContents']['non_null'] || 0
+      col.null = column['cachedContents']['null'] || 0
+      col.count = col.non_null + col.null
+      col.min = column['cachedContents']['smallest'] || null
+      col.max = column['cachedContents']['largest'] || null
+    }
+
     metadata.columns[column['fieldName']] = col
   }
 
@@ -273,6 +302,15 @@ function transformQuery (json, state) {
   }
 }
 
+function transformTableQuery (json) {
+  return {
+    table: {
+      isFetching: false,
+      data: json
+    }
+  }
+}
+
 function transformCount (json) {
   return {rowCount: json[0].count}
 }
@@ -289,7 +327,7 @@ function transformColumnProperties (json, state, params) {
     columns: {}
   }
   transformed.columns[params['key']] = {}
-  if ((checkFirst <= 0.95 && checkNumCategories <= 0.95) && maxRecord !== '1' && json.length !== 50000) {
+  if ((checkFirst <= 0.95 && checkFirst >= 0.05 && checkNumCategories <= 0.95) && maxRecord !== '1' && json.length !== 50000) {
     transformed.columns[params['key']].categories = json
     transformed.categoryColumns = [params['key']]
   } else if (maxRecord === 1) {
@@ -303,9 +341,12 @@ function transformColumnProperties (json, state, params) {
   return transformed
 }
 
+// Export constants
+
 export const Endpoints = {
   METADATA: endpointMetadata,
   QUERY: endpointQuery,
+  TABLEQUERY: endpointTableQuery,
   COUNT: endpointCount,
   MIGRATION: endpointApiMigration,
   COLPROPS: endpointColumnProperties
@@ -314,6 +355,7 @@ export const Endpoints = {
 export const Transforms = {
   METADATA: transformMetadata,
   QUERY: transformQuery,
+  TABLEQUERY: transformTableQuery,
   COUNT: transformCount,
   MIGRATION: transformApiMigration,
   COLPROPS: transformColumnProperties

@@ -22,8 +22,8 @@ class Charts extends Component {
         let buttonColors = bColorsFxn.range()
         return buttonColors
       }
-      //let btnColors = buttonColors()
-      let btnColors = [ '#3498db','#27ae60', '#16a085', '#7986cb', '#d35400', '#c0392b',  '#a97964', '#8e44ad', '#f39c12']
+      // let btnColors = buttonColors()
+      let btnColors = ['#3498db', '#27ae60', '#16a085', '#7986cb', '#d35400', '#c0392b', '#a97964', '#8e44ad', '#f39c12']
 
       let numberFields = ['double', 'money', 'number']
       let textFields = ['text']
@@ -37,7 +37,7 @@ class Charts extends Component {
         } else {
           return false
         }
-      };
+      }
       let allFields = [categoryFields, numberFields, textFields, dateFields, contactFields, locationFields, booleanFields]
 
       let isType = function (col, fieldList) {
@@ -52,7 +52,7 @@ class Charts extends Component {
       }
 
       for (let i = 0; i < allFields.length; i++) {
-        if(isType(col, allFields[i])){
+        if (isType(col, allFields[i])) {
           return btnColors[i]
         }
       }
@@ -74,6 +74,10 @@ class Charts extends Component {
     }
     function isNotNull (col) {
       if (col['count'] !== col['null']) {
+        return true
+      }
+      // if the field doesn't exist just return true
+      if (!col['null']) {
         return true
       }
       return false
