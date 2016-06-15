@@ -330,7 +330,6 @@ let C3Chart = React.createClass({
     } else {
       cleanedData = limitLongTailGroupBy(rawData)
     }
-    console.log(cleanedData)
     return cleanedData
   },
 
