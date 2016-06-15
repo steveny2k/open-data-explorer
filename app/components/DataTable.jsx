@@ -29,7 +29,7 @@ class SortHeaderCell extends Component {
     return (
       <Cell {...props}>
         <a onClick={this._onSortChange}>
-          {children} {sortDir ? (sortDir === SortTypes.DESC ? '↑' : '↓') : ''}
+          {children} {sortDir ? (sortDir === SortTypes.DESC ? '↓' : '↑') : ''}
         </a>
       </Cell>
     )
