@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { loadTable, sortColumn } from '../actions'
+import { loadTable, sortColumn, updatePage } from '../actions'
 import DataTable from '../components/DataTable'
 
 const mapStateToProps = (state, ownProps) => {
@@ -16,6 +16,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     sortColumn: (key, dir) => {
       return dispatch(sortColumn(key, dir))
+    },
+    updatePage: (page) => {
+      return dispatch(updatePage(page))
     }
   }
 }

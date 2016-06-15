@@ -1,4 +1,4 @@
-import { METADATA_REQUEST, METADATA_SUCCESS, SELECT_COLUMN, SORT_COLUMN, COUNT_SUCCESS, LOAD_TABLE, MIGRATION_SUCCESS, COLPROPS_SUCCESS, DATA_SUCCESS, GROUP_BY, UPDATE_FILTER, ADD_FILTER, REMOVE_FILTER, APPLY_FILTER, CHANGE_DATEBY, SUM_BY } from '../actions'
+import { METADATA_REQUEST, METADATA_SUCCESS, SELECT_COLUMN, SORT_COLUMN, COUNT_SUCCESS, UPDATE_PAGE, LOAD_TABLE, MIGRATION_SUCCESS, COLPROPS_SUCCESS, DATA_SUCCESS, GROUP_BY, UPDATE_FILTER, ADD_FILTER, REMOVE_FILTER, APPLY_FILTER, CHANGE_DATEBY, SUM_BY } from '../actions'
 import { routerReducer as routing } from 'react-router-redux'
 import { combineReducers } from 'redux'
 import merge from 'lodash/merge'
@@ -36,6 +36,12 @@ function dataset (state = { columns: {}, query: {}, table: { tablePage: 0 } }, a
       return merge({}, state, {
         table: {
           tablePage: 0
+        }
+      })
+    case UPDATE_PAGE:
+      return merge({}, state, {
+        table: {
+          tablePage: action.page
         }
       })
     case METADATA_REQUEST:

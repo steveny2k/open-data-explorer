@@ -71,6 +71,16 @@ class DynamicCell extends Component {
 }
 
 class DataTable extends Component {
+  constructor (props) {
+    super(props)
+
+    this.handlePagination = this.handlePagination.bind(this)
+  }
+
+  handlePagination (page) {
+    this.props.updatePage(page - 1)
+  }
+
   render () {
     let { dataset } = this.props
     let { columns, table, rowCount } = dataset
