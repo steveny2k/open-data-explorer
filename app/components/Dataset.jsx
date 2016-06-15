@@ -7,9 +7,7 @@ class Dataset extends Component {
 
   componentWillMount () {
     this.props.onLoad().then(() => {
-      this.props.loadColumnProps().then(() => {
-        this.props.loadTable()
-      })
+      this.props.loadColumnProps()
     })
   }
 

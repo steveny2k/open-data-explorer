@@ -77,6 +77,18 @@ class DataTable extends Component {
     this.handlePagination = this.handlePagination.bind(this)
   }
 
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.dataset.id && !this.props.dataset.table) {
+      this.props.loadTable()
+    }
+  }
+
+  componentDidMount () {
+    if (this.props.dataset.id && !this.props.dataset.table) {
+      this.props.loadTable()
+    }
+  }
+
   handlePagination (page) {
     this.props.updatePage(page - 1)
   }
@@ -84,11 +96,13 @@ class DataTable extends Component {
   render () {
     let { dataset } = this.props
     let { columns, table, rowCount } = dataset
-    let perPage = 1000
-    let tableRows = table && table.data ? table.data.length : 0
     let tableContainer = null
-    let items = Math.ceil(parseInt(rowCount) / perPage)
+
     if (table && table.data && table.data.length > 0) {
+      let perPage = 1000
+      let tableRows = table.data.length
+      let items = Math.ceil(parseInt(rowCount) / perPage)
+
       columns = Object.keys(columns).map((key, i) => {
         let column = columns[key]
         return <Column columnKey={key}

@@ -35,7 +35,8 @@ function dataset (state = { columns: {}, query: {}, table: { tablePage: 0 } }, a
     case LOAD_TABLE:
       return merge({}, state, {
         table: {
-          tablePage: 0
+          tablePage: 0,
+          isFetching: true
         }
       })
     case UPDATE_PAGE:
