@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { Route, IndexRoute } from 'react-router'
+import { Route, IndexRoute, IndexRedirect } from 'react-router'
 
 import App from './containers/App'
 import HomePage from './components/HomePage/HomePage'
-import Catalog from './components/Catalog/Catalog'
+import Catalog from './components/Catalog'
 import Dataset from './containers/Dataset'
 import DatasetOverview from './containers/DatasetOverview'
 import DatasetDetails from './containers/DatasetDetails'
@@ -14,9 +14,12 @@ import DataTable from './containers/DataTable'
 export default (
   <Route component={App} path='/'>
     <IndexRoute component={HomePage} />
-    <Route component={Catalog} path='catalog' />
+    <Route path='/catalog' component={Catalog}>
+      <IndexRoute component={Catalog} />
+      <Route path=':page' component={Catalog} />
+    </Route>
     <Route path='/:category/:title/:id' components={Dataset}>
-      <IndexRoute component={DatasetOverview} />
+      <IndexRedirect to='charts' />
       <Route path='overview' component={DatasetOverview} />
       <Route path='details' component={DatasetDetails} />
       <Route path='charts' component={Charts} />

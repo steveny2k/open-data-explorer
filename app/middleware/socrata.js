@@ -1,4 +1,3 @@
-import fetch from 'isomorphic-fetch'
 import soda from 'soda-js'
 import pluralize from 'pluralize'
 import { capitalize } from 'underscore.string'
