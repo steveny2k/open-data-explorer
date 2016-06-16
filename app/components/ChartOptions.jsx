@@ -3,6 +3,7 @@ require('react-select/dist/react-select.css')
 import React, { Component } from 'react'
 import Select from 'react-select'
 
+
 import ChartFilters from './ChartFilters'
 
 class ChartOptions extends Component {
@@ -73,10 +74,12 @@ class ChartOptions extends Component {
     }
   }
 
+
   render () {
     let {columns, handleAddFilter, handleRemoveFilter, filters, applyFilter, updateFilter, selectedColumn} = this.props
     let groupByOptions = null
     let sumByOptions = null
+
 
     if (columns[selectedColumn].type !== 'number' || columns[selectedColumn].categories) {
       groupByOptions = this.renderGroupByOptions()
@@ -85,6 +88,7 @@ class ChartOptions extends Component {
 
     return (
       <div className={'chartFiltersStyle'}>
+
         {groupByOptions}
         <ChartFilters
           columns={columns}

@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Button, Row, Col } from 'react-bootstrap'
 import ChartCanvas from './ChartCanvas'
 import ChartOptions from './ChartOptions'
+import ChartType from './ChartType'
+
 
 class Charts extends Component {
   constructor (props) {
@@ -108,21 +110,38 @@ class Charts extends Component {
   }
 
   renderChartArea (props) {
-    let { dataset, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy } = this.props
+    let { dataset, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType} = this.props
     let { columns, query, ...other } = dataset
-    let otherProps = {...other}
 
+    //set the props here; will get set by the reducer
+    let chartType
+    let otherProps = {...other}
+    let displayChartOptions = false
     otherProps.selectedColumnDef = query.selectedColumn ? columns[query.selectedColumn] : null
-    otherProps.chartType = 'bar'
 
     if (otherProps.selectedColumnDef && otherProps.selectedColumnDef.type === 'date') {
-      otherProps.chartType = 'area'
+      chartType = 'area'
+      displayChartOptions = true
     }
+    else{
+        chartType = 'bar'
+    }
+
+    let checkChartType = query.chartType
+    if(checkChartType &&  displayChartOptions) {
+      chartType = checkChartType
+    }
+    else {
+      chartType = 'bar'
+    }
+
+    let shouldRender
     return (
       query && query.data
       ? (<Row>
         <Col md={9}>
           <ChartCanvas
+            query={query}
             data={query.data}
             dateBy={query.dateBy}
             changeDateBy={changeDateBy}
@@ -130,9 +149,13 @@ class Charts extends Component {
             sumBy={query.sumBy}
             filters={query.filters}
             columns={columns}
+            chartType={chartType}
+            applyChartType={applyChartType}
+            displayChartOptions={displayChartOptions}
             {...otherProps} />
         </Col>
         <Col md={3}>
+          <Row>
           <ChartOptions
             {...query}
             columns={columns}
@@ -142,8 +165,18 @@ class Charts extends Component {
             applyFilter={applyFilter}
             updateFilter={updateFilter}
             handleSumBy={handleSumBy} />
+            </Row>
+          <Row>
+          <ChartType
+          applyChartType={applyChartType}
+          displayChartOptions={displayChartOptions}
+          chartType={chartType}/>
+          </Row>
         </Col>
-      </Row>)
+      </Row>
+
+
+      )
       : false
     )
   }
@@ -156,6 +189,7 @@ class Charts extends Component {
         return this.renderColumnButton(column, idx, columns)
       })
     }
+    let ChartArea = this.renderChartArea()
     return (
       <div className={'container-fluid'}>
         <Row className={'chartButtonRow'}>
@@ -163,7 +197,7 @@ class Charts extends Component {
             {cols}
           </Col>
         </Row>
-        {this.renderChartArea()}
+        {ChartArea}
       </div>
 
     )

@@ -145,6 +145,7 @@ let C3Chart = React.createClass({
     if (this.props.data.length > 1) {
       multi = true
     }
+    let displayChartOptions = this.props.displayChartOptions
     switch (this.props.type) {
       case 'line':
         this.setChart(this.drawGraphLineOrArea(false, multi))
@@ -153,7 +154,7 @@ let C3Chart = React.createClass({
         this.setChart(this.drawGraphLineOrArea(true, multi))
         break
       case 'bar':
-        this.setChart(this.drawGraphBar(multi))
+        this.setChart(this.drawGraphBar(multi, displayChartOptions))
         break
       case 'pie':
         this.setChart(this.drawGraphPie())
@@ -185,7 +186,7 @@ let C3Chart = React.createClass({
         names: { value: this.props.data[0].key }
       }
     }
-    if (area && this.props.data.length === 1) {
+    if (area && this.props.data.length === 2) {
       graphObjectData.type = 'area'
     }
 
@@ -333,7 +334,7 @@ let C3Chart = React.createClass({
     return cleanedData
   },
 
-  drawGraphBar: function (multi) {
+  drawGraphBar: function (multi, displayChartOptions) {
     let graphObject = this.graphObject()
     let graphObjectData = {
       x: 'x',
@@ -347,7 +348,12 @@ let C3Chart = React.createClass({
       })
     } else {
       let barData = []
-      barData = this.dataPrepBarMulti(this.props.data)
+      if(displayChartOptions){
+        barData = this.props.data
+      }else{
+        barData = this.dataPrepBarMulti(this.props.data)
+      }
+
       graphObjectData = _.merge(graphObjectData, {
         columns: Array.isArray(barData[0]) ? barData : this.multiDmsDataPreparator(barData)
 
