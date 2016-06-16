@@ -87,7 +87,7 @@ class ChartCanvas extends Component {
 
   render () {
     let chartType = this.props.chartType
-    let { rowLabel, selectedColumnDef, data, columns, sumBy } = this.props
+    let { rowLabel, selectedColumnDef, data, columns, sumBy, displayChartOptions } = this.props
     let type = selectedColumnDef.type
 
     let labels = Array.isArray(data[0]) ? data[0] : data[0].values
@@ -180,6 +180,7 @@ class ChartCanvas extends Component {
           type={chartType}
           dataType={type}
           options={options}
+          displayChartOptions={displayChartOptions}
           colors={colors} />
       </div>
     )
