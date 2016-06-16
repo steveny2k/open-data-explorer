@@ -185,7 +185,7 @@ let C3Chart = React.createClass({
         names: { value: this.props.data[0].key }
       }
     }
-    if (area && this.props.data.length === 1) {
+    if (area && this.props.data.length === 2) {
       graphObjectData.type = 'area'
     }
 
@@ -330,7 +330,6 @@ let C3Chart = React.createClass({
     } else {
       cleanedData = limitLongTailGroupBy(rawData)
     }
-    console.log(cleanedData)
     return cleanedData
   },
 

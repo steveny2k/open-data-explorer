@@ -1,4 +1,4 @@
-import { METADATA_REQUEST, METADATA_SUCCESS, SELECT_COLUMN, SORT_COLUMN, COUNT_SUCCESS, LOAD_TABLE, MIGRATION_SUCCESS, COLPROPS_SUCCESS, DATA_SUCCESS, GROUP_BY, UPDATE_FILTER, ADD_FILTER, REMOVE_FILTER, APPLY_FILTER, CHANGE_DATEBY, SUM_BY } from '../actions'
+import { METADATA_REQUEST, METADATA_SUCCESS, SELECT_COLUMN, SORT_COLUMN, COUNT_SUCCESS, LOAD_TABLE, MIGRATION_SUCCESS, COLPROPS_SUCCESS, DATA_SUCCESS, GROUP_BY, UPDATE_FILTER, ADD_FILTER, REMOVE_FILTER, APPLY_FILTER,  APPLY_CHART_TYPE, CHANGE_DATEBY, SUM_BY } from '../actions'
 import { routerReducer as routing } from 'react-router-redux'
 import { combineReducers } from 'redux'
 import merge from 'lodash/merge'
@@ -98,6 +98,12 @@ function dataset (state = { columns: {}, query: {}, table: { tablePage: 0 } }, a
           }
         }
       })
+    case APPLY_CHART_TYPE:
+      return merge({}, state, {
+        query: {
+          chartType: action.chartType
+        }
+      })
     case REMOVE_FILTER:
       copyState = {...state}
       delete copyState.query.filters[action.key]
@@ -113,7 +119,6 @@ function dataset (state = { columns: {}, query: {}, table: { tablePage: 0 } }, a
         (existingOptions.selected.length !== newOptions.selected.length || typeof newOptions.selected === 'string')) {
         copyState.query.filters[action.key].options.selected = action.options.selected
         newState = merge({}, copyState)
-        console.log(copyState)
       } else {
         let updatedOptions = {
           query: {
