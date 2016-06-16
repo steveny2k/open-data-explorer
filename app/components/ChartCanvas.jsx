@@ -141,7 +141,7 @@ class ChartCanvas extends Component {
       options.padding.left = (maxLabelLength * 4) + 55
     }
 
-    if (type === 'number' && !selectedColumnDef.categories) {
+    if ((type === 'number' && !selectedColumnDef.categories) || type === 'date') {
       options.rotated = false
     }
 
