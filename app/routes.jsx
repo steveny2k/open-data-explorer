@@ -19,7 +19,7 @@ export default (
       <Route path=':page' component={Catalog} />
     </Route>
     <Route path='/:category/:title/:id' components={Dataset}>
-      <IndexRedirect to='charts' />
+      <IndexRoute component={DatasetOverview} />
       <Route path='overview' component={DatasetOverview} />
       <Route path='details' component={DatasetDetails} />
       <Route path='charts' component={Charts} />
