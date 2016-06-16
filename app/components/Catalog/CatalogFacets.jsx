@@ -33,13 +33,13 @@ export default class CatalogFacets extends React.Component {
     }.bind(this))
 
     return (
-    <div className='facets'>
-      <div className='facet'>
+    <div className={'facets'}>
+      <div className={'facet'}>
         <h3 className={'categories'}>Categories</h3>
         {categories}
       </div>
-      <div className='facet'>
-        <h3 className = {'categories'}>Departments</h3>
+      <div className={'facet'}>
+        <h3 className={'categories'}>Departments</h3>
         {departments}
       </div>
     </div>

@@ -1,4 +1,5 @@
-import { CALL_API, Endpoints, Transforms, shouldRunColumnStats } from '../middleware/socrata'
+import { CALL_API } from '../middleware'
+import { Endpoints, Transforms, shouldRunColumnStats } from '../middleware/socrata'
 
 export const METADATA_REQUEST = 'METADATA_REQUEST'
 export const METADATA_SUCCESS = 'METADATA_SUCCESS'
@@ -126,6 +127,7 @@ export const CHANGE_DATEBY = 'CHANGE_DATEBY'
 export const GROUP_BY = 'GROUP_BY'
 export const SUM_BY = 'SUM_BY'
 export const SORT_COLUMN = 'SORT_COLUMN'
+export const UPDATE_PAGE = 'UPDATE_PAGE'
 
 export function selectColumn (column) {
   return (dispatch, getState) => {
@@ -169,6 +171,16 @@ export function sortColumn (key, dir) {
       type: SORT_COLUMN,
       key,
     dir})
+    dispatch(fetchData(getState(), true))
+  }
+}
+
+export function updatePage (page) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: UPDATE_PAGE,
+      page
+    })
     dispatch(fetchData(getState(), true))
   }
 }
