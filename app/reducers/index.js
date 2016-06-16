@@ -48,7 +48,7 @@ function dataset (state = { columns: {}, query: {}, table: { tablePage: 0 } }, a
     case METADATA_REQUEST:
       let freshState = {
         query: {
-          isFetching: false,
+          isFetching: true,
           dateBy: 'year'
         },
         columns: {}

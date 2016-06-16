@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
-import api from '../middleware/socrata'
+import api from '../middleware'
 import createLogger from 'redux-logger'
 import rootReducer from '../reducers'
 

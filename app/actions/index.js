@@ -1,4 +1,5 @@
-import { CALL_API, Endpoints, Transforms, shouldRunColumnStats } from '../middleware/socrata'
+import { CALL_API } from '../middleware'
+import { Endpoints, Transforms, shouldRunColumnStats } from '../middleware/socrata'
 
 export const METADATA_REQUEST = 'METADATA_REQUEST'
 export const METADATA_SUCCESS = 'METADATA_SUCCESS'
