@@ -6,6 +6,40 @@ import _ from 'lodash'
 
 const API_ROOT = 'https://data.sfgov.org/'
 
+// Export constants
+export const Endpoints = {
+  METADATA: endpointMetadata,
+  QUERY: endpointQuery,
+  TABLEQUERY: endpointTableQuery,
+  COUNT: endpointCount,
+  MIGRATION: endpointApiMigration,
+  COLPROPS: endpointColumnProperties
+}
+
+export const Transforms = {
+  METADATA: transformMetadata,
+  QUERY: transformQuery,
+  TABLEQUERY: transformTableQuery,
+  COUNT: transformCount,
+  MIGRATION: transformApiMigration,
+  COLPROPS: transformColumnProperties
+}
+
+export const shouldRunColumnStats = (type, key) => {
+  /*
+   * below is a bit of a hack to get around the fact that some categorical fields are encoded as numbers on the portal
+   * we don't want to run column stats against all numeric columns, so this allows us to control that, the regex below may need to be
+   * tuned as is, it could create false positives. This is okay for now, something we can optimize later
+  */
+  let regex = /(year|day|date|month|district|yr|code)/g
+  let isCategorical = regex.test(key)
+  if (type === 'text' || (isCategorical && type === 'number')) {
+    return true
+  } else {
+    return false
+  }
+}
+
 // Construct URL based on chart options
 
 function constructQuery (state) {
@@ -98,16 +132,18 @@ function constructQuery (state) {
   return query.getURL()
 }
 
+// Endpoints
+
 function endpointApiMigration (id) {
-  return `api/migrations/${id}.json`
+  return API_ROOT + `api/migrations/${id}.json`
 }
 
 function endpointMetadata (id) {
-  return `api/views/${id}.json`
+  return API_ROOT + `api/views/${id}.json`
 }
 
 function endpointCount (id) {
-  return `resource/${id}.json?$select=count(*)`
+  return API_ROOT + `resource/${id}.json?$select=count(*)`
 }
 
 function endpointQuery (state) {
@@ -140,7 +176,7 @@ function endpointColumnProperties (id, key) {
   if (key === 'category') {
     category = key
   }
-  return `resource/${id}.json?$select=${category},count(*)&$group=category&$order=category asc&$limit=50000`
+  return API_ROOT + `resource/${id}.json?$select=${category},count(*)&$group=category&$order=category asc&$limit=50000`
 }
 
 // Transforms
@@ -339,107 +375,4 @@ function transformColumnProperties (json, state, params) {
   }
 
   return transformed
-}
-
-// Export constants
-
-export const Endpoints = {
-  METADATA: endpointMetadata,
-  QUERY: endpointQuery,
-  TABLEQUERY: endpointTableQuery,
-  COUNT: endpointCount,
-  MIGRATION: endpointApiMigration,
-  COLPROPS: endpointColumnProperties
-}
-
-export const Transforms = {
-  METADATA: transformMetadata,
-  QUERY: transformQuery,
-  TABLEQUERY: transformTableQuery,
-  COUNT: transformCount,
-  MIGRATION: transformApiMigration,
-  COLPROPS: transformColumnProperties
-}
-
-export const shouldRunColumnStats = (type, key) => {
-  /*
-   * below is a bit of a hack to get around the fact that some categorical fields are encoded as numbers on the portal
-   * we don't want to run column stats against all numeric columns, so this allows us to control that, the regex below may need to be
-   * tuned as is, it could create false positives. This is okay for now, something we can optimize later
-  */
-  let regex = /(year|day|date|month|district|yr|id|code)/g
-  let isCategorical = regex.test(key)
-  if (type === 'text' || (isCategorical && type === 'number')) {
-    return true
-  } else {
-    return false
-  }
-}
-
-// Fetches an API response and normalizes the result JSON according to a transformation which can involve a normalized schema.
-// This makes the shape of API data predictable
-function callApi (endpoint, transform, state, params) {
-  const fullUrl = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint
-
-  return fetch(fullUrl)
-    .then((response) => response.json().then((json) => ({json, response}))
-  ).then(({ json, response }) => {
-    if (!response.ok) {
-      return Promise.reject(json)
-    }
-
-    const transformed = transform(json, state, params)
-    // const nextPageUrl = null // getNextPageUrl(response)
-
-    return Object.assign({},
-      transformed
-    )
-  })
-}
-
-export const CALL_API = Symbol('Call API')
-
-// A Redux middleware that interprets actions with CALL_API info specified.
-// Performs the call and promises when such actions are dispatched.
-export default (store) => (next) => (action) => {
-  const callAPI = action[CALL_API]
-  if (typeof callAPI === 'undefined') {
-    return next(action)
-  }
-
-  let { endpoint } = callAPI
-  const { types, transform, params } = callAPI
-
-  if (typeof endpoint === 'function') {
-    endpoint = endpoint(store.getState())
-  }
-  if (typeof endpoint !== 'string') {
-    throw new Error('Specify a string endpoint URL.')
-  }
-  if (!Array.isArray(types) || types.length !== 3) {
-    throw new Error('Expected an array of three action types.')
-  }
-  if (!types.every((type) => typeof type === 'string')) {
-    throw new Error('Expected action types to be strings.')
-  }
-
-  function actionWith (data) {
-    const finalAction = Object.assign({}, action, data)
-    delete finalAction[CALL_API]
-    return finalAction
-  }
-
-  const [requestType, successType, failureType] = types
-  next(actionWith({ type: requestType }))
-
-  return callApi(endpoint, transform, store.getState(), params).then(
-    (response) => next(actionWith({
-      response,
-      type: successType
-    })),
-    (error) => next(actionWith({
-      type: failureType,
-      error: error.message || 'Something bad happened'
-    }))
-  )
 }
