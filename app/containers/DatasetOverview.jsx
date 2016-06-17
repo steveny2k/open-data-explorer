@@ -1,9 +1,11 @@
-import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import DatasetDetails from '../components/Dataset/DatasetDetails'
 
-export class DatasetOverview extends Component {
-  render () {
-    return (
-      <div></div>
-    )
+const mapStateToProps = (state, ownProps) => {
+  const { dataset } = state
+  return {
+    dataset
   }
 }
+
+export default connect(mapStateToProps)(DatasetDetails)

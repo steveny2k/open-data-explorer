@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { hashHistory } from 'react-router'
 import { Row, Col, Nav, NavItem } from 'react-bootstrap'
 
-class DatasetTabs extends Component {
+class DatasetNav extends Component {
   constructor (props) {
     super(props)
 
@@ -21,15 +21,17 @@ class DatasetTabs extends Component {
       <Row className={'chartTabs'}>
         <Col sm={12}>
           <Nav
-            bsStyle='tabs'
-            justified
+            bsStyle='pills'
             activeKey={active}
             onSelect={this.handleTabSelect}>
-            <NavItem eventKey={'charts'} className={'tabSelected'}>
-              Charts
+            <NavItem eventKey={'overview'} className={'tabSelected'}>
+              Overview
             </NavItem>
             <NavItem eventKey={'details'} className={'tabSelected'}>
-              Dataset Details
+              Details
+            </NavItem>
+            <NavItem eventKey={'charts'} className={'tabSelected'}>
+              Charts
             </NavItem>
             <NavItem eventKey={'table'} className={'tabSelected'}>
               Table Preview
@@ -40,4 +42,4 @@ class DatasetTabs extends Component {
   }
 }
 
-export default DatasetTabs
+export default DatasetNav

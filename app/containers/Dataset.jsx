@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { loadMetadata, loadColumnProps, loadTable } from '../actions'
-import Dataset from '../components/Dataset'
+import Dataset from '../components/Dataset/Dataset'
 
 const mapStateToProps = (state, ownProps) => {
   const { dataset } = state

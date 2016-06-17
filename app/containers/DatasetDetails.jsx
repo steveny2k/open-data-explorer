@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import DatasetDetails from '../components/DatasetDetails'
+import DatasetDetails from '../components/Dataset/DatasetDetails'
 
 const mapStateToProps = (state, ownProps) => {
   const { dataset } = state

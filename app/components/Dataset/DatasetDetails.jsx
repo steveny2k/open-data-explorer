@@ -6,7 +6,7 @@ var labelStyle = {
 }
 
 var defStyle = {
-  minHeight: '200px',
+  minHeight: '200px'
 }
 
 var humanType = {
