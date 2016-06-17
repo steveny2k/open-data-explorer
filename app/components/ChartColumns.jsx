@@ -7,11 +7,8 @@ class ChartColumns extends Component {
     super(props)
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
-    return !nextProps.dataset.query.isFetching
-  }
 
-  renderColumnButton (column, idx, columns, selectColumn) {
+  renderColumnButton (column, idx, columns, selectColumn, dataset) {
     function setButtonColors (col) {
       let buttonColors = function () {
         let bColorsFxn = d3.scale.category30()
@@ -82,8 +79,7 @@ class ChartColumns extends Component {
     let removedIdKeys = removeIdKeys(columns)
     let col = columns[column]
     let buttonColor = setButtonColors(col)
-    //let { selectColumn } = this.props.selectColumn
-    let categoryColumns = this.props.dataset.categoryColumns
+    let categoryColumns = dataset.categoryColumns
     let buttonClassName = 'chartButtons'
     let colTypesAccepted = ['number', 'checkbox', 'date']
     if ((categoryColumns.indexOf(col.key) > -1 || colTypesAccepted.indexOf(col.type) > -1) && (removedIdKeys.indexOf(col.key) < 0) && (isNotNull(col))) {
@@ -104,13 +100,14 @@ class ChartColumns extends Component {
     }
   }
 
-  renderButtons(columns, selectColumn){
+  renderButtons(columns, selectColumn, dataset){
     let cols = []
     if (columns) {
       cols = Object.keys(columns).map((column, idx) => {
-        return this.renderColumnButton(column, idx, columns, selectColumn)
+        return this.renderColumnButton(column, idx, columns, selectColumn, dataset)
       })
     }
+    console.log(columns)
     console.log(cols)
     return cols
   }
@@ -118,8 +115,8 @@ class ChartColumns extends Component {
   render () {
     console.log("This is the chart columns rendering")
     console.log(this.props);
-    let { columns, selectColumn  } = this.props
-    let cols = this.renderButtons(columns, selectColumn)
+    let { columns, selectColumn, dataset } = this.props
+    let cols = this.renderButtons(columns, selectColumn, dataset)
     console.log(cols)
     return (
         <div>

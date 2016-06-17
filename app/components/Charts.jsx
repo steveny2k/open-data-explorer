@@ -1,54 +1,56 @@
 import React, { Component } from 'react'
 import { Button, Row, Col } from 'react-bootstrap'
 import ChartCanvas from './ChartCanvas'
-import ChartOptions from './ChartOptions'
-import ChartType from './ChartType'
-import ChartColumns from './ChartColumns'
+import ChartSideBar from './ChartSideBar.jsx'
+
 
 
 class Charts extends Component {
   constructor (props) {
     super(props)
-
-    //this.renderColumnButton = this.renderColumnButton.bind(this)
-    this.renderChartArea = this.renderChartArea.bind(this)
+    //this.renderChartArea = this.renderChartArea.bind(this)
+    //this.chartTypeChecks = this.chartTypeChecks.bind(this)
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
-    return !nextProps.dataset.query.isFetching
-  }
+  //shouldComponentUpdate (nextProps, nextState) {
+  // return !nextProps.dataset.query.isFetching
+  //}
 
-
-  renderChartArea (props) {
-    let { dataset, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType} = this.props
-    let { columns, query, ...other } = dataset
-
-    //set the props here; will get set by the reducer
-    let chartType
-    let otherProps = {...other}
-    let displayChartOptions = false
-    otherProps.selectedColumnDef = query.selectedColumn ? columns[query.selectedColumn] : null
-
+  chartTypeChecks (otherProps, query, columns) {
+    let chartDisplay = { displayChartOptions: false, chartType: null }
     if (otherProps.selectedColumnDef && otherProps.selectedColumnDef.type === 'date') {
-      chartType = 'area'
-      displayChartOptions = true
+      chartDisplay.chartType = 'area'
+      chartDisplay.displayChartOptions = true
     }
     else{
-        chartType = 'bar'
+        chartDisplay.chartType = 'bar'
     }
-
     let checkChartType = query.chartType
-    if(checkChartType &&  displayChartOptions) {
-      chartType = checkChartType
+    if(checkChartType &&  chartDisplay.displayChartOptions) {
+      chartDisplay.chartType = checkChartType
     }
     else {
-      chartType = 'bar'
+      chartDisplay.chartType = 'bar'
     }
+    return chartDisplay
+  }
 
+  renderChartArea (props) {
+    let { dataset, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType, selectColumn} = this.props
+    let { columns, query, ...other } = dataset
+    let otherProps = {...other}
+    let selectedColumn = null
+    let displayChartOptions = null
+    if(query.selectedColumn){
+      selectedColumn = query.selectedColumn
+    }
+    otherProps.selectedColumnDef = query.selectedColumn ? columns[query.selectedColumn] : null
+    let chartDisplay = this.chartTypeChecks(otherProps, query, columns)
+    displayChartOptions = chartDisplay.displayChartOptions
+    console.log(displayChartOptions);
+    let chartType = chartDisplay.chartType
     return (
-      query && query.data
-      ? (<Row>
-        <Col md={9}>
+      <Row>
           <ChartCanvas
             query={query}
             data={query.data}
@@ -62,10 +64,7 @@ class Charts extends Component {
             applyChartType={applyChartType}
             displayChartOptions={displayChartOptions}
             {...otherProps} />
-        </Col>
-        <Col md={3}>
-          <Row>
-          <ChartOptions
+           <ChartSideBar
             {...query}
             columns={columns}
             handleGroupBy={handleGroupBy}
@@ -73,40 +72,26 @@ class Charts extends Component {
             handleRemoveFilter={handleRemoveFilter}
             applyFilter={applyFilter}
             updateFilter={updateFilter}
-            handleSumBy={handleSumBy} />
-            </Row>
-          <Row>
-          <ChartType
-          applyChartType={applyChartType}
-          displayChartOptions={displayChartOptions}
-          chartType={chartType}/>
-          </Row>
-        </Col>
+            handleSumBy={handleSumBy}
+            applyChartType={applyChartType}
+            displayChartOptions={displayChartOptions}
+            chartType={chartType}
+            dataset= {dataset}
+            selectColumn={selectColumn}
+            displayChartOptions = {displayChartOptions}
+          />
       </Row>
-
-
-      )
-      : false
     )
   }
 
   render () {
-    console.log("This is chart rendering")
-    console.log(this.props);
-    console.log(this.props.dataset);
-    let { dataset, selectColumn}  = this.props
-    let ChartArea = this.renderChartArea()
+    let ChartArea = this.renderChartArea(this.props)
+    console.log("rendering the chart area")
     return (
       <div className={'container-fluid'}>
-        <Row className={'chartButtonRow'}>
-          <Col md={12}>
-          <ChartColumns
-            dataset= {dataset}
-            selectColumn={selectColumn}
-           />
-          </Col>
-        </Row>
-        {ChartArea}
+        <Col md={12}>
+          {ChartArea}
+        </Col>
       </div>
 
     )
