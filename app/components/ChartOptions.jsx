@@ -80,15 +80,14 @@ class ChartOptions extends Component {
     let groupByOptions = null
     let sumByOptions = null
 
-
-    if (columns[selectedColumn].type !== 'number' || columns[selectedColumn].categories) {
-      groupByOptions = this.renderGroupByOptions()
-      sumByOptions = this.renderSumByOptions()
+    if(columns[selectedColumn]){
+      if (columns[selectedColumn].type !== 'number' || columns[selectedColumn].categories) {
+        groupByOptions = this.renderGroupByOptions()
+        sumByOptions = this.renderSumByOptions()
+      }
     }
-
     return (
       <div className={'chartFiltersStyle'}>
-
         {groupByOptions}
         <ChartFilters
           columns={columns}
