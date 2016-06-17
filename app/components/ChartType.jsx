@@ -4,7 +4,6 @@ import RadioGroup from 'react-radio-group'
 class ChartType extends Component {
   constructor (props) {
     super(props)
-    //this.renderChartTypes = this.renderChartTypes.bind(this)
   }
 
 
@@ -50,7 +49,6 @@ class ChartType extends Component {
         <div>
           {chartTypeOptions}
         </div>
-
     )
   }
 }
