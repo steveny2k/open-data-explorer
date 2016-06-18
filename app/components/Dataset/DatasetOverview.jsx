@@ -24,7 +24,7 @@ class DatasetOverview extends Component {
   render () {
     const { description, publishingDepartment, licenseLink, licenseName, rowCount, rowsUpdatedAt, publishingFrequency, notes, attachments, programLink, tags } = this.props.dataset
     let numberFormat = format(',')
-    let dayUpdated = unix(rowsUpdatedAt).format('MM/DD/YYYY hh:mm A')
+    let dayUpdated = unix(rowsUpdatedAt).format('MM/DD/YYYY')
     let timeUpdated = unix(rowsUpdatedAt).format('hh:mm A')
     let overviewContent = null
 
