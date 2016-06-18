@@ -13,7 +13,11 @@ class DownloadLinks extends Component {
 
   render () {
     let options = Object.keys(downloadTypes)
-    let { apiDomain, id } = this.props
+    let { apiDomain, id, migrationId } = this.props
+
+    if (migrationId) {
+      id = migrationId
+    }
     let menuItems = options.map(function (type, i) {
       let downloadLink = 'https://' + apiDomain + '/api/views/' + id + '/rows.' + type + '?accessType=DOWNLOAD'
       return (

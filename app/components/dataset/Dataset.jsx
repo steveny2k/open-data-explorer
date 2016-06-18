@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import DatasetFrontMatter from './DatasetFrontMatter'
 import DatasetNav from './DatasetNav'
-import API_DOMAIN from '../../constants/AppConstants'
+import { API_DOMAIN } from '../../constants/AppConstants'
 
 class Dataset extends Component {
 
@@ -15,9 +15,11 @@ class Dataset extends Component {
     const { dataset, children, ...other } = this.props
     return (
       <section id={'Dataset'}>
-        <DatasetFrontMatter apiDomain={API_DOMAIN} {...dataset} />
-        <DatasetNav {...other} />
-        {children}
+        <div className='container-fluid'>
+          <DatasetFrontMatter apiDomain={API_DOMAIN} {...dataset} />
+          <DatasetNav {...other} />
+          {children}
+        </div>
       </section>
     )
   }

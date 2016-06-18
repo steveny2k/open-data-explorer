@@ -92,26 +92,9 @@ input-mysize{
   minHeight: '200px';
   font-size:105%;
 }
-.descriptionPanelHead{
-  margin-top:3%;
-  margin-left:2%;
-  margin-right:2%;
-}
+
 .descriptionPanelField{
   font-size:85%;
-}
-
-.dataSetInfo{
-  font-size:110%;
-  margin-top:-0.25%;
-  margin-left:-2%;
-  font-family: 'Lato', sans-serif;
-}
-
-.dataSetInfoDescription{
-  font-size:130%;
-  margin-right:10%;
-  font-family: 'Lato', sans-serif;
 }
 
 .datasetOverview{
@@ -123,13 +106,6 @@ input-mysize{
 .datasetLinks{
   font-size:130%;
 }
-
-.datasetDownLoadButtons{
-  margin-top:1%;
-  margin-left:-2%;
-  font-family: 'Lato', sans-serif;
-}
-
 
 .dataSetTitle{
    margin-top:6%;
@@ -202,4 +178,20 @@ h3.chartTitle{
 .chartTypeRadioLabel{
   padding-right:1%;
   font-family: 'Lato', sans-serif;
+}
+
+/* Dataset Front Matter */
+
+#header p {
+  margin-bottom: 21px;
+}
+
+#header h1 {
+  margin-bottom: 2px;
+}
+
+/* Dataset Nav */
+
+.DatasetNav .nav-pills {
+  margin-bottom: 1em;
 }

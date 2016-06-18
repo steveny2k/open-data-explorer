@@ -192,8 +192,17 @@ function transformMetadata (json) {
     licenseName: json.license.name || null,
     licenseLink: json.license.termsLink || null,
     publishingDepartment: json.metadata.custom_fields['Department Metrics']['Publishing Department'] || null,
+    publishingFrequency: json.metadata.custom_fields['Publishing Details']['Publishing frequency'] || null,
+    dataChangeFrequency: json.metadata.custom_fields['Publishing Details']['Data change frequency'] || null,
+    notes: json.metadata.custom_fields['Detailed Descriptive']['Data notes'] || null,
+    programLink: json.metadata.custom_fields['Detailed Descriptive']['Program link'] || null,
     rowLabel: json.metadata.rowLabel || 'Record',
+    tags: json.tags || null,
     columns: {}
+  }
+
+  if (json.metadata.attachments) {
+    metadata.attachments = json.metadata.attachments
   }
 
   for (let column of json.columns) {

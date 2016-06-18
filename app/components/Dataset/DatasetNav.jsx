@@ -12,13 +12,17 @@ class DatasetNav extends Component {
   handleTabSelect (key) {
     let pathArray = this.props.location.pathname.split('/')
     // assure we are passing the viewtype at the end of the dataset path
+    if (key === 'overview') {
+      key = ''
+    }
     hashHistory.push('/' + pathArray[1] + '/' + pathArray[2] + '/' + pathArray[3] + '/' + key)
   }
 
   render () {
     let active = this.props.routes[2].path
+    if(!active) active = 'overview'
     return (
-      <Row className={'chartTabs'}>
+      <Row className={'chartTabs DatasetNav'}>
         <Col sm={12}>
           <Nav
             bsStyle='pills'
@@ -28,7 +32,7 @@ class DatasetNav extends Component {
               Overview
             </NavItem>
             <NavItem eventKey={'details'} className={'tabSelected'}>
-              Details
+              Column Details
             </NavItem>
             <NavItem eventKey={'charts'} className={'tabSelected'}>
               Charts

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import DatasetDetails from '../components/Dataset/DatasetDetails'
+import DatasetOverview from '../components/Dataset/DatasetOverview'
 
 const mapStateToProps = (state, ownProps) => {
   const { dataset } = state
@@ -8,4 +8,4 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-export default connect(mapStateToProps)(DatasetDetails)
+export default connect(mapStateToProps)(DatasetOverview)

@@ -18,11 +18,11 @@ class App extends Component {
   render () {
     const { children } = this.props
     return (
-      <Grid fluid id='main-container' className={'app'}>
+      <div>
         <Navigation pages={pages} />
         {children}
         <Footer />
-      </Grid>
+      </div>
     )
   }
 }
