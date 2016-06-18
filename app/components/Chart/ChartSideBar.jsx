@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import ChartCanvas from './ChartCanvas'
-import ChartOptions from './ChartOptions'
+import ChartOptions from '../Query/ChartOptions'
 import ChartType from './ChartType'
 import ChartColumns from './ChartColumns'
-import { Button, Row, Col, ButtonGroup} from 'react-bootstrap'
-
+import { Button, Row, Col, ButtonGroup, Panel, Accordion} from 'react-bootstrap'
+import './_Chart.scss'
 
 class ChartSideBar extends Component {
   constructor (props) {
@@ -12,16 +12,26 @@ class ChartSideBar extends Component {
   }
 
   render () {
-    console.log("rendering the chart chartSideBar")
-    console.log(this.props)
     let { chartType, displayChartOptions, selectedColumn, dataset, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType, selectColumn } = this.props
     let { columns, query, ...other } = dataset
     let otherProps = {...other}
-    console.log(displayChartOptions);
+    const panelTitle = (
+        <h3 className="ChartSideBarTitle">Chart Options</h3>
+    );
+
     return (
       <Col md={3}>
-        <Row>
-          <ChartOptions
+      <Row>
+          <Accordion>
+          <Row>
+            <ChartColumns
+            dataset= {dataset}
+            selectColumn={selectColumn}
+            columns= {columns}
+           />
+          </Row>
+          <Row>
+            <ChartOptions
             {...query}
             columns={columns}
             handleGroupBy={handleGroupBy}
@@ -30,19 +40,14 @@ class ChartSideBar extends Component {
             applyFilter={applyFilter}
             updateFilter={updateFilter}
             handleSumBy={handleSumBy} />
-        </Row>
-        <Row>
-          <ChartType
+          </Row>
+          <Row>
+            <ChartType
             applyChartType={applyChartType}
             displayChartOptions={displayChartOptions}
             chartType={chartType}/>
-        </Row>
-        <Row className={'chartButtonRow'}>
-          <ChartColumns
-            dataset= {dataset}
-            selectColumn={selectColumn}
-            columns= {columns}
-           />
+          </Row>
+          </Accordion>
         </Row>
       </Col>
     )

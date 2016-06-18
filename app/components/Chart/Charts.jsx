@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Button, Row, Col } from 'react-bootstrap'
 import ChartCanvas from './ChartCanvas'
 import ChartSideBar from './ChartSideBar.jsx'
-
+import './_Chart.scss'
 
 
 class Charts extends Component {

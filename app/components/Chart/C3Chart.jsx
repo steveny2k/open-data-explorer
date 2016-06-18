@@ -1,3 +1,4 @@
+import './_Chart.scss'
 const React = require('react')
 const _ = require('lodash')
 

@@ -1,9 +1,9 @@
 import './_daterangepicker.scss'
-
 import React, { Component } from 'react'
 import {Button, Glyphicon} from 'react-bootstrap'
 import DateRangePicker from 'react-bootstrap-daterangepicker'
 import moment from 'moment'
+import './_Query.scss'
 
 const ranges = {
   'year': {

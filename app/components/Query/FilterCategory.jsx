@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
+import './_Query.scss'
+
 
 class FilterCategory extends Component {
   constructor (props) {
