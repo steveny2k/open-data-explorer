@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import RadioGroup from 'react-radio-group'
+import './_Chart.scss'
+import { Button, Row, Col, ButtonGroup, Panel, Accordion} from 'react-bootstrap'
 
 class ChartType extends Component {
   constructor (props) {
@@ -12,9 +14,11 @@ class ChartType extends Component {
     if(!chartType) {
       chartType = 'line'
     }
+    const panelTitle = (
+        <div>Chart Type Options</div>
+    );
     return (
-      <div className={'chartTypeRadioGroup'}>
-       <div className={'chartTypeRadioTitle'}> Select ChartType </div>
+      <Panel collapsible defaultExpanded header={panelTitle}>
         <div className={'chartTypeRadio'}>
         <RadioGroup
             name="chartTypes"
@@ -35,7 +39,7 @@ class ChartType extends Component {
             )}
           </RadioGroup>
         </div>
-      </div>
+      </Panel>
     )
   }
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Button, Row, Col } from 'react-bootstrap'
-
+import { Button, Row, Col, Panel} from 'react-bootstrap'
+import './_Chart.scss'
 
 class ChartColumns extends Component {
   constructor (props) {
@@ -80,7 +80,7 @@ class ChartColumns extends Component {
     let col = columns[column]
     let buttonColor = setButtonColors(col)
     let categoryColumns = dataset.categoryColumns
-    let buttonClassName = 'chartButtons'
+    let buttonClassName = 'chartColumnButtons'
     let colTypesAccepted = ['number', 'checkbox', 'date']
     if ((categoryColumns.indexOf(col.key) > -1 || colTypesAccepted.indexOf(col.type) > -1) && (removedIdKeys.indexOf(col.key) < 0) && (isNotNull(col))) {
       return (
@@ -107,22 +107,19 @@ class ChartColumns extends Component {
         return this.renderColumnButton(column, idx, columns, selectColumn, dataset)
       })
     }
-    console.log(columns)
-    console.log(cols)
     return cols
   }
 
   render () {
-    console.log("This is the chart columns rendering")
-    console.log(this.props);
     let { columns, selectColumn, dataset } = this.props
     let cols = this.renderButtons(columns, selectColumn, dataset)
-    console.log(cols)
+       const panelTitle = (
+        <div>Dataset Columns</div>
+    )
     return (
-        <div>
-        {cols}
-        </div>
-
+         <Panel collapsible defaultExpanded header={panelTitle}>
+            {cols}
+          </Panel>
     )
   }
 }

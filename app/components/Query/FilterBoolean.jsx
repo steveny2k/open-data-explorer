@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
+import './_Query.scss'
 
 class FilterBoolean extends Component {
   constructor (props) {

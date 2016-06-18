@@ -1,0 +1,96 @@
+/**** General Charts Component *****/
+
+h2.chartTitle{
+  margin-top:4%;
+  margin-left:3%;
+}
+h3.chartTitle{
+  margin-left:3%;
+  padding-bottom:0.5%;
+}
+
+/****************************/
+
+/**** Chart SideBar Component *****/
+.ChartSideBarTitle{}
+/****************************/
+
+/**** Chart Canvas Component *****/
+.ChartCanvasToggleTime{
+  margin-top:4%;
+  margin-right:7%;
+  float: right;
+}
+.chartCanvasBlankCanvas{
+  padding:20%;
+  border: 1px solid;
+}
+/****************************/
+
+/**** C3 Chart Component *****/
+.c3 {
+  width: 100%;
+  height: 600px;
+}
+
+.c3 line, .c3 path {
+    stroke: #d9d9d9;
+}
+
+.c3 .tick text {
+    fill: #666666;
+}
+
+.c3 svg {
+     line-height: 1.4;
+    font-family: 'Lato', sans-serif;
+}
+.c3chart{
+  margin-top:3%;
+}
+/****************************/
+
+/**** Chart Type Component *****/
+.chartTypeRadio{
+  font-size:124%;
+  font-family: 'Lato', sans-serif;
+}
+
+.chartTypeRadioTitle{
+  font-size:140%;
+  padding-left:3%;
+  padding-bottom:1.5%;
+  font-family: 'Lato', sans-serif;
+}
+.chartTypeRadioGroup{
+  padding-left:3%;
+    background-color:#d3d3d3;
+  padding-top:3%;
+  font-family: 'Lato', sans-serif;
+  padding-bottom:3%;
+}
+.chartTypeRadioLabel{
+  padding-right:1%;
+  font-family: 'Lato', sans-serif;
+}
+/****************************/
+
+/**** Chart Buttons Component *****/
+.chartButtons{
+  font-size:110%;
+  padding:0.50%;
+  border-radius: 0.10 !important;
+  border:0.001;
+  margin-left:0.01%;
+  margin-right:0.01%;
+  margin-bottom:0.01%;
+  font-family: 'Lato', sans-serif;
+}
+
+.chartButtonRow{
+  margin-right:2%;
+  margin-top:2%;
+}
+.chartColumnButtons{
+}
+/****************************/

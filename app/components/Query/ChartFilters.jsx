@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import Select from 'react-select'
 import { Well, Button } from 'react-bootstrap'
-
 import FilterDateTime from './FilterDateTime'
 import FilterCategory from './FilterCategory'
 import FilterNumeric from './FilterNumeric'
 import FilterBoolean from './FilterBoolean'
+import './_Query.scss'
+
 
 class ChartFilters extends Component {
   constructor (props) {
@@ -100,7 +101,7 @@ class ChartFilters extends Component {
   }
 
   render () {
-    let { handleAddFilter, columns, filters } = this.props
+    let { selectedColumn,handleAddFilter, columns, filters } = this.props
     let checkboxes = false
     // todo: these are specific to Socrata, filterable columns should just be set in the state when columns are processed
     const notFilters = ['checkbox', 'location', 'url']
@@ -126,6 +127,8 @@ class ChartFilters extends Component {
     }
 
     return (
+      selectedColumn
+      ? (
       <div>
         <Select
           name='filters'
@@ -134,7 +137,8 @@ class ChartFilters extends Component {
           onChange={handleAddFilter} />
         {filters ? this.renderFilterList() : false}
       </div>
-
+      )
+      : false
     )
   }
 }

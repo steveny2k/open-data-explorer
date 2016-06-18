@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { selectColumn, groupBy, sumBy, addFilter, applyChartType, removeFilter, applyFilter, updateFilter, changeDateBy } from '../actions'
-import Charts from '../components/Charts'
+import Charts from '../components/Chart/Charts'
 
 const mapStateToProps = (state, ownProps) => {
   const { dataset } = state
