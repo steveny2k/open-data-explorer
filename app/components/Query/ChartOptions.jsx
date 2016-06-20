@@ -25,14 +25,15 @@ class ChartOptions extends Component {
     }
 
     return (
-      <Select
-        name='groupby'
-        placeholder='Select a field to group by'
-        options={groupableColumns}
-        value={groupBy}
-        onChange={handleGroupBy}
-        className={'filterF'}
-        />
+      <Row className="chartOptionsRow">
+        <div className="chartOptionsTitle"> Group By </div>
+          <Select
+          name='groupby'
+          placeholder='Select a field to group by'
+          options={groupableColumns}
+          value={groupBy}
+          onChange={handleGroupBy}/>
+        </Row>
       )
   }
 
@@ -64,14 +65,17 @@ class ChartOptions extends Component {
       return false
     } else {
       return (
+        <Row className="chartOptionsRow">
+        <div className="chartOptionsTitle"> Sum By </div>
         <Select
           name='sumby'
           placeholder='Select a field to sum by'
           options={sumableColumns}
           value={sumBy}
           onChange={handleSumBy}
-          className={'filterF'}
-          />)
+          />
+        </Row>
+      )
     }
   }
 
@@ -93,7 +97,7 @@ class ChartOptions extends Component {
     return (
       selectedColumn
       ? (
-       <Panel collapsible defaultExpanded header={panelTitle}>
+       <Panel collapsible defaultExpanded className="chart" header={panelTitle}>
         {groupByOptions}
         <ChartFilters
           columns={columns}
@@ -102,7 +106,6 @@ class ChartOptions extends Component {
           handleRemoveFilter={handleRemoveFilter}
           applyFilter={applyFilter}
           updateFilter={updateFilter}
-          className={'filterF'}
           selectedColumn = {columns[selectedColumn]}
           />
         {sumByOptions}
