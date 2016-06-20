@@ -27,13 +27,13 @@ class ChartType extends Component {
             {Radio => (
               <div>
                 <label className={'chartTypeRadioLabel'}>
-                  <Radio className={'chartTypeRadioLabel'} value="bar" />Bar
+                  <Radio  value="bar" />Bar
                 </label>
                 <label className={'chartTypeRadioLabel'}>
-                  <Radio className={'chartTypeRadioLabel'} value="line" />Line
+                  <Radio value="line" />Line
                 </label>
                 <label className={'chartTypeRadioLabel'}>
-                  <Radio className={'chartTypeRadioLabel'} value="area" />Area
+                  <Radio value="area" />Area
                 </label>
               </div>
             )}

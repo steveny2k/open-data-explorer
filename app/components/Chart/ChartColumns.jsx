@@ -8,7 +8,7 @@ class ChartColumns extends Component {
   }
 
 
-  renderColumnButton (column, idx, columns, selectColumn, dataset) {
+  renderColumnButton (column, idx, columns, selectColumn, dataset, selectedColumn) {
     function setButtonColors (col) {
       let buttonColors = function () {
         let bColorsFxn = d3.scale.category30()
@@ -80,7 +80,16 @@ class ChartColumns extends Component {
     let col = columns[column]
     let buttonColor = setButtonColors(col)
     let categoryColumns = dataset.categoryColumns
-    let buttonClassName = 'chartColumnButtons'
+    let buttonClassName
+    if(col.key == selectedColumn){
+      buttonClassName = 'chartButtons chartColumnButtonsActive'
+    }
+    else if(selectedColumn && col.key != selectedColumn){
+      buttonClassName = ' chartButtons chartColumnButtonsInActive'
+    }
+    else{
+     buttonClassName  = ' chartButtons chartColumnButtonsNonSelected'
+    }
     let colTypesAccepted = ['number', 'checkbox', 'date']
     if ((categoryColumns.indexOf(col.key) > -1 || colTypesAccepted.indexOf(col.type) > -1) && (removedIdKeys.indexOf(col.key) < 0) && (isNotNull(col))) {
       return (
@@ -92,7 +101,6 @@ class ChartColumns extends Component {
           className={buttonClassName}
           onClick={selectColumn.bind(this, col.key)}>
           {col.name}
-
         </Button>
       )
     } else {
@@ -100,19 +108,19 @@ class ChartColumns extends Component {
     }
   }
 
-  renderButtons(columns, selectColumn, dataset){
+  renderButtons(columns, selectColumn, dataset, selectedColumn){
     let cols = []
     if (columns) {
       cols = Object.keys(columns).map((column, idx) => {
-        return this.renderColumnButton(column, idx, columns, selectColumn, dataset)
+        return this.renderColumnButton(column, idx, columns, selectColumn, dataset, selectedColumn)
       })
     }
     return cols
   }
 
   render () {
-    let { columns, selectColumn, dataset } = this.props
-    let cols = this.renderButtons(columns, selectColumn, dataset)
+    let { columns, selectColumn, dataset, selectedColumn } = this.props
+    let cols = this.renderButtons(columns, selectColumn, dataset, selectedColumn)
        const panelTitle = (
         <div>Dataset Columns</div>
     )

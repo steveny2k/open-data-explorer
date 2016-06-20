@@ -162,7 +162,8 @@ class ChartCanvas extends Component {
       }
     }
     return (
-        <div id='C3Chart'className={'container-fluid'}>
+       <Col md={9}>
+        <div id='C3Chart'className="c3ChartContainer">
           {toggle}
           {this.renderTitle()}
           {this.renderSubTitle()}
@@ -174,6 +175,7 @@ class ChartCanvas extends Component {
             displayChartOptions={displayChartOptions}
             colors={colors} />
         </div>
+      </Col>
     )
   }
 
@@ -184,9 +186,16 @@ class ChartCanvas extends Component {
     let { query, rowLabel, selectedColumnDef, data, columns, sumBy, displayChartOptions } = this.props
     let chartCanvas = null
     const jumbotronInstance = (
-      <div className="chartCanvasBlankCanvas">
-        <p>Click on the chart columns to render a chart</p>
-        </div>
+      <div>
+        <Col md={8}>
+         <div className="chartCanvasBlankCanvas">
+         <Row>
+            <div>Click on the chart columns to render a chart</div>
+          </Row>
+          </div>
+        </Col>
+        <Col md={1}></Col>
+      </div>
       )
 
     if(selectedColumnDef && query){
@@ -196,11 +205,9 @@ class ChartCanvas extends Component {
       chartCanvas = jumbotronInstance
     }
     return (
-      <Col md={9}>
-        <Row>
-          {chartCanvas}
-        </Row>
-      </Col>
+      <div>
+        {chartCanvas}
+      </div>
     )
   }
 }

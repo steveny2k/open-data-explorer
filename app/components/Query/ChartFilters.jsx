@@ -5,6 +5,8 @@ import FilterDateTime from './FilterDateTime'
 import FilterCategory from './FilterCategory'
 import FilterNumeric from './FilterNumeric'
 import FilterBoolean from './FilterBoolean'
+import {  Row} from 'react-bootstrap'
+
 import './_Query.scss'
 
 
@@ -129,14 +131,15 @@ class ChartFilters extends Component {
     return (
       selectedColumn
       ? (
-      <div>
+       <Row className="chartOptionsRow">
+        <div className="chartOptionsTitle"> Filter By </div>
         <Select
           name='filters'
           placeholder="Select fields you'd like to filter by"
           options={options}
           onChange={handleAddFilter} />
         {filters ? this.renderFilterList() : false}
-      </div>
+        </Row>
       )
       : false
     )

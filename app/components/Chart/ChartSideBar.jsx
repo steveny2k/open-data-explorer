@@ -24,13 +24,6 @@ class ChartSideBar extends Component {
       <Row>
           <Accordion>
           <Row>
-            <ChartColumns
-            dataset= {dataset}
-            selectColumn={selectColumn}
-            columns= {columns}
-           />
-          </Row>
-          <Row>
             <ChartOptions
             {...query}
             columns={columns}
@@ -46,6 +39,14 @@ class ChartSideBar extends Component {
             applyChartType={applyChartType}
             displayChartOptions={displayChartOptions}
             chartType={chartType}/>
+          </Row>
+          <Row>
+            <ChartColumns
+            dataset= {dataset}
+            selectColumn={selectColumn}
+            columns= {columns}
+            selectedColumn={selectedColumn}
+           />
           </Row>
           </Accordion>
         </Row>
