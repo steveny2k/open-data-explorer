@@ -21,7 +21,11 @@ if (DEBUG) {
     new ExtractTextPlugin(cssBundle, {
       allChunks: true
     }),
-    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    }),
     new webpack.optimize.DedupePlugin(),
     new webpack.DefinePlugin({
       'process.env': {

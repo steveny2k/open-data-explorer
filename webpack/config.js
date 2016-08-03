@@ -12,7 +12,8 @@ var TEST = process.env.NODE_ENV === 'test'
 var jsBundle = path.join('js', util.format('[name].%s.js', pkg.version))
 
 var entry = {
-  app: ['bootstrap-loader', './app.jsx']
+  app: ['bootstrap-loader', './app.jsx'],
+  vendor: ['react', 'c3', 'react-router', 'react-dom']
 }
 
 if (DEBUG) {

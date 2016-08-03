@@ -1,1 +1,3 @@
-import { CALL_API, Endpoints, Transforms, shouldRunColumnStats } from '../middleware/socrata'
+import { CALL_API } from '../middleware'
+import { Endpoints, Transforms } from '../middleware/algolia'
+

@@ -88,10 +88,9 @@ class Charts extends Component {
     let ChartArea = this.renderChartArea(this.props)
     console.log("rendering the chart area")
     return (
-        <Col md={12}>
-          {ChartArea}
-        </Col>
-
+      <div>
+        {ChartArea}
+      </div>
     )
   }
 }

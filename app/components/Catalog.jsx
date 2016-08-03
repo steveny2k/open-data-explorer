@@ -135,7 +135,7 @@ export default class CatalogBrowse extends React.Component {
   render () {
     let {facets, catalogSize, nbHits, ...state} = this.state
     let listItems = []
-    let showingMsg = ""
+    let showingMsg = ''
     if (this.state.results.length > 0) {
       listItems = this.state.results.map(function (dataset, i) {
         return (<CatalogItem key={i} dataset={dataset}/>)
@@ -154,15 +154,15 @@ export default class CatalogBrowse extends React.Component {
           </Col>
           <Col sm={9}>
             <CatalogSearchBar helper={helper} handleSearch={this.handleSearch}/>
-            <div style={{float: 'left'}}>
+            <div>
               {showingMsg}
-            </div>
-            <div style={{float: 'right'}}>
-              <Pagination
-                bsSize='small'
-                items={this.state.pages}
-                activePage={this.state.activePage}
-                onSelect={this.handleSelect} />
+              <div style={{float: 'right'}}>
+                <Pagination
+                  bsSize='small'
+                  items={this.state.pages}
+                  activePage={this.state.activePage}
+                  onSelect={this.handleSelect} />
+              </div>
             </div>
             {listItems}
             <div style={{float: 'right'}}>
