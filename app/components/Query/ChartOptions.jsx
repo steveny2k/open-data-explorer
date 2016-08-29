@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 import Select from 'react-select'
 import ChartFilters from './ChartFilters'
 import './_Query.scss'
-import { Panel } from 'react-bootstrap'
+import { Panel, Row } from 'react-bootstrap'
 
 class ChartOptions extends Component {
   renderGroupByOptions () {
