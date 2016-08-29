@@ -1,12 +1,16 @@
 import { METADATA_REQUEST, METADATA_SUCCESS, SELECT_COLUMN, SORT_COLUMN, COUNT_SUCCESS, UPDATE_PAGE, LOAD_TABLE, MIGRATION_SUCCESS, COLPROPS_SUCCESS, DATA_SUCCESS, GROUP_BY, UPDATE_FILTER, ADD_FILTER, REMOVE_FILTER, APPLY_FILTER,  APPLY_CHART_TYPE, CHANGE_DATEBY, SUM_BY } from '../actions'
-import { routerReducer as routing } from 'react-router-redux'
-import { combineReducers } from 'redux'
+import routing from '../reducers/routerReducer'
+import { combineReducers } from 'redux-immutable'
 import merge from 'lodash/merge'
 import union from 'lodash/union'
 import uniq from 'lodash/uniq'
+import { List, Map } from 'immutable'
 
-function dataset (state = { columns: {}, query: {}, table: { tablePage: 0 } }, action) {
+const initDataset = Map({columns: {}, query: {}, table: { tablePage: 0 }})
+
+function dataset (state = initDataset, action) {
   let copyState
+  console.log(state)
 
   if (action.response) {
     switch (action.type) {
@@ -15,9 +19,12 @@ function dataset (state = { columns: {}, query: {}, table: { tablePage: 0 } }, a
       case MIGRATION_SUCCESS:
       case COLPROPS_SUCCESS:
         if (COLPROPS_SUCCESS) {
-          action.response.categoryColumns = union(state.categoryColumns, action.response.categoryColumns)
+          // let stateCategories = List(state.categoryColumns)
+          // action.response.categoryColumns = union(state.categoryColumns, action.response.categoryColumns)
         }
-        return merge({}, state, action.response)
+        // console.log(state)
+        // return merge({}, state, action.response)
+        return state.merge(Map(action.response))
       case DATA_SUCCESS:
         let merged = merge({}, state, action.response)
         if (action.response.query) {

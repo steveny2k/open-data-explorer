@@ -26,8 +26,4 @@ class App extends Component {
   }
 }
 
-App.propTypes = {
-  children: PropTypes.node
-}
-
 export default connect()(App)
