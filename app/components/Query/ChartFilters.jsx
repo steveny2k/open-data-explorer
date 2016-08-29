@@ -5,10 +5,9 @@ import FilterDateTime from './FilterDateTime'
 import FilterCategory from './FilterCategory'
 import FilterNumeric from './FilterNumeric'
 import FilterBoolean from './FilterBoolean'
-import {  Row} from 'react-bootstrap'
+import { Row } from 'react-bootstrap'
 
 import './_Query.scss'
-
 
 class ChartFilters extends Component {
   constructor (props) {
@@ -90,7 +89,7 @@ class ChartFilters extends Component {
         <Well bsSize='small' className='filter' key={filter.key}>
           <div className='filter-content'>
             <Button className='close' onClick={handleRemoveFilter.bind(this, filter.key)}>
-              &times;
+              &times
             </Button>
             <h4>{filter.name}</h4>
             {filterContent}
@@ -103,7 +102,7 @@ class ChartFilters extends Component {
   }
 
   render () {
-    let { selectedColumn,handleAddFilter, columns, filters } = this.props
+    let { selectedColumn, handleAddFilter, columns, filters } = this.props
     let checkboxes = false
     // todo: these are specific to Socrata, filterable columns should just be set in the state when columns are processed
     const notFilters = ['checkbox', 'location', 'url']
@@ -129,17 +128,19 @@ class ChartFilters extends Component {
     }
 
     return (
-      selectedColumn
+    selectedColumn
       ? (
-       <Row className="chartOptionsRow">
-        <div className="chartOptionsTitle"> Filter By </div>
+      <Row className='chartOptionsRow'>
+        <div className='chartOptionsTitle'>
+          Filter By
+        </div>
         <Select
           name='filters'
           placeholder="Select fields you'd like to filter by"
           options={options}
           onChange={handleAddFilter} />
         {filters ? this.renderFilterList() : false}
-        </Row>
+      </Row>
       )
       : false
     )

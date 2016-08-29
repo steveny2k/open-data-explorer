@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { Grid } from 'react-bootstrap'
 import Navigation from '../components/Navigation/Navigation'
 import Footer from '../components/Footer/Footer'
 

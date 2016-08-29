@@ -4,8 +4,7 @@ import React, { Component } from 'react'
 import Select from 'react-select'
 import ChartFilters from './ChartFilters'
 import './_Query.scss'
-import {  Row, Col, Panel} from 'react-bootstrap'
-
+import { Panel } from 'react-bootstrap'
 
 class ChartOptions extends Component {
   renderGroupByOptions () {
@@ -25,16 +24,16 @@ class ChartOptions extends Component {
     }
 
     return (
-      <Row className="chartOptionsRow">
-        <div className="chartOptionsTitle"> Group By </div>
-          <Select
+      <Row className='chartOptionsRow'>
+        <div className='chartOptionsTitle'> Group By </div>
+        <Select
           name='groupby'
           placeholder='Select a field to group by'
           options={groupableColumns}
           value={groupBy}
           onChange={handleGroupBy}/>
-        </Row>
-      )
+      </Row>
+    )
   }
 
   renderSumByOptions () {
@@ -65,52 +64,51 @@ class ChartOptions extends Component {
       return false
     } else {
       return (
-        <Row className="chartOptionsRow">
-        <div className="chartOptionsTitle"> Sum By </div>
-        <Select
-          name='sumby'
-          placeholder='Select a field to sum by'
-          options={sumableColumns}
-          value={sumBy}
-          onChange={handleSumBy}
-          />
+        <Row className='chartOptionsRow'>
+          <div className='chartOptionsTitle'> Sum By </div>
+          <Select
+            name='sumby'
+            placeholder='Select a field to sum by'
+            options={sumableColumns}
+            value={sumBy}
+            onChange={handleSumBy}
+            />
         </Row>
       )
     }
   }
 
-
   render () {
-    let { columns, handleAddFilter, handleRemoveFilter, filters, applyFilter, updateFilter, selectedColumn} = this.props
+    let {columns, handleAddFilter, handleRemoveFilter, filters, applyFilter, updateFilter, selectedColumn} = this.props
     let groupByOptions = null
     let sumByOptions = null
 
-    if(columns[selectedColumn]){
+    if (columns[selectedColumn]) {
       if (columns[selectedColumn].type !== 'number' || columns[selectedColumn].categories) {
         groupByOptions = this.renderGroupByOptions()
         sumByOptions = this.renderSumByOptions()
       }
     }
     const panelTitle = (
-        <div>Filter Options</div>
-    );
+      <div>Filter Options</div>
+    )
     return (
       selectedColumn
       ? (
-       <Panel collapsible defaultExpanded className="chart" header={panelTitle}>
-        {groupByOptions}
-        <ChartFilters
-          columns={columns}
-          filters={filters}
-          handleAddFilter={handleAddFilter}
-          handleRemoveFilter={handleRemoveFilter}
-          applyFilter={applyFilter}
-          updateFilter={updateFilter}
-          selectedColumn = {columns[selectedColumn]}
-          />
+        <Panel collapsible defaultExpanded className='chart' header={panelTitle}>
+          {groupByOptions}
+          <ChartFilters
+            columns={columns}
+            filters={filters}
+            handleAddFilter={handleAddFilter}
+            handleRemoveFilter={handleRemoveFilter}
+            applyFilter={applyFilter}
+            updateFilter={updateFilter}
+            selectedColumn={columns[selectedColumn]}
+            />
         {sumByOptions}
-      </Panel>
-      ):false
+        </Panel>
+      ) : false
     )
   }
 }

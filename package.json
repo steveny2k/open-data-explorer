@@ -11,6 +11,7 @@
     "devPort": 8000
   },
   "scripts": {
+    "stats": "NODE_ENV=production webpack --profile --json --config ./webpack/config > stats.json",
     "build": "NODE_ENV=production npm run webpack",
     "clean": "rimraf $npm_package_config_buildDir && mkdir $npm_package_config_buildDir",
     "env": "env",
