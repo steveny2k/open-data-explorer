@@ -1,42 +1,37 @@
 import React, { Component } from 'react'
 import RadioGroup from 'react-radio-group'
 import './_Chart.scss'
-import { Button, Row, Col, ButtonGroup, Panel, Accordion} from 'react-bootstrap'
+import { Panel } from 'react-bootstrap'
 
 class ChartType extends Component {
-  constructor (props) {
-    super(props)
-  }
-
-
   renderChartTypes () {
-    let { applyChartType, chartType} = this.props
-    if(!chartType) {
+    let {applyChartType, chartType} = this.props
+    if (!chartType) {
       chartType = 'line'
     }
     const panelTitle = (
-        <div>Chart Type Options</div>
-    );
+      <div>Chart Type Options</div>
+    )
     return (
       <Panel collapsible defaultExpanded header={panelTitle}>
         <div className={'chartTypeRadio'}>
-        <RadioGroup
-            name="chartTypes"
+          <RadioGroup
+            name='chartTypes'
             selectedValue={chartType}
             onChange={applyChartType}>
-            {Radio => (
-              <div>
-                <label className={'chartTypeRadioLabel'}>
-                  <Radio  value="bar" />Bar
-                </label>
-                <label className={'chartTypeRadioLabel'}>
-                  <Radio value="line" />Line
-                </label>
-                <label className={'chartTypeRadioLabel'}>
-                  <Radio value="area" />Area
-                </label>
-              </div>
-            )}
+              {Radio => (
+                <div>
+                  <label className={'chartTypeRadioLabel'}>
+                    <Radio value='bar' />Bar
+                  </label>
+                  <label className={'chartTypeRadioLabel'}>
+                    <Radio value='line' />Line
+                  </label>
+                  <label className={'chartTypeRadioLabel'}>
+                    <Radio value='area' />Area
+                  </label>
+                </div>
+              )}
           </RadioGroup>
         </div>
       </Panel>
@@ -46,13 +41,13 @@ class ChartType extends Component {
   render () {
     let {displayChartOptions} = this.props
     let chartTypeOptions = null
-    if(displayChartOptions){
+    if (displayChartOptions) {
       chartTypeOptions = this.renderChartTypes()
     }
     return (
-        <div>
-          {chartTypeOptions}
-        </div>
+      <div>
+        {chartTypeOptions}
+      </div>
     )
   }
 }

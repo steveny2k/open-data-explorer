@@ -1,53 +1,44 @@
 import React, { Component } from 'react'
-import ChartCanvas from './ChartCanvas'
 import ChartOptions from '../Query/ChartOptions'
 import ChartType from './ChartType'
 import ChartColumns from './ChartColumns'
-import { Button, Row, Col, ButtonGroup, Panel, Accordion} from 'react-bootstrap'
+import { Row, Col, Accordion } from 'react-bootstrap'
 import './_Chart.scss'
 
 class ChartSideBar extends Component {
-  constructor (props) {
-    super(props)
-  }
-
   render () {
-    let { chartType, displayChartOptions, selectedColumn, dataset, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType, selectColumn } = this.props
-    let { columns, query, ...other } = dataset
-    let otherProps = {...other}
-    const panelTitle = (
-        <h3 className="ChartSideBarTitle">Chart Options</h3>
-    );
+    let { chartType, displayChartOptions, selectedColumn, dataset, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, applyChartType, selectColumn } = this.props
+    let { columns, query } = dataset
 
     return (
       <Col md={3}>
-      <Row>
+        <Row>
           <Accordion>
-          <Row>
-            <ChartOptions
-            {...query}
-            columns={columns}
-            handleGroupBy={handleGroupBy}
-            handleAddFilter={handleAddFilter}
-            handleRemoveFilter={handleRemoveFilter}
-            applyFilter={applyFilter}
-            updateFilter={updateFilter}
-            handleSumBy={handleSumBy} />
-          </Row>
-          <Row>
-            <ChartType
-            applyChartType={applyChartType}
-            displayChartOptions={displayChartOptions}
-            chartType={chartType}/>
-          </Row>
-          <Row>
-            <ChartColumns
-            dataset= {dataset}
-            selectColumn={selectColumn}
-            columns= {columns}
-            selectedColumn={selectedColumn}
-           />
-          </Row>
+            <Row>
+              <ChartOptions
+                {...query}
+                columns={columns}
+                handleGroupBy={handleGroupBy}
+                handleAddFilter={handleAddFilter}
+                handleRemoveFilter={handleRemoveFilter}
+                applyFilter={applyFilter}
+                updateFilter={updateFilter}
+                handleSumBy={handleSumBy} />
+            </Row>
+            <Row>
+              <ChartType
+                applyChartType={applyChartType}
+                displayChartOptions={displayChartOptions}
+                chartType={chartType} />
+            </Row>
+            <Row>
+              <ChartColumns
+                dataset={dataset}
+                selectColumn={selectColumn}
+                columns={columns}
+                selectedColumn={selectedColumn}
+              />
+            </Row>
           </Accordion>
         </Row>
       </Col>

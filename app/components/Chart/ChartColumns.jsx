@@ -1,20 +1,17 @@
 import React, { Component } from 'react'
-import { Button, Row, Col, Panel} from 'react-bootstrap'
+import { Button, Panel } from 'react-bootstrap'
 import './_Chart.scss'
 
 class ChartColumns extends Component {
-  constructor (props) {
-    super(props)
-  }
-
-
   renderColumnButton (column, idx, columns, selectColumn, dataset, selectedColumn) {
     function setButtonColors (col) {
+      /*
       let buttonColors = function () {
         let bColorsFxn = d3.scale.category30()
         let buttonColors = bColorsFxn.range()
         return buttonColors
       }
+      */
       // let btnColors = buttonColors()
       let btnColors = ['#3498db', '#27ae60', '#16a085', '#7986cb', '#d35400', '#c0392b', '#a97964', '#8e44ad', '#f39c12']
 
@@ -81,14 +78,12 @@ class ChartColumns extends Component {
     let buttonColor = setButtonColors(col)
     let categoryColumns = dataset.categoryColumns
     let buttonClassName
-    if(col.key == selectedColumn){
+    if (col.key === selectedColumn) {
       buttonClassName = 'chartButtons chartColumnButtonsActive'
-    }
-    else if(selectedColumn && col.key != selectedColumn){
+    } else if (selectedColumn && col.key !== selectedColumn) {
       buttonClassName = ' chartButtons chartColumnButtonsInActive'
-    }
-    else{
-     buttonClassName  = ' chartButtons chartColumnButtonsNonSelected'
+    } else {
+      buttonClassName = ' chartButtons chartColumnButtonsNonSelected'
     }
     let colTypesAccepted = ['number', 'checkbox', 'date']
     if ((categoryColumns.indexOf(col.key) > -1 || colTypesAccepted.indexOf(col.type) > -1) && (removedIdKeys.indexOf(col.key) < 0) && (isNotNull(col))) {
@@ -108,7 +103,7 @@ class ChartColumns extends Component {
     }
   }
 
-  renderButtons(columns, selectColumn, dataset, selectedColumn){
+  renderButtons (columns, selectColumn, dataset, selectedColumn) {
     let cols = []
     if (columns) {
       cols = Object.keys(columns).map((column, idx) => {
@@ -121,13 +116,13 @@ class ChartColumns extends Component {
   render () {
     let { columns, selectColumn, dataset, selectedColumn } = this.props
     let cols = this.renderButtons(columns, selectColumn, dataset, selectedColumn)
-       const panelTitle = (
-        <div>Dataset Columns</div>
+    const panelTitle = (
+      <div>Dataset Columns</div>
     )
     return (
-         <Panel collapsible defaultExpanded header={panelTitle}>
-            {cols}
-          </Panel>
+      <Panel collapsible defaultExpanded header={panelTitle}>
+        {cols}
+      </Panel>
     )
   }
 }

@@ -15,10 +15,9 @@ const pages = [
 export default class App extends React.Component {
   render () {
     return (
-      <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'/>
       <div className={'app'}>
         <Navigation pages={pages} />
-        {this.props.children}
+          {this.props.children}
         <Footer />
       </div>
     )

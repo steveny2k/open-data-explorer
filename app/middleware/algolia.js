@@ -1,6 +1,7 @@
+/*
 import search from 'algoliasearch'
 import searchHelper from 'algoliasearch-helper'
-/*
+
 const API_ROOT = 'https://data.sfgov.org/'
 const client = search('N6IVMSP2S4', '3bd0fc517f80911bf21045747262a1bd')
 
@@ -20,9 +21,9 @@ const helper = searchHelper(
   facets: ['publishing_dept'],
   disjunctiveFacets: ['category']
   }
-)*/
+) */
 
 /*
 function endpointSearch () {
   client
-}*/
+} */

@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import DatasetFrontMatter from './DatasetFrontMatter'
 import DatasetNav from './DatasetNav'
 import { API_DOMAIN } from '../../constants/AppConstants'

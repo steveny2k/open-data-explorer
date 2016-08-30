@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { hashHistory } from 'react-router'
 import { Row, Col, Nav, NavItem } from 'react-bootstrap'
 
@@ -20,7 +20,7 @@ class DatasetNav extends Component {
 
   render () {
     let active = this.props.routes[2].path
-    if(!active) active = 'overview'
+    if (!active) active = 'overview'
     return (
       <Row className={'chartTabs DatasetNav'}>
         <Col sm={12}>

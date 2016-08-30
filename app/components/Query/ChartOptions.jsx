@@ -31,7 +31,7 @@ class ChartOptions extends Component {
           placeholder='Select a field to group by'
           options={groupableColumns}
           value={groupBy}
-          onChange={handleGroupBy}/>
+          onChange={handleGroupBy} />
       </Row>
     )
   }

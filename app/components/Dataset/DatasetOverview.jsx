@@ -7,7 +7,7 @@ import {unix} from 'moment'
 
 class DatasetOverview extends Component {
   renderAttachmentsList () {
-    let { attachments, id } = this.props.dataset 
+    let { attachments, id } = this.props.dataset
 
     let attachmentList = attachments.map((att, idx, array) => {
       return (
@@ -82,6 +82,5 @@ class DatasetOverview extends Component {
 }
 
 export default DatasetOverview
-
 
 // https://data.sfgov.org/api/views/wv5m-vpq2/files/3360189c-38b9-48bd-ac1c-1b39a8353662?download=true&filename=ASR-0001_DataDictionary_historic-secured-property-rolls.xlsx

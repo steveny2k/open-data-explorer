@@ -1,12 +1,8 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import {Row, Col, Panel, Label} from 'react-bootstrap'
 
 var labelStyle = {
   marginRight: '5px'
-}
-
-var defStyle = {
-  minHeight: '200px'
 }
 
 var humanType = {

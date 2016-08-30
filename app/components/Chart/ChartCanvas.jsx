@@ -6,8 +6,7 @@ import { toTitleCase } from '../../helpers'
 import pluralize from 'pluralize'
 import _ from 'lodash'
 import d3 from 'd3'
-import ChartType from './ChartType'
-import { Button, Row, Col, ButtonGroup,Well} from 'react-bootstrap'
+import { Button, Row, Col, ButtonGroup } from 'react-bootstrap'
 import './_Chart.scss'
 
 const colors = ['#a78ac6', '#04ae14', '#fb680e', '#fe32fe', '#a49659', '#ff5a8b', '#29a5ae', '#0eab6f', '#b479fc', '#de7b5c', '#89a004', '#3599fc', '#c68a13', '#f459c7', '#a99090', '#d47aa0', '#379fd4', '#76a080', '#77a250', '#fd634e', '#c579d6', '#8d8af4', '#df5ef5', '#8199ae', '#e37a31', '#40aa46', '#ea6f7b', '#c8884b', '#c18972', '#0fa98f', '#a4982b', '#fe43de', '#e06eb8', '#65a718', '#7994dd', '#b688a7', '#fd56a9', '#9b9779', '#ff5f6d', '#c88389', '#7d9c97', '#dd67de', '#5fa570', '#9292be', '#b79037', '#929c48', '#899d69', '#c57fb7', '#a985dd', '#e96c99', '#58a0b6', '#df7d02', '#f46d33', '#5ca297', '#9f91a7', '#ee6e65', '#d47f73', '#7da234', '#ec724d', '#54a857', '#2b9cec', '#b98e5a', '#d1842f', '#b4930e', '#af7fed', '#7298cd', '#db788a', '#18ac57', '#f447f6', '#cc855b', '#c773ed', '#4ea587', '#da7e4c', '#ff50b8', '#6a93f4', '#e06ac7', '#28a2c5', '#69a53d', '#ac9172', '#c98199', '#a78cb6']
@@ -84,7 +83,7 @@ class ChartCanvas extends Component {
   }
 
   renderChartOptions (selectedColumnDef, rowLabel) {
-     let options = {
+    let options = {
       padding: {
         top: 20,
         bottom: 20,
@@ -116,7 +115,7 @@ class ChartCanvas extends Component {
     return options
   }
 
-  renderMaxLabelLength ( labels, data) {
+  renderMaxLabelLength (labels, data) {
     let maxLabelLength = labels.reduce((prev, curr, idx, array) => {
       if (Array.isArray(data[0])) {
         return curr.length > prev ? curr.length : prev
@@ -131,13 +130,13 @@ class ChartCanvas extends Component {
     return maxLabelLength
   }
 
-  renderChartCanvasComponent(chartType, rowLabel, selectedColumnDef, data, columns, sumBy, displayChartOptions ) {
+  renderChartCanvasComponent (chartType, rowLabel, selectedColumnDef, data, columns, sumBy, displayChartOptions) {
     let type = selectedColumnDef.type
     let labels = Array.isArray(data[0]) ? data[0] : data[0].values
-    let toggle = <span/>
+    let toggle = <span />
      // chart defaults
-    let options = this.renderChartOptions (selectedColumnDef, rowLabel)
-    let maxLabelLength = this.renderMaxLabelLength(labels, data )
+    let options = this.renderChartOptions(selectedColumnDef, rowLabel)
+    let maxLabelLength = this.renderMaxLabelLength(labels, data)
     if (((data[0].values && data[0].values.length > 10) || (Array.isArray(data[0]) && data[0].length > 11)) && chartType === 'bar') {
       options.rotated = true
       options.padding.left = (maxLabelLength * 4) + 55
@@ -162,8 +161,8 @@ class ChartCanvas extends Component {
       }
     }
     return (
-       <Col md={9}>
-        <div id='C3Chart'className="c3ChartContainer">
+      <Col md={9}>
+        <div id='C3Chart'className='c3ChartContainer'>
           {toggle}
           {this.renderTitle()}
           {this.renderSubTitle()}
@@ -179,31 +178,30 @@ class ChartCanvas extends Component {
     )
   }
 
-
   render () {
-    console.log("rendering the chart area")
+    console.log('rendering the chart area')
     let chartType = this.props.chartType
     let { query, rowLabel, selectedColumnDef, data, columns, sumBy, displayChartOptions } = this.props
     let chartCanvas = null
     const jumbotronInstance = (
       <div>
         <Col md={8}>
-         <div className="chartCanvasBlankCanvas">
-         <Row>
-            <div>Click on the chart columns to render a chart</div>
-          </Row>
+          <div className='chartCanvasBlankCanvas'>
+            <Row>
+              <div>Click on the chart columns to render a chart</div>
+            </Row>
           </div>
         </Col>
-        <Col md={1}></Col>
+        <Col md={1} />
       </div>
       )
 
-    if(selectedColumnDef && query){
-      chartCanvas = this.renderChartCanvasComponent(chartType, rowLabel, selectedColumnDef, data, columns, sumBy, displayChartOptions )
-    }
-    else{
+    if (selectedColumnDef && query) {
+      chartCanvas = this.renderChartCanvasComponent(chartType, rowLabel, selectedColumnDef, data, columns, sumBy, displayChartOptions)
+    } else {
       chartCanvas = jumbotronInstance
     }
+
     return (
       <div>
         {chartCanvas}

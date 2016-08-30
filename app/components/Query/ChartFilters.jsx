@@ -1,13 +1,12 @@
+import './_Query.scss'
+
 import React, { Component } from 'react'
 import Select from 'react-select'
-import { Well, Button } from 'react-bootstrap'
+import { Well, Button, Row } from 'react-bootstrap'
 import FilterDateTime from './FilterDateTime'
 import FilterCategory from './FilterCategory'
 import FilterNumeric from './FilterNumeric'
 import FilterBoolean from './FilterBoolean'
-import { Row } from 'react-bootstrap'
-
-import './_Query.scss'
 
 class ChartFilters extends Component {
   constructor (props) {

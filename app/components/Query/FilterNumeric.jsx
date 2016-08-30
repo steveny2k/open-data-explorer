@@ -54,9 +54,9 @@ class FilterNumeric extends Component {
     return (
       <div>
         <div className='input-group input-group-sm' style={style}>
-          <input type='text' className='form-control' placeholder='Min' value={nextRange[0]} onChange={this.updateSliderRange.bind(this, 'min')}/>
+          <input type='text' className='form-control' placeholder='Min' value={nextRange[0]} onChange={this.updateSliderRange.bind(this, 'min')} />
           <span className='input-group-addon'>to</span>
-          <input type='text' className='form-control' placeholder='Max' value={nextRange[1]} onChange={this.updateSliderRange.bind(this, 'max')}/>
+          <input type='text' className='form-control' placeholder='Max' value={nextRange[1]} onChange={this.updateSliderRange.bind(this, 'max')} />
         </div>
         <Slider range
           min={min}
@@ -65,7 +65,7 @@ class FilterNumeric extends Component {
           defaultValue={[min, max]}
           value={nextRange}
           onChange={this.updateInputRange}
-          style={style}/>
+          style={style} />
         {applyOrCancel}
       </div>
     )

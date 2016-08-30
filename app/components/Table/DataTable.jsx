@@ -121,7 +121,7 @@ class DataTable extends Component {
               field={key}
               format={column.format} />
           }
-          width={200}/>
+          width={200} />
       })
 
       tableContainer = (

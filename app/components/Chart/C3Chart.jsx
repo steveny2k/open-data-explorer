@@ -3,7 +3,7 @@ const React = require('react')
 const _ = require('lodash')
 
 const c3 = require('c3')
-const d3 = require("d3")
+const d3 = require('d3')
 
 let C3Chart = React.createClass({
   displayName: 'C3Chart',
@@ -52,15 +52,14 @@ let C3Chart = React.createClass({
 
   // color theme
   colors: function (count) {
-
-    let makeColors = function(){
-        let bColorsFxn = d3.scale.category20();
-        let colors = bColorsFxn.range();
-        return colors;
-      }
+    let makeColors = function () {
+      let bColorsFxn = d3.scale.category20()
+      let colors = bColorsFxn.range()
+      return colors
+    }
 
     let colors = makeColors()
-
+    return colors
   },
 
   // apply props.options to graph json
@@ -206,7 +205,7 @@ let C3Chart = React.createClass({
   },
 
   dataPrepBarMulti: function (rawData) {
-
+    /*
     function zip (arrays) {
       return arrays[0].map(function (_, i) {
         return arrays.map(function (array) {
@@ -214,7 +213,6 @@ let C3Chart = React.createClass({
         })
       })
     }
-
     function chunkIt (someArray) {
       // dont actually end up using this; could be useful later.
       var groupSize = 2
@@ -226,6 +224,7 @@ let C3Chart = React.createClass({
         })
       return groups
     }
+    */
 
     function filterOutZeros (chunkVals, chunkKeys = false) {
       // edits array directly
@@ -247,10 +246,10 @@ let C3Chart = React.createClass({
       if (chunk[0].length > 12 && dataType !== 'number') {
         var keys7 = chunk[0].slice(0, 12)
         var counts7 = chunk[1].slice(0, 12)
-        var keysRest = chunk[0].slice(12, chunk[0].length)
+        // var keysRest = chunk[0].slice(12, chunk[0].length)
         var countsRest = chunk[1].slice(12, chunk[1].length)
         // /stores all the k,v pairs of the longTail
-        var dataDictOther = zip([keysRest, countsRest])
+        // var dataDictOther = zip([keysRest, countsRest])
         var intCountsRest = countsRest.map(Number)
         // reducer function to get sum
         var total = intCountsRest.reduce((a, b) => a + b, 0)
@@ -306,9 +305,9 @@ let C3Chart = React.createClass({
       }
       for (let k = 0; k < removeIndexes.length; k++) {
         var removedIndex = removeIndexes[k]
-        var removedHeader = newData[0].pop(removedIndex)
+        newData[0].pop(removedIndex)
         for (let z = 1; z < newData.length; z++) {
-          var popped = newData[z].pop(removedIndex)
+          newData[z].pop(removedIndex)
         }
       }
     }
@@ -349,9 +348,9 @@ let C3Chart = React.createClass({
       })
     } else {
       let barData = []
-      if(displayChartOptions){
+      if (displayChartOptions) {
         barData = this.props.data
-      }else{
+      } else {
         barData = this.dataPrepBarMulti(this.props.data)
       }
 
@@ -400,6 +399,7 @@ let C3Chart = React.createClass({
     })
 
     let data
+    /*
     let total = rawData.reduce((prev, curr) => {
       let sum = 0
       curr.values.reduce((p, c) => {
@@ -407,9 +407,10 @@ let C3Chart = React.createClass({
       }, 0)
       return prev + sum
     }, 0)
+    */
 
     data = _.map(rawData, (datum) => {
-      let row = [datum.key]; // to make ['key', 30, 200, 100, 400 ...] for each row
+      let row = [datum.key] // to make ['key', 30, 200, 100, 400 ...] for each row
       _.map(datum.values, (d) => {
         row.push(d.value)
       })
@@ -500,11 +501,11 @@ let C3Chart = React.createClass({
     let show = (this.props.viewOption === 'top' ? this.props.order.slice(0, 5) : (this.props.viewOption === 'bottom' ? this.props.order.slice(-5) : this.props.order))
     chart.hide()
     this.props.viewOption === 'compare' ? chart.show() : chart.show(show)
-  }*/
+  } */
   },
 
   render: function () {
-    return (<div id='chartCanvas'></div>)
+    return (<div id='chartCanvas' />)
   }
 })
 

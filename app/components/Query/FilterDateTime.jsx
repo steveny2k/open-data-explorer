@@ -15,7 +15,7 @@ const ranges = {
     'This Quarter': [moment().startOf('quarter'), moment().endOf('quarter')],
     'Last Quarter': [moment().subtract(1, 'quarter').startOf('quarter'), moment().subtract(1, 'quarter').endOf('quarter')],
     'This Year': [moment().startOf('year'), moment()],
-    'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1,'year').endOf('year')]
+    'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
   },
   'month': {
     'Last 90 days': [moment().subtract(89, 'days'), moment()],
@@ -23,7 +23,7 @@ const ranges = {
     'This Quarter': [moment().startOf('quarter'), moment().endOf('quarter')],
     'Last Quarter': [moment().subtract(1, 'quarter').startOf('quarter'), moment().subtract(1, 'quarter').endOf('quarter')],
     'This Year': [moment().startOf('year'), moment()],
-    'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1,'year').endOf('year')]
+    'Last Year': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')]
   },
   'day': {
     'Last 7 Days': [moment().subtract(6, 'days'), moment()],
@@ -68,7 +68,7 @@ class FilterDateTime extends Component {
             <span>
               {label}&nbsp;
             </span>
-            <span className='caret'></span>
+            <span className='caret' />
           </div>
         </Button>
       </DateRangePicker>

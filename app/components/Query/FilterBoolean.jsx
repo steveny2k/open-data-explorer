@@ -58,7 +58,7 @@ class FilterBoolean extends Component {
           options={options}
           multi
           value={selected}
-          onChange={this.onFilter}/>
+          onChange={this.onFilter} />
       </div>
       )
   }

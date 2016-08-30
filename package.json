@@ -1,6 +1,6 @@
 {
   "name": "open-data-explorer",
-  "version": "0.0.1",
+  "version": "1.0.0-alpha.0",
   "description": "React based application to explore open datasets interactively.",
   "repository": "https://github.com/DataSF/open-data-explorer",
   "license": "MIT",
@@ -111,6 +111,7 @@
     "rimraf": "^2.4.1",
     "sass-loader": "^3.2.0",
     "sinon": "^1.15.4",
+    "snazzy": "^4.0.1",
     "source-map-support": "^0.4.0",
     "standard": "^8.0.0",
     "style-loader": "^0.13.1",
