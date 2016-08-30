@@ -4,19 +4,21 @@
 set -xe
 
 if [ $TRAVIS_BRANCH == "master" ] ; then
-
+    cd build
+    ls -ltr
+    git init
     # setup ssh agent, git config and remote
     eval "$(ssh-agent -s)"
     ssh-add ~/.ssh/travis_rsa
     git remote add deploy "travis@datasfexplorer.tk:/var/www/open-data-explorer/public_html"
     git config user.name "Travis CI"
-    git config user.email "travis@planecq.com"
+    git config user.email "travis@datasfexplorer.tk"
 
  # commit compressed files and push it to remote
     git add .
     git status # debug
     git commit -m "Deploy compressed files"
-    git push -f deploy $TRAVIS_BRANCH:master
+    git push --force deploy master
 
 else
 

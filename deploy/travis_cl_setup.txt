@@ -28,20 +28,16 @@ chmod 600 .ssh/authorized_keys
 
 #Setting up a remote repo:
 #Remote is just a repository on our web server to which we can push.
-#We’ll want to push to a repository in /var/kjaermaxi.me/.git, and have the files available in /var/kjaermaxi.me/public_html. We’re placing the .git one level above public_html because we don’t want to serve it.
+#We’ll want to push to a repository in /var/www/open-data-explorer/.git, and have the files available in /var/kjaermaxi.me/build. We’re placing the .git one level above public_html because we don’t want to serve it.
 #To do this, we’ll start out by creating an empty Git repo in /var/www/open-data-explorer/public_html
 
-To do this, we’ll start out by creating an empty Git repo in /var/www/open-data-explorer/public_html:
+To do this, it assumes we have Git repo in /var/www/open-data-explorer/public_html:
 
-mkdir /var/www/open-data-explorer/public_html
-mkdir /var/www/open-data-explorer/public_html/.git
-cd .git
-git init --bare
-#That’s all it really takes to have a remote that we can push to! But our repository is in /var/www/kjaermaxi.me, and we want to have the pushed files in /var/www/kjaermaxi.me/public_html. To achieve this, we can add what’s called a post-receive hook, which is a list of commands to run once the remote has received a push.
-
+cd /var/www/open-data-explorer/.git/
 cd hooks
+
 vim post-receive
-#Then, you’ll need to type the following in:
+#Then, you’ll need to coy following in :
 
 #!/bin/sh
-git --work-tree=/var/www/open-data-explorer/public_html/ --git-dir=/var/www/open-data-explorer/public_html/.git checkout -f
+git --work-tree=/var/www/open-data-explorer/build/ --git-dir=/var/www/open-data-explorer/public_html/.git checkout -f
