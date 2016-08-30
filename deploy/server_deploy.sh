@@ -4,8 +4,9 @@
 set -xe
 
 if [ $TRAVIS_BRANCH == "master" ] ; then
+    print "in heeeere!!!"
     cd build
-    ls -ltr
+    # Initialize a new git repo in _site, and push it to our server.
     git init
     # setup ssh agent, git config and remote
     eval "$(ssh-agent -s)"
