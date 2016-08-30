@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { loadTable, sortColumn, updatePage } from '../actions'
-import DataTable from '../components/DataTable'
+import DataTable from '../components/Table/DataTable'
 
 const mapStateToProps = (state, ownProps) => {
   const { dataset } = state
