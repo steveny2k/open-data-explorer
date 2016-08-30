@@ -7,7 +7,7 @@ branches:
   only:
   - master
 before_install:
-- bash .travis/install.sh
+  - bash .travis/install.sh
 script:
 - npm run build
 after_success:
