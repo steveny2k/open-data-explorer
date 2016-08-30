@@ -9,6 +9,6 @@ branches:
 before_install:
   - bash .travis/install.sh
 script:
-- npm run build
+ - bash .travis/build.sh
 after_success:
   - bash .travis/deploy.sh
