@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  '0.12'
+  - "0.12"
 addons:
   ssh_known_hosts: datasfexplorer.tk
 branches:
@@ -11,7 +11,7 @@ before_install:
   -in deploy/travis_rsa.enc -out deploy/travis_rsa -d
 - chmod 600 ~/.ssh/travis_rsa
 script:
-- npm run test-travis && npm run build
+- npm run build
 deploy:
   provider: script
   script: deploy/server_deploy.sh
