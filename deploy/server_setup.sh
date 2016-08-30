@@ -35,10 +35,10 @@ cd /var/wwww
 git clone https://github.com/DataSF/open-data-explorer.git
 
 cd /var/www/open-data-explorer
-sudo npm install
+#sudo npm install
 chown -R www-data:www-data /var/www/
 #change the directory perms to use www-data
-sudo npm run build
+#sudo npm run build
 
 
 
