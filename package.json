@@ -23,7 +23,7 @@
     "test": "NODE_ENV=test karma start",
     "test-travis": "NODE_ENV=test karma start --single-run",
     "webpack": "webpack --colors --progress --config ./webpack/config",
-    "singletest": "NODE_ENV=test karma start --single-run"
+    "singletest": "node_modules/.bin/karma start --single-run --no-auto-watch karma.conf.js"
   },
   "dependencies": {
     "algoliasearch": "^3.17.0",
@@ -82,8 +82,12 @@
     "karma-babel-preprocessor": "^6.0.1",
     "karma-chrome-launcher": "^2.0.0",
     "karma-cli": "^1.0.1",
+    "karma-firefox-launcher": "^1.0.0",
     "karma-mocha": "^1.1.1",
     "karma-mocha-reporter": "^2.1.0",
+    "karma-phantomjs-launcher": "^1.0.1",
+    "karma-sinon": "^1.0.5",
+    "karma-source-map-support": "^1.2.0",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.8.0",
     "mocha": "^2.2.5",
