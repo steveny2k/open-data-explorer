@@ -20,8 +20,8 @@
     "pretest": "npm install && npm run lint",
     "pretest-travis": "npm install && npm run lint",
     "start": "NODE_ENV=development node dev-server ./webpack/config",
-    "test": "NODE_ENV=test karma start",
-    "test-travis": "NODE_ENV=test karma start --single-run",
+    "test": "NODE_ENV=test node_modules/.bin/karma start",
+    "test-travis": "NODE_ENV=test node_modules/.bin/karma start --single-run",
     "webpack": "webpack --colors --progress --config ./webpack/config",
     "singletest": "NODE_ENV=test node_modules/.bin/karma start --single-run --no-auto-watch karma.conf.js"
   },
@@ -81,7 +81,6 @@
     "karma": "^1.2.0",
     "karma-babel-preprocessor": "^6.0.1",
     "karma-chrome-launcher": "^2.0.0",
-    "karma-cli": "^1.0.1",
     "karma-firefox-launcher": "^1.0.0",
     "karma-mocha": "^1.1.1",
     "karma-mocha-reporter": "^2.1.0",
