@@ -1,13 +1,6 @@
 /**** General Charts Component *****/
 
-h2.chartTitle{
-  margin-top:4%;
-  margin-left:3%;
-}
-h3.chartTitle{
-  margin-left:3%;
-  padding-bottom:0.5%;
-}
+
 
 /****************************/
 
@@ -19,14 +12,13 @@ font-size:150%;
 
 /**** Chart Canvas Component *****/
 .ChartCanvasToggleTime{
-  margin-top:4%;
-  margin-right:7%;
   float: right;
 }
 .chartCanvasBlankCanvas{
   padding:20%;
   border: 7px dashed;
   border-color: #ecf0f1;
+  color: #ecf0f1;
   font-size:275%;
 }
 

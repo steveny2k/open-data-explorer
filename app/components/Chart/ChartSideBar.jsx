@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import ChartOptions from '../Query/ChartOptions'
 import ChartType from './ChartType'
 import ChartColumns from './ChartColumns'
-import { Row, Col, Accordion } from 'react-bootstrap'
+import { Col, Accordion } from 'react-bootstrap'
 import './_Chart.scss'
 
 class ChartSideBar extends Component {
