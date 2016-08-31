@@ -88,7 +88,7 @@ class ChartFilters extends Component {
         <Well bsSize='small' className='filter' key={filter.key}>
           <div className='filter-content'>
             <Button className='close' onClick={handleRemoveFilter.bind(this, filter.key)}>
-              &times
+              &times;
             </Button>
             <h4>{filter.name}</h4>
             {filterContent}

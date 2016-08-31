@@ -147,15 +147,6 @@ input-mysize{
   min-width:320px;
   height:40px;
 }
-h2.chartTitle{
-  margin-top:4%;
-  margin-left:3%;
-}
-
-h3.chartTitle{
-  margin-left:3%;
-  padding-bottom:0.5%;
-}
 
 .chartTypeRadio{
   font-size:124%;
@@ -194,4 +185,8 @@ h3.chartTitle{
 
 .DatasetNav .nav-pills {
   margin-bottom: 1em;
+}
+
+.DatasetNav .nav-pills > li > a {
+  border: thin solid #ecf0f1;
 }
