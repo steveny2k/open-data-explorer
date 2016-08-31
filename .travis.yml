@@ -3,10 +3,6 @@ node_js:
   - "6"
 addons:
   ssh_known_hosts: datasfexplorer.tk
-branches:
-  only:
-  - master
-  - staging
 before_install:
   - bash .travis/install.sh
 script:
