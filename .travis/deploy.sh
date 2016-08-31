@@ -4,7 +4,7 @@
 set -xe
 
 if [ $TRAVIS_BRANCH == "master" ] ; then
-    echo "in heeeere!!!"
+    echo "*******pushing build to production website!********"
     # setup ssh agent, git config and remote
     eval `ssh-agent -s`
     ssh-add ~/.ssh/travis_rsa
@@ -19,9 +19,25 @@ if [ $TRAVIS_BRANCH == "master" ] ; then
     git add .
     git commit -m "Deploy compressed files"
     git push --force deploy master
+    echo "****SUCCESS: Production build was deployed ********"
+elif [ $TRAVIS_BRANCH == "staging" ] ; then
+    echo "*******pushing build to staging website!********"
+    # setup ssh agent, git config and remote
+    eval `ssh-agent -s`
+    ssh-add ~/.ssh/travis_rsa
+    cd build
+    # Initialize a new git repo in _site, and push it to our server.
+    git init
+    git remote add deploy "deploy@datasfexplorer.tk:/var/www/staging-open-data-explorer/"
+    git config user.name "Travis CI"
+    git config user.email "travis@datasfexplorer.tk"
 
+ # commit compressed files and push it to remote
+    git add .
+    git commit -m "Deploy compressed files"
+    git push --force deploy master
+    echo "****SUCCESS: Staging build was deployed ********"
 else
-
     echo "No deploy script for branch '$TRAVIS_BRANCH'"
 
 fi
