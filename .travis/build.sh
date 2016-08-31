@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#testing deploy branch
 function error_exit
 {
   echo "$1" 1>&2
