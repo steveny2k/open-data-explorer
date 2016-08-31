@@ -26,7 +26,7 @@ elif [ $TRAVIS_BRANCH == "develop" ] ; then
     #eval `ssh-agent -s`
     #ssh-add ~/.ssh/travis_rsa
     cd build
-    # Initialize a new git repo in _site, and push it to our server.
+    # Initialize a new git repo in _site, angd push it to our server.
     git init
     git remote add deploy "deploy@datasfexplorer.tk:/var/www/staging-open-data-explorer/"
     git config user.name "Travis CI"
