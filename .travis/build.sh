@@ -2,5 +2,8 @@
 
 set -x
 
-npm run test-travis
-npm run build
+if [ $TRAVIS_BRANCH == "master" ] ; then
+  npm run build
+else
+  echo "not on master branch"
+fi
