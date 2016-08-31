@@ -1,13 +1,13 @@
 language: node_js
 node_js:
-  - "6"
+- '6'
 addons:
   ssh_known_hosts: datasfexplorer.tk
 before_install:
-  - bash .travis/install.sh
+- bash .travis/install.sh
 script:
- - bash .travis/build.sh
+- bash .travis/build.sh
 deploy:
   provider: script
   script:
-   - bash .travis/deploy.sh
+  - bash .travis/deploy.sh
