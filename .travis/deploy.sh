@@ -2,7 +2,7 @@
 
 # print outputs and exit on first failure/show output of commands
 set -xe
-
+echo $TRAVIS_BRANCH
 if [ $TRAVIS_BRANCH == "master" ] ; then
     echo "*******pushing build to production website!********"
     # setup ssh agent, git config and remote
