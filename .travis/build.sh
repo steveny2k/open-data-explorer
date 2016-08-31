@@ -8,7 +8,7 @@ function error_exit
 
 
 set -x
-if [ $TRAVIS_BRANCH == "master" ] || [ $TRAVIS_BRANCH == "staging" ]; then
+if [ $TRAVIS_BRANCH == "master" ] || [ $TRAVIS_BRANCH == "develop" ]; then
   if npm run test-travis; then
     if npm run build; then
       echo "****TESTS PASSED****"

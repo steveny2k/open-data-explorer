@@ -9,4 +9,5 @@ script:
  - bash .travis/build.sh
 deploy:
   provider: script
-  script: .travis/deploy.sh
+  script:
+   - bash .travis/deploy.sh
