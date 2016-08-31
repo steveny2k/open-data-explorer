@@ -8,7 +8,11 @@ module.exports = function (config) {
     preprocessors: {
       'tests.webpack.js': ['webpack', 'sourcemap']
     },
-    reporters: ['mocha'],
+    reporters: ['mocha', 'coverage'],
+    coverageReporter: {
+      type: 'html',
+      dir: 'coverage/'
+    },
     // port: 9876,
     // colors: true,
     logLevel: config.LOG_INFO,
