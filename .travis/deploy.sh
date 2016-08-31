@@ -11,7 +11,7 @@ if [ $TRAVIS_BRANCH == "master" ] ; then
     cd build
     # Initialize a new git repo in _site, and push it to our server.
     git init
-    git remote add deploy "deploy@datasfexplorer.tk:/var/www/test2/"
+    git remote add deploy "deploy@datasfexplorer.tk:/var/www/open-data-explorer/"
     git config user.name "Travis CI"
     git config user.email "travis@datasfexplorer.tk"
 
