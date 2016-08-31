@@ -10,7 +10,8 @@ before_install:
   - bash .travis/install.sh
 script:
  - bash .travis/build.sh
-provider: script
+deploy:
+  provider: script
   script: .travis/deploy.sh
   on:
     all_branches: true:
