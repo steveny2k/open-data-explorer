@@ -179,21 +179,15 @@ class ChartCanvas extends Component {
   }
 
   render () {
-    console.log('rendering the chart area')
     let chartType = this.props.chartType
     let { query, rowLabel, selectedColumnDef, data, columns, sumBy, displayChartOptions } = this.props
     let chartCanvas = null
     const jumbotronInstance = (
-      <div>
-        <Col md={8}>
-          <div className='chartCanvasBlankCanvas'>
-            <Row>
-              <div>Click on the chart columns to render a chart</div>
-            </Row>
-          </div>
-        </Col>
-        <Col md={1} />
-      </div>
+      <Col md={9}>
+        <div className='chartCanvasBlankCanvas'>
+          Click on the chart columns to render a chart
+        </div>
+      </Col>
       )
 
     if (selectedColumnDef && query) {

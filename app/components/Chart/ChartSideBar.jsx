@@ -12,35 +12,26 @@ class ChartSideBar extends Component {
 
     return (
       <Col md={3}>
-        <Row>
-          <Accordion>
-            <Row>
-              <ChartOptions
-                {...query}
-                columns={columns}
-                handleGroupBy={handleGroupBy}
-                handleAddFilter={handleAddFilter}
-                handleRemoveFilter={handleRemoveFilter}
-                applyFilter={applyFilter}
-                updateFilter={updateFilter}
-                handleSumBy={handleSumBy} />
-            </Row>
-            <Row>
-              <ChartType
-                applyChartType={applyChartType}
-                displayChartOptions={displayChartOptions}
-                chartType={chartType} />
-            </Row>
-            <Row>
-              <ChartColumns
-                dataset={dataset}
-                selectColumn={selectColumn}
-                columns={columns}
-                selectedColumn={selectedColumn}
-              />
-            </Row>
-          </Accordion>
-        </Row>
+        <Accordion>
+          <ChartOptions
+            {...query}
+            columns={columns}
+            handleGroupBy={handleGroupBy}
+            handleAddFilter={handleAddFilter}
+            handleRemoveFilter={handleRemoveFilter}
+            applyFilter={applyFilter}
+            updateFilter={updateFilter}
+            handleSumBy={handleSumBy} />
+          <ChartType
+            applyChartType={applyChartType}
+            displayChartOptions={displayChartOptions}
+            chartType={chartType} />
+          <ChartColumns
+            dataset={dataset}
+            selectColumn={selectColumn}
+            columns={columns}
+            selectedColumn={selectedColumn} />
+        </Accordion>
       </Col>
     )
   }
