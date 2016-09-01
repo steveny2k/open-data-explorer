@@ -1,7 +1,7 @@
 module.exports = function (config) {
   config.set({
     basePath: '',
-    frameworks: ['mocha'],
+    frameworks: ['mocha', 'chai', 'sinon'],
     files: [
       'tests.webpack.js'
     ],
@@ -17,7 +17,7 @@ module.exports = function (config) {
     // colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Firefox'],
+    browsers: ['PhantomJS'],
     singleRun: false,
     webpack: require('./webpack/config.test'),
     webpackServer: {
