@@ -28,7 +28,7 @@ elif [ $TRAVIS_BRANCH == "develop" ] ; then
     cd build
     # Initialize a new git repo in _site, angd push it to our server.
     git init
-    git remote add deploy "deploy@datasfexplorer.tk:/var/www/staging-open-data-explorer/"
+    git remote add deploy "deploy@datasfexplorer.tk:/var/www/open-data-explorer/"
     git config user.name "Travis CI"
     git config user.email "travis@datasfexplorer.tk"
 
