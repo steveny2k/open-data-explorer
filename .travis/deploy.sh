@@ -23,6 +23,7 @@ elif [ $TRAVIS_BRANCH == "develop" ] ; then
     echo "*******pushing build to staging website!********"
     # setup ssh agent, git config and remote
     #cd build
+    ls -ltr
     # Initialize a new git repo in _site, angd push it to our server.
     #git init
     #git remote add deploy "deploy@datasfexplorer.tk:/var/www/staging-open-data-explorer/"
@@ -33,7 +34,7 @@ elif [ $TRAVIS_BRANCH == "develop" ] ; then
     #git add .
     #git commit -m "Deploy compressed files"
     #git push --force deploy master
-    sshpass -p $MYSECRET_PASS scp -r build deploy@datasfexplorer.tk:/var/www/staging-open-data-explorer/
+    sshpass -p "mypass" scp -r build/ deploy@datasfexplorer.tk:/var/www/staging-open-data-explorer/
     echo "****SUCCESS: Staging build was deployed ********"
 else
     echo "No deploy script for branch '$TRAVIS_BRANCH'"
