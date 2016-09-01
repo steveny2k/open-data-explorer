@@ -7,8 +7,6 @@ before_install:
 - bash .travis/install.sh
 script:
 - bash .travis/build.sh
-before_deploy:
-- bash .travis/setup_ssh_agent.sh
 deploy:
   skip_cleanup: true  // insures dist/ dir not to be deleted after npm test
   provider: script
