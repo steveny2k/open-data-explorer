@@ -14,7 +14,5 @@ echo "Setting up ssh keys!"
 
 # Import the SSH deployment key
 
-openssl aes-256-cbc -K $encrypted_5c93ddfc62aa_key -iv $encrypted_5c93ddfc62aa_iv -in .travis/deploy_rsa.enc -out deploy_rsa -d
-
-mv deploy_rsa ~/.ssh/
-chmod 600 ~/.ssh/travis_rsa
+openssl aes-256-cbc -K $encrypted_5c93ddfc62aa_key -iv $encrypted_5c93ddfc62aa_iv -in .travis/deploy_rsa.enc -out ~/.ssh/deploy_rsa -d
+chmod 600 ~/.ssh/deploy_rsa
