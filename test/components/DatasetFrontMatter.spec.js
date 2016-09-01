@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 
 import DatasetFrontMatter from '../../app/components/Dataset/DatasetFrontMatter'
-import { Col } from 'react-boot'
+import { Col } from 'react-bootstrap'
 
 describe('<DatasetFrontMatter/>', () => {
 

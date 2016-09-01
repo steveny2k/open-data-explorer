@@ -124,8 +124,8 @@
   },
   "standard": {
     "ignore": [
-      "*-test.js",
-      "*-test.jsx"
+      "*.spec.js",
+      "*.spec.jsx"
     ]
   },
   "eslintConfig": {
