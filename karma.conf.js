@@ -13,6 +13,12 @@ module.exports = function (config) {
       type: 'html',
       dir: 'coverage/'
     },
+    externals: {
+      'jsdom': 'window',
+      'cheerio': 'window',
+      'react/lib/ExecutionEnvironment': true,
+      'react/lib/ReactContext': 'window'
+    },
     // port: 9876,
     // colors: true,
     logLevel: config.LOG_INFO,

@@ -13,5 +13,6 @@ echo "Setting up ssh keys!"
 #echo -e "Host 162.243.143.214\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 
 # Import the SSH deployment key
-openssl aes-256-cbc -K $encrypted_5c93ddfc62aa_key -iv $encrypted_5c93ddfc62aa_iv -in .travis/travis_rsa.enc -out ~/.ssh/travis_rsa -d
+#openssl aes-256-cbc -K $encrypted_5c93ddfc62aa_key -iv $encrypted_5c93ddfc62aa_iv -in .travis/travis_rsa.enc -out ~/.ssh/travis_rsa -d
+mv deploy_rsa ~/.ssh/
 chmod 600 ~/.ssh/travis_rsa
