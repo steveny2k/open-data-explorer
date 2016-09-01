@@ -6,6 +6,7 @@ echo $TRAVIS_BRANCH
 if [ $TRAVIS_BRANCH == "master" ] ; then
     echo "*******pushing build to production website!********"
     # setup ssh agent, git config and remote
+
     eval `ssh-agent -s`
     ssh-add ~/.ssh/travis_rsa
     cd build
@@ -14,6 +15,7 @@ if [ $TRAVIS_BRANCH == "master" ] ; then
     git remote add deploy "deploy@datasfexplorer.tk:/var/www/open-data-explorer/"
     git config user.name "Travis CI"
     git config user.email "travis@datasfexplorer.tk"
+    git config --global push.default simple
 
  # commit compressed files and push it to remote
     git add .
@@ -23,15 +25,17 @@ if [ $TRAVIS_BRANCH == "master" ] ; then
 elif [ $TRAVIS_BRANCH == "develop" ] ; then
     echo "*******pushing build to staging website!********"
     # setup ssh agent, git config and remote
+
     eval `ssh-agent -s`
     ssh-add ~/.ssh/travis_rsa
+
     cd build
     # Initialize a new git repo in _site, angd push it to our server.
     git init
-    git remote add deploy "deploy@datasfexplorer.tk:/var/www/staging-open-data-explorer/"
+    git remote add deploy "deploy@datasf-explorer.tk:/var/www/staging-open-data-explorer/"
     git config user.name "Travis CI"
     git config user.email "travis@datasfexplorer.tk"
-
+    git config --global push.default simple
  # commit compressed files and push it to remote
     git add .
     git commit -m "Deploy compressed files"
