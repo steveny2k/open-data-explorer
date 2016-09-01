@@ -22,14 +22,15 @@ if [ $TRAVIS_BRANCH == "master" ] ; then
 elif [ $TRAVIS_BRANCH == "develop" ] ; then
     echo "*******pushing build to staging website!********"
     # setup ssh agent, git config and remote
-    #cd build
-    eval "$(ssh-agent -s)" # Start the ssh agent
     echo "$DEPLOY_KEY" > deploy_key.pem
+    echo "$DEPLOY_KEY"
+    eval $(ssh-agent)  # Start the ssh agent
     chmod 600 deploy_key.pem # This key should have push access
     ssh-add deploy_key.pem
+    cd build
     # Initialize a new git repo in _site, angd push it to our server.
     git init
-    git remote add deploy "deploy@datasfexplorer.tk:/var/www/staging-open-data-explorer/"
+    git remote add deploy "deploy@datasfexplorer.tk:/var/www/open-data-explorer/"
     git config user.name "Travis CI"
     git config user.email "travis@datasfexplorer.tk"
  # commit compressed files and push it to remote

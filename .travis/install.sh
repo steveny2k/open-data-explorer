@@ -17,4 +17,3 @@ echo "Setting up ssh!"
 #openssl aes-256-cbc -K $encrypted_5c93ddfc62aa_key -iv $encrypted_5c93ddfc62aa_iv -in .travis/deploy_rsa.enc -out ~/.ssh/deploy_rsa -d
 #chmod 600 ~/.ssh/deploy_rsa
 
-sudo apt-get install sshpass
