@@ -22,17 +22,18 @@ if [ $TRAVIS_BRANCH == "master" ] ; then
 elif [ $TRAVIS_BRANCH == "develop" ] ; then
     echo "*******pushing build to staging website!********"
     # setup ssh agent, git config and remote
-    cd build
+    #cd build
     # Initialize a new git repo in _site, angd push it to our server.
-    git init
-    git remote add deploy "deploy@datasfexplorer.tk:/var/www/staging-open-data-explorer/"
-    git config user.name "Travis CI"
-    git config user.email "travis@datasfexplorer.tk"
+    #git init
+    #git remote add deploy "deploy@datasfexplorer.tk:/var/www/staging-open-data-explorer/"
+    #git config user.name "Travis CI"
+    #git config user.email "travis@datasfexplorer.tk"
     #git config --global push.default simple
  # commit compressed files and push it to remote
-    git add .
-    git commit -m "Deploy compressed files"
-    git push --force deploy master
+    #git add .
+    #git commit -m "Deploy compressed files"
+    #git push --force deploy master
+    rsync -r --delete-after --quiet build deploy@deploy@datasfexplorer:/var/www//var/www/staging-open-data-explorer/
     echo "****SUCCESS: Staging build was deployed ********"
 else
     echo "No deploy script for branch '$TRAVIS_BRANCH'"
