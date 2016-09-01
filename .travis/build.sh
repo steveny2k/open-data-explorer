@@ -21,7 +21,7 @@ if [ $TRAVIS_BRANCH == "master" ] || [ $TRAVIS_BRANCH == "develop" ]; then
   fi
 else
   if npm run test-travis; then
-    echo "****TESTS PASSED****"
+    echo "*****TESTS PASSED****"
   else
     error_exit "******TESTS FAILED! Aborting build.*********"
   fi
