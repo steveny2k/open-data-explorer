@@ -72,7 +72,6 @@ class Charts extends Component {
 
   render () {
     let ChartArea = this.renderChartArea(this.props)
-    console.log('rendering the chart area')
     return (
       <div>
         {ChartArea}
