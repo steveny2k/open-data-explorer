@@ -4,7 +4,7 @@
 set -xe
 
 if [ $TRAVIS_BRANCH == "master" ] ; then
-    echo "*******pushing build to production website!********"
+    echo "******pushing build to production website!*******"
     # setup ssh agent, git config and remote
     eval `ssh-agent -s`
     ssh-add ~/.ssh/travis_rsa
