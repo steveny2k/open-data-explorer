@@ -1,11 +1,8 @@
 language: node_js
-sudo: required
 node_js:
 - '6'
 addons:
-  ssh_known_hosts: datasf-explorer.tk
-before_install:
-- bash .travis/install.sh
+  ssh_known_hosts: datasfexplorer.tk
 script:
 - bash .travis/build.sh
 deploy:

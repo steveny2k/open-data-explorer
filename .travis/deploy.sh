@@ -23,18 +23,19 @@ elif [ $TRAVIS_BRANCH == "develop" ] ; then
     echo "*******pushing build to staging website!********"
     # setup ssh agent, git config and remote
     #cd build
-    ls -ltr
+    eval "$(ssh-agent -s)" # Start the ssh agent
+    echo "$DEPLOY_KEY" > deploy_key.pem
+    chmod 600 deploy_key.pem # This key should have push access
+    ssh-add deploy_key.pem
     # Initialize a new git repo in _site, angd push it to our server.
-    #git init
-    #git remote add deploy "deploy@datasfexplorer.tk:/var/www/staging-open-data-explorer/"
-    #git config user.name "Travis CI"
-    #git config user.email "travis@datasfexplorer.tk"
-    #git config --global push.default simpleg
+    git init
+    git remote add deploy "deploy@datasfexplorer.tk:/var/www/staging-open-data-explorer/"
+    git config user.name "Travis CI"
+    git config user.email "travis@datasfexplorer.tk"
  # commit compressed files and push it to remote
-    #git add .
-    #git commit -m "Deploy compressed files"
-    #git push --force deploy master
-    sshpass -p "mypass" scp -r build/ deploy@datasfexplorer.tk:/var/www/staging-open-data-explorer/
+    git add .
+    git commit -m "Deploy compressed files"
+    git push --force deploy master
     echo "****SUCCESS: Staging build was deployed ********"
 else
     echo "No deploy script for branch '$TRAVIS_BRANCH'"
