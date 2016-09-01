@@ -11,7 +11,7 @@ set -x
 if [ $TRAVIS_BRANCH == "master" ] || [ $TRAVIS_BRANCH == "develop" ]; then
   if npm run test-travis; then
     if npm run build; then
-      echo "****TESTS PASSED****"
+      echo "*****TESTS PASSED*****"
       exit 0
     else
       error_exit "******BUILD FAILED! Aborting.*********"
