@@ -34,6 +34,10 @@
 	float: right;
 }
 
+.datasetContainer{
+   margin-top:3%;
+}
+
 .c3 {
 	width: 100%;
 	height: 600px;
@@ -81,7 +85,8 @@ input-mysize{
 }
 
 .datasetLinks{
-  font-size:130%;
+  font-size:105%;
+  background-color: #476481
 }
 
 .dataSetTitle{
@@ -147,6 +152,9 @@ input-mysize{
   font-family: 'Lato', sans-serif;
 }
 
+
+
+
 /* Dataset Front Matter */
 
 #header p {
@@ -165,4 +173,14 @@ input-mysize{
 
 .DatasetNav .nav-pills > li > a {
   border: thin solid #ecf0f1;
+
 }
+.DatasetNav .nav-pills > li.active > a {
+ background-color: #476481
+
+}
+
+
+
+
+

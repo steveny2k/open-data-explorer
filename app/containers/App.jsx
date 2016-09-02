@@ -5,8 +5,8 @@ import Footer from '../components/Footer/Footer'
 
 const pages = [
   {
-    route: '',
-    title: 'Home'
+    route: 'about',
+    title: 'About'
   },
   {
     route: 'catalog',

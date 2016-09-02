@@ -1,12 +1,11 @@
-import './_App.scss'
 import React from 'react'
 import Navigation from '../Navigation/Navigation'
 import Footer from '../Footer/Footer'
 
 const pages = [
   {
-    route: '',
-    title: 'Home'
+    route: 'aboutpage',
+    title: 'AboutPage'
   },
   {
     route: 'catalog',

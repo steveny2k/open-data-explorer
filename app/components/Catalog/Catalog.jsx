@@ -128,7 +128,7 @@ export default class CatalogBrowse extends React.Component {
     }
 
     return (
-      <Grid fluid id='main-container' className={'catalogMain'}>
+      <Grid fluid id='main-container space' className={'catalogMain'}>
         <Row className={'catalogMainFacets'}>
           <Col sm={3}>
             <CatalogFacets facets={facets} handleCategorySelect={this.handleFacetSelections} />
