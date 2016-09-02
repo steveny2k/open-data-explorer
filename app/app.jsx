@@ -20,7 +20,7 @@ const initialState = {
   }
 }
 var airbrakeJs = require('airbrake-js')
-window.airbrake = new airbrakeJs({projectId: 129600, projectKey: 'b8fe4ddb8be71382afa569e93c9b0d87'})
+window.airbrake = new airbrakeJs({projectId: 129600, projectKey: 'b8fe4ddb8be71382afa569e93c9b0d87'}) // eslint-disable-line
 const store = configureStore(initialState)
 const history = syncHistoryWithStore(hashHistory, store)
 render(
