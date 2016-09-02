@@ -17,7 +17,9 @@ export default class App extends React.Component {
     return (
       <div className={'app'}>
         <Navigation pages={pages} />
-           {this.props.children}
+        <div className={'content-wrapper'}>
+          {this.props.children}
+        </div>
         <Footer />
       </div>
     )

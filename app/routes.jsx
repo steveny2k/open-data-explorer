@@ -3,7 +3,7 @@ import { Route, IndexRoute } from 'react-router'
 
 import App from './containers/App'
 import HomePage from './components/HomePage/HomePage'
-import Catalog from './components/Catalog/Catalog'
+import Catalog from './containers/Catalog'
 import Dataset from './containers/Dataset'
 import DatasetOverview from './containers/DatasetOverview'
 import DatasetDetails from './containers/DatasetDetails'
