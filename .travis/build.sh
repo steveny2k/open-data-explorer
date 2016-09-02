@@ -1,7 +1,31 @@
 #!/bin/bash
+
+function error_exit
+{
+  echo "$1" 1>&2
+  exit 1
+}
+
 set -x
 if [ $TRAVIS_BRANCH == "master" ] || [ $TRAVIS_BRANCH == "develop" ]; then
-  npm run build;
+  if npm run test-travis; then
+    if npm run build; then
+      echo "****TESTS PASSED****"
+      exit 0
+    else
+      error_exit "******BUILD FAILED! Aborting.*********"
+    fi
+  else
+    error_exit "******TESTS FAILED! Aborting build.*********"
+  fi
 else
-  echo "not building"
+  if npm run test-travis; then
+    echo "****TESTS PASSED****"
+  else
+    error_exit "******TESTS FAILED! Aborting build.*********"
+  fi
 fi
+
+
+
+
