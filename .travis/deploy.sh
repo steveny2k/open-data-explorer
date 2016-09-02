@@ -20,7 +20,7 @@ if [ $TRAVIS_BRANCH == "master" ] ; then
     git push --force deploy master
     echo "****SUCCESS: Production build was deployed ********"
 elif [ $TRAVIS_BRANCH == "develop" ] ; then
-    echo "*******pushing build to staging website!*******"
+    echo "******pushing build to staging website!*******"
     # setup ssh agent, git config and remote
     eval `ssh-agent -s` #start shh agent
     ssh-add ~/.ssh/id_rsa
