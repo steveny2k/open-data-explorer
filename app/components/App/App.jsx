@@ -14,10 +14,9 @@ const pages = [
 
 export default class App extends React.Component {
   render () {
-    console.log(pages);
     return (
       <div className={'app'}>
-          <Navigation pages={pages} />
+        <Navigation pages={pages} />
            {this.props.children}
         <Footer />
       </div>
