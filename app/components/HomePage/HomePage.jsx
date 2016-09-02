@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { Component } from 'react'
 
-class HomePage extends React.Component {
+class HomePage extends Component {
 
   render () {
     return (
