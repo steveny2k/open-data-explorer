@@ -11,6 +11,8 @@ export default class Navigation extends React.Component {
   }
 
   renderNavItem (page, index) {
+    console.log(page);
+    if(page.title != 'Home')
     return (
       <li key={'page-' + index}>
         <Link to={page.route}>
@@ -22,6 +24,10 @@ export default class Navigation extends React.Component {
 
   render () {
     return (
+      <div>
+      <div className={'ribbon'}>
+        <a className={'ribbonTxt'} href="#" title="Read more about what we mean by alpha">alpha</a>
+      </div>
       <nav id={'Navigation'} className={'myNav'}>
         <div className={'navbar navbar-default navbar-fixed-top'} role='navigation'>
           <div className={'container navTotal'}>
@@ -32,8 +38,8 @@ export default class Navigation extends React.Component {
                 <span className={'icon-bar'} />
                 <span className={'icon-bar'} />
               </button>
-              <a className={'navbar-brand'} href='#'> <img src='https://lh3.googleusercontent.com/lfLEPeGqOCpXHk57yldP5oQ-3MUug9djPzVJYVZYY_AX7vIQ2alRW2aWamZ3IP7-pg=w170' alt='logo' height='60' width='60' /></a>
-              <a className={'navbar-brand navLogo'} href='#'>DataSF // Explorer</a>
+              <a className={'navbar-brand navImg'} href='#'></a>
+              <a className={'navbar-brand navLogo'} href='#'>DataSF &#47;&#47; Explorer</a>
             </div>
             <div className={'navbar-collapse collapse'}>
               <ul className={'nav navbar-nav navbar-right navLi'}>
@@ -41,12 +47,13 @@ export default class Navigation extends React.Component {
                     this.renderNavItem.bind(this)
                 )}
                 <li><a href='#'>Help</a></li>
-                <li><a href='#'>Contact</a></li>
+                <li><a href='#'>About</a></li>
               </ul>
             </div>
           </div>
         </div>
       </nav>
+      </div>
     )
   }
 }
