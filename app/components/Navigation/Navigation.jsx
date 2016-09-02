@@ -24,7 +24,7 @@ export default class Navigation extends React.Component {
     return (
       <div>
         <div className={'ribbon'}>
-          <a className={'ribbonTxt'} href='/about' title='Read more about what we mean by alpha'>alpha</a>
+          <Link to={'/about'} className={'ribbonTxt'}>alpha</Link>
         </div>
         <nav id={'Navigation'} className={'myNav'}>
           <div className={'navbar navbar-default navbar-fixed-top'} role='navigation'>
