@@ -1,5 +1,7 @@
 #Set up travis CI
 
+#most helpful article: https://kjaer.io/travis/
+
 #pre installation on local machine
 gem install travis
 #need to log onto travis ci website
@@ -8,17 +10,22 @@ travis login
 
 #generate ssh keys in local repo:
 touch .travis.yml
-ssh-keygen -t rsa -N "" -C "travis@datasf-explorer.tk" -f travis_rsa
+ssh-keygen
+
+#which will prompt something like this:
+#Generating public/private rsa key pair.
+#Enter file in which to save the key (/Users/Maxime Kjaer/.ssh/id_rsa):
+#enter in travis_deploy
 
 
 #You’ll need to copy your private key file (deploy-key) to your local repository. Then, we’ll install the Travis command line utility, log in, and encrypt the file:
 #This command encrypts a copy of your deployment key, travis_rsa.enc. It will also add a few lines to your .travis.yml
 
-travis encrypt-file travis_rsa --add
+travis encrypt-file travis_deploy --add
 
 #after the above runs successfully, delete the private key, you don't need it- and we don't want it getting in the git repo!
 rm travis_rsa
-#remember to keep the public key- you will need this in a little bit.
+#remember to keep the public key- you will need this in a little bit to add to the server.
 
 ##Setup Travis on the droplet
 
@@ -35,11 +42,10 @@ chmod 600 .ssh/authorized_keys
 cat travis_rsa.pub | ssh deploy@datasfexplorer.tk "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
 
 
-
 #Setting up a remote repo:
 #Remote is just a repository on our web server to which we can push.
 #We’ll want to push to a repository in /var/www/open-data-explorer/.git, and have the files available in /var/kjaermaxi.me/build. We’re placing the .git one level above public_html because we don’t want to serve it.
-#To do this, we’ll start out by creating an empty Git repo in /var/www/open-data-explorer/public_html
+#To do this, we’ll start out by creating an empty Git repo in /var/www/open-data-explorer/
 
 #Set up for production
 sudo mkdir /var/www/open-data-explorer/:
@@ -63,8 +69,8 @@ chmod +x /var/www/open-data-explorer/.git/hooks/post-receive
 #repeat steps for staging:
 
 su superuser #aka user with sudo privs.
-sudo mkdir /var/www/staging open-data-explorer/:
-sudo chown -R deploy:deploy /var/www/open-data-explorer
+sudo mkdir /var/www/staging-open-data-explorer/:
+sudo chown -R deploy:deploy /var/www/staging-open-data-explorer
 
 sudo su deploy
 mkdir /var/www/staging-open-data-explorer/.git
@@ -80,7 +86,5 @@ git --work-tree=/var/www/staging-open-data-explorer/build/ --git-dir=/var/www/st
 
 #change the perms on the post-receive file
 chmod +x /var/www/staging-open-data-explorer/.git/hooks/post-receive
-
-
 
 #now create your .travis yaml file. See the actual yaml file and corresponding bash scripts for configuration.
