@@ -6,7 +6,6 @@ function error_exit
   exit 1
 }
 
-
 set -x
 if [ $TRAVIS_BRANCH == "master" ] || [ $TRAVIS_BRANCH == "develop" ]; then
   if npm run test-travis; then
