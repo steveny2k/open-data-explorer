@@ -6,12 +6,8 @@ import { hashHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import Root from './containers/Root'
 import configureStore from './store/configureStore'
-
-
-
 var airbrakeJs = require('airbrake-js')
 window.airbrake = new airbrakeJs({projectId: 129534, projectKey: '9a82934389a163571bd7dd056cbfec5d'})
-
 const initialState = {
   dataset: {
     query: {
@@ -22,10 +18,6 @@ const initialState = {
     }
   }
 }
-
-
-
-
 const store = configureStore(initialState)
 const history = syncHistoryWithStore(hashHistory, store)
 render(
