@@ -18,7 +18,6 @@ export default class CatalogFacets extends React.Component {
     }.bind(this))
 
     var departments = facets.departments.map(function (cat, i) {
-      console.log(cat.isRefined)
       return <Input
         type='radio'
         name='departmentOptions'

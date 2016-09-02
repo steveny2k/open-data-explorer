@@ -17,7 +17,7 @@ class DatasetFrontMatter extends Component {
           <p className={'small text-muted'}>Data last updated {dayUpdated} at {timeUpdated}</p>
         </Col>
         <Col sm={3} className={'datasetDownLoadButtons'}>
-          <ButtonGroup style={{float: 'right', marginTop: '1em'}}>
+          <ButtonGroup style={{float: 'right', marginTop: '2em'}}>
             <DownloadLinks apiDomain={apiDomain} id={id} migrationId={migrationId} />
             <Button className={'datasetLinks'} bsStyle='primary' href={`https://dev.socrata.com/foundry/${apiDomain}/${id}`} target='_blank'>API</Button>
           </ButtonGroup>
