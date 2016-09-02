@@ -4,10 +4,8 @@ node_js:
 addons:
   ssh_known_hosts: datasfexplorer.tk
 before_install:
-- bash .travis/install.sh
+  - bash .travis/install.sh
 script:
 - bash .travis/build.sh
-deploy:
-  provider: script
-  script:
+after_success:
   - bash .travis/deploy.sh
