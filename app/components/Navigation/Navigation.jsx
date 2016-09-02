@@ -12,7 +12,6 @@ export default class Navigation extends React.Component {
 
   renderNavItem (page, index) {
     console.log(page);
-    if(page.title != 'Home')
     return (
       <li key={'page-' + index}>
         <Link to={page.route}>
@@ -46,8 +45,7 @@ export default class Navigation extends React.Component {
                 {this.props.pages.map(
                     this.renderNavItem.bind(this)
                 )}
-                <li><a href='#'>Help</a></li>
-                <li><a href='#'>About</a></li>
+                <li><a href='http://support.datasf.org/'>Help</a></li>
               </ul>
             </div>
           </div>
