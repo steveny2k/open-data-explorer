@@ -12,3 +12,5 @@ deploy:
   - bash .travis/deploy.sh
   on:
     all_branches: true
+before_install:
+

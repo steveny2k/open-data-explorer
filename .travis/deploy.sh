@@ -22,10 +22,6 @@ if [ $TRAVIS_BRANCH == "master" ] ; then
 elif [ $TRAVIS_BRANCH == "develop" ] ; then
     echo "*******pushing build to staging website!*******"
     # setup ssh agent, git config and remote
-    echo "$DEPLOY_KEY" > ~/.ssh/id_rsa
-    eval $(ssh-agent)  # Start the ssh agent
-    chmod 600 deploy_key.pem # This key should have push access
-    ssh-add deploy_key.pem
     cd build
     # Initialize a new git repo in _site, angd push it to our server.
     git init
