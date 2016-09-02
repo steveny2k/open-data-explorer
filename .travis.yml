@@ -3,14 +3,9 @@ node_js:
 - '6'
 addons:
   ssh_known_hosts: datasfexplorer.tk
+before_install:
+  - bash _scripts/install.sh
 script:
 - bash .travis/build.sh
-deploy:
-  skip_cleanup: true  // insures dist/ dir not to be deleted after npm test
-  provider: script
-  script:
-  - bash .travis/deploy.sh
-  on:
-    all_branches: true
-before_install:
-
+after_success:
+  - bash _scripts/deploy.sh

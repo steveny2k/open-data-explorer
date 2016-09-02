@@ -22,8 +22,10 @@ if [ $TRAVIS_BRANCH == "master" ] ; then
 elif [ $TRAVIS_BRANCH == "develop" ] ; then
     echo "*******pushing build to staging website!*******"
     # setup ssh agent, git config and remote
-    cd build
+    eval `ssh-agent -s` #start shh agent
+    ssh-add ~/.ssh/id_rsa
     # Initialize a new git repo in _site, angd push it to our server.
+    cd build
     git init
     git remote add deploy "deploy@datasfexplorer.tk:/var/www/open-data-explorer/"
     git config user.name "Travis CI"
