@@ -1,27 +1,41 @@
+var webpackConfig = require('./webpack/config.test')
+
 module.exports = function (config) {
   config.set({
     basePath: '',
-    frameworks: ['mocha'],
+    frameworks: ['mocha', 'chai'],
     files: [
-      'tests.webpack.js'
+      'node_modules/babel-polyfill/dist/polyfill.js',
+      'node_modules/phantomjs-polyfill/bind-polyfill.js',
+      './test/**/*.js' // specify files to watch for tests
     ],
     preprocessors: {
-      'tests.webpack.js': ['webpack', 'sourcemap']
+      './test/**/*.js': ['webpack', 'sourcemap']
     },
     reporters: ['mocha', 'coverage'],
     coverageReporter: {
-      type: 'html',
-      dir: 'coverage/'
+      dir: 'coverage/',
+      reporters: [
+        {type: 'html', subdir: 'report-html'},
+        {type: 'lcov', subdir: 'report-lcov'}
+      ]
+    },
+    externals: {
+      'jsdom': 'window',
+      'cheerio': 'window',
+      'react/lib/ExecutionEnvironment': true,
+      'react/lib/ReactContext': 'window'
     },
     // port: 9876,
     // colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Firefox'],
+    browsers: ['PhantomJS'],
     singleRun: false,
-    webpack: require('./webpack/config.test'),
+    webpack: webpackConfig,
     webpackServer: {
       noInfo: true
     }
   })
 }
+

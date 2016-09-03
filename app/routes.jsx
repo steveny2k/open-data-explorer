@@ -3,12 +3,13 @@ import { Route, IndexRoute } from 'react-router'
 
 import App from './containers/App'
 import HomePage from './components/HomePage/HomePage'
-import Catalog from './components/Catalog/Catalog'
+import Catalog from './containers/Catalog'
 import Dataset from './containers/Dataset'
 import DatasetOverview from './containers/DatasetOverview'
 import DatasetDetails from './containers/DatasetDetails'
 import Charts from './containers/Charts'
 import DataTable from './containers/DataTable'
+import AboutPage from './components/AboutPage/AboutPage'
 
 export default (
   <Route component={App} path='/'>
@@ -16,6 +17,10 @@ export default (
     <Route path='/catalog' component={Catalog}>
       <IndexRoute component={Catalog} />
       <Route path=':page' component={Catalog} />
+    </Route>
+    <Route path='/about' component={AboutPage}>
+      <IndexRoute component={AboutPage} />
+      <Route path=':page' component={AboutPage} />
     </Route>
     <Route path='/:category/:title/:id' components={Dataset}>
       <IndexRoute component={DatasetOverview} />

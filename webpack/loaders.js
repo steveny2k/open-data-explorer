@@ -19,6 +19,7 @@ var htmlLoader = [
     'debug=' + DEBUG
   ].join('&')
 ].join('!')
+
 var jsonLoader = ['json-loader']
 
 var sassParams = [
@@ -75,7 +76,7 @@ var loaders = [
   {
     test: /\.json$/,
     exclude: /node_modules/,
-    loaders: jsonLoader
+    loader: jsonLoader
   },
   {
     test: /\.html$/,

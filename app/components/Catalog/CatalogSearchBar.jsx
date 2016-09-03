@@ -8,15 +8,21 @@ export default class CatalogSearchBar extends React.Component {
     this.handleSearch = this.handleSearch.bind(this)
   }
 
-  handleSearch (ev) {
+  handleSearch (e) {
     let {helper} = this.props
-    helper.setQuery(ev.target.value).search()
+    helper.setQuery(e.target.value).search()
   }
 
   render () {
+    let { searchTerm } = this.props
+    let searchInput = <Input type='text' placeholder='Search' onKeyUp={this.handleSearch} />
+    if (searchTerm !== '') {
+      searchInput = <Input type='text' defaultValue={searchTerm} onKeyUp={this.handleSearch} />
+    }
+
     return (
       <div className={'catalogMainSearchBox'}>
-        <Input type='text' placeholder='Search' onKeyUp={this.handleSearch} />
+        { searchInput }
       </div>
     )
   }

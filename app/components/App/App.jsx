@@ -4,8 +4,8 @@ import Footer from '../Footer/Footer'
 
 const pages = [
   {
-    route: '',
-    title: 'Home'
+    route: 'aboutpage',
+    title: 'AboutPage'
   },
   {
     route: 'catalog',
@@ -17,7 +17,9 @@ export default class App extends React.Component {
     return (
       <div className={'app'}>
         <Navigation pages={pages} />
+        <div className={'content-wrapper'}>
           {this.props.children}
+        </div>
         <Footer />
       </div>
     )

@@ -22,31 +22,35 @@ export default class Navigation extends React.Component {
 
   render () {
     return (
-      <nav id={'Navigation'} className={'myNav'}>
-        <div className={'navbar navbar-default navbar-fixed-top'} role='navigation'>
-          <div className={'container navTotal'}>
-            <div className={'navbar-header'}>
-              <button type='button' className={'navbar-toggle'} data-toggle='collapse' data-target='.navbar-collapse'>
-                <span className={'sr-only'}>Toggle navigation</span>
-                <span className={'icon-bar'} />
-                <span className={'icon-bar'} />
-                <span className={'icon-bar'} />
-              </button>
-              <a className={'navbar-brand'} href='#'> <img src='https://lh3.googleusercontent.com/lfLEPeGqOCpXHk57yldP5oQ-3MUug9djPzVJYVZYY_AX7vIQ2alRW2aWamZ3IP7-pg=w170' alt='logo' height='60' width='60' /></a>
-              <a className={'navbar-brand navLogo'} href='#'>DataSF // Explorer</a>
-            </div>
-            <div className={'navbar-collapse collapse'}>
-              <ul className={'nav navbar-nav navbar-right navLi'}>
-                {this.props.pages.map(
-                    this.renderNavItem.bind(this)
-                )}
-                <li><a href='#'>Help</a></li>
-                <li><a href='#'>Contact</a></li>
-              </ul>
+      <div>
+        <div className={'ribbon'}>
+          <Link to={'/about'} className={'ribbonTxt'}>alpha</Link>
+        </div>
+        <nav id={'Navigation'} className={'myNav'}>
+          <div className={'navbar navbar-default navbar-fixed-top'} role='navigation'>
+            <div className={'container navTotal'}>
+              <div className={'navbar-header'}>
+                <button type='button' className={'navbar-toggle'} data-toggle='collapse' data-target='.navbar-collapse'>
+                  <span className={'sr-only'}>Toggle navigation</span>
+                  <span className={'icon-bar'} />
+                  <span className={'icon-bar'} />
+                  <span className={'icon-bar'} />
+                </button>
+                <a className={'navbar-brand navImg'} href='#' />
+                <a className={'navbar-brand navLogo'} href='#'>DataSF &#47;&#47; Explorer </a>
+              </div>
+              <div className={'navbar-collapse collapse'}>
+                <ul className={'nav navbar-nav navbar-right navLi'}>
+                  {this.props.pages.map(
+                      this.renderNavItem.bind(this)
+                  )}
+                  <li><a href='http://support.datasf.org/'>Help</a></li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </div>
     )
   }
 }

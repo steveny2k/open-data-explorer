@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import { MenuItem, DropdownButton } from 'react-bootstrap'
 
-const downloadTypes = {
-  'csv': 'CSV',
-  'xls': 'Excel 2003',
-  'xlsx': 'Excel 2007+',
-  'geojson': 'GeoJSON',
-  'json': 'JSON'
+// ToDo: create isGeo property of the dataset, also possibly abstract this out of here to allow different configurable URL patterns (not tied to Socrata)
+let downloadTypes = {
+  'csv': 'CSV (Spreadsheet)',
+  'json': 'JSON',
+  'geojson': 'GeoJSON'
 }
 // should be abstracted more to allow different download template links based or an array of link options, maybe can be loaded as part of middleware?
 class DownloadLinks extends Component {
@@ -19,9 +18,9 @@ class DownloadLinks extends Component {
       id = migrationId
     }
     let menuItems = options.map(function (type, i) {
-      let downloadLink = 'https://' + apiDomain + '/api/views/' + id + '/rows.' + type + '?accessType=DOWNLOAD'
+      let downloadLink = 'https://' + apiDomain + '/resource/' + id + '.' + type + '?$limit=99999999999'
       return (
-        <MenuItem href={downloadLink} key={i} eventKey={i}>
+        <MenuItem href={downloadLink} key={i} eventKey={i} download='Download'>
           {downloadTypes[type]}
         </MenuItem>
       )

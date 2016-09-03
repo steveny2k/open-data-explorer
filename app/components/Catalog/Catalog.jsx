@@ -60,7 +60,6 @@ export default class CatalogBrowse extends React.Component {
     var facets = {}
     facets.departments = content.getFacetValues('publishing_dept')
     facets.categories = content.getFacetValues('category')
-    console.log(facets.departments)
     this.setState({
       results: content.hits,
       facets: facets,
@@ -107,8 +106,10 @@ export default class CatalogBrowse extends React.Component {
       console.error(err)
     })
 
-    helper.setQuery('')
-    .search()
+    let { searchTerm } = this.props
+
+    helper.setQuery(searchTerm)
+      .search()
   }
 
   componentWillUnmount () {
@@ -118,6 +119,7 @@ export default class CatalogBrowse extends React.Component {
 
   render () {
     let { facets } = this.state
+    let { searchTerm } = this.props
     let listItems = []
     if (this.state.results.length > 0) {
       listItems = this.state.results.map(function (dataset, i) {
@@ -126,13 +128,13 @@ export default class CatalogBrowse extends React.Component {
     }
 
     return (
-      <Grid fluid id='main-container' className={'catalogMain'}>
+      <Grid fluid id='main-container space' className={'catalogMain'}>
         <Row className={'catalogMainFacets'}>
           <Col sm={3}>
             <CatalogFacets facets={facets} handleCategorySelect={this.handleFacetSelections} />
           </Col>
           <Col sm={9}>
-            <CatalogSearchBar helper={helper} handleSearch={this.handleSearch} />
+            <CatalogSearchBar helper={helper} handleSearch={this.handleSearch} searchTerm={searchTerm} />
             {listItems}
             <Pagination
               bsSize='large'
