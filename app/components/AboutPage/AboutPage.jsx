@@ -1,7 +1,7 @@
 require('./_AboutPage.scss')
 
 import React from 'react'
-import { Grid, Row } from 'react-bootstrap'
+import { Grid } from 'react-bootstrap'
 
 export default class AboutPage extends React.Component {
   render () {
@@ -17,7 +17,7 @@ export default class AboutPage extends React.Component {
           <li> visually detect patterns, outliers and anomalies in a dataset </li>
           <li> more clearly access a dataset&#39;s metadata</li>
           <li> test their underlying assumptions about a dataset </li>
-          <li> determine if a dataset a candidate for further analysis</li>
+          <li> determine if a dataset is a candidate for further analysis</li>
         </ul>
         <h3>Want to help build out this tool!? Or interested to see how the open data explorer was made? Checkout out the github repo for this project <a href='https://github.com/DataSF/open-data-explorer'> here</a>.</h3>
 
