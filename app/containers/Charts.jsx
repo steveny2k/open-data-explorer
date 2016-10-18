@@ -3,9 +3,9 @@ import { selectColumn, groupBy, sumBy, addFilter, applyChartType, removeFilter, 
 import Charts from '../components/Chart/Charts'
 
 const mapStateToProps = (state, ownProps) => {
-  const { dataset } = state
+  const { metadata } = state
   return {
-    dataset
+    metadata
   }
 }
 

@@ -3,7 +3,7 @@ import { Button, Panel } from 'react-bootstrap'
 import './_Chart.scss'
 
 class ChartColumns extends Component {
-  renderColumnButton (column, idx, columns, selectColumn, dataset, selectedColumn) {
+  renderColumnButton (column, idx, columns, selectColumn, metadata, selectedColumn) {
     function setButtonColors (col) {
       /*
       let buttonColors = function () {
@@ -76,7 +76,7 @@ class ChartColumns extends Component {
     let removedIdKeys = removeIdKeys(columns)
     let col = columns[column]
     let buttonColor = setButtonColors(col)
-    let categoryColumns = dataset.categoryColumns
+    let categoryColumns = metadata.categoryColumns
     let buttonClassName
     if (col.key === selectedColumn) {
       buttonClassName = 'chartButtons chartColumnButtonsActive'
@@ -103,19 +103,19 @@ class ChartColumns extends Component {
     }
   }
 
-  renderButtons (columns, selectColumn, dataset, selectedColumn) {
+  renderButtons (columns, selectColumn, metadata, selectedColumn) {
     let cols = []
     if (columns) {
       cols = Object.keys(columns).map((column, idx) => {
-        return this.renderColumnButton(column, idx, columns, selectColumn, dataset, selectedColumn)
+        return this.renderColumnButton(column, idx, columns, selectColumn, metadata, selectedColumn)
       })
     }
     return cols
   }
 
   render () {
-    let { columns, selectColumn, dataset, selectedColumn } = this.props
-    let cols = this.renderButtons(columns, selectColumn, dataset, selectedColumn)
+    let { columns, selectColumn, metadata, selectedColumn } = this.props
+    let cols = this.renderButtons(columns, selectColumn, metadata, selectedColumn)
     const panelTitle = (
       <div>Dataset Columns</div>
     )

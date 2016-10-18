@@ -76,10 +76,10 @@ export function loadMetadata (id) {
 
 export function loadColumnProps () {
   return (dispatch, getState) => {
-    let id = getState().dataset.migrationId ? getState().dataset.migrationId : getState().dataset.id
+    let id = getState().metadata.migrationId ? getState().metadata.migrationId : getState().metadata.id
     let promises = []
-    for (var key in getState().dataset.columns) {
-      if (shouldRunColumnStats(getState().dataset.columns[key].type, key)) {
+    for (var key in getState().metadata.columns) {
+      if (shouldRunColumnStats(getState().metadata.columns[key].type, key)) {
         promises.push(dispatch(fetchColumnProps(id, key)))
       }
     }

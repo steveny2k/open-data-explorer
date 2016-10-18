@@ -28,8 +28,8 @@ class Charts extends Component {
   }
 
   renderChartArea (props) {
-    let { dataset, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType, selectColumn } = this.props
-    let { columns, query, ...other } = dataset
+    let { metadata, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType, selectColumn } = this.props
+    let { columns, query, ...other } = metadata
     let otherProps = {...other}
     let displayChartOptions = null
     otherProps.selectedColumnDef = query.selectedColumn ? columns[query.selectedColumn] : null
@@ -64,7 +64,7 @@ class Charts extends Component {
           applyChartType={applyChartType}
           displayChartOptions={displayChartOptions}
           chartType={chartType}
-          dataset={dataset}
+          metadata={metadata}
           selectColumn={selectColumn} />
       </Row>
     )

@@ -5,7 +5,7 @@ import merge from 'lodash/merge'
 import union from 'lodash/union'
 import uniq from 'lodash/uniq'
 
-function dataset (state = { columns: {}, query: {}, table: { tablePage: 0 } }, action) {
+function metadataReducer (state = {}, action) {
   let copyState
 
   if (action.response) {
@@ -146,12 +146,71 @@ function dataset (state = { columns: {}, query: {}, table: { tablePage: 0 } }, a
   }
 }
 
+function columnsReducer (state = {}, action) {
+  if (action.response) {
+    switch (action.type) {
+      case METADATA_SUCCESS:
+        return Object.assign({}, state, {
+          columns: action.response.columns
+        })
+      case COLPROPS_SUCCESS:
+        if (COLPROPS_SUCCESS) {
+          action.response.categoryColumns = union(state.categoryColumns, action.response.categoryColumns)
+        }
+        return merge({}, state, action.response)
+      default:
+        return state
+    }
+  } else {
+    return state
+  }
+}
+
+function chartReducer (state = {}, action) {
+  if (action.response) {
+    switch (action.type) {
+      case DATA_SUCCESS:
+        if (action.response.query) {
+          return Object.assign({}, state, {
+            chartData: action.response.query.originalData,
+            isFetching: false
+          })
+        } else {
+          return state
+        }
+      default:
+        return state
+    }
+  }
+  switch (action.type) {
+    case GROUP_BY:
+      let groupKey = action.key ? action.key.value : null
+      return merge({}, state, {
+        groupBy: groupKey
+      })
+    case SELECT_COLUMN:
+      return merge({}, state, {
+        selectedColumn: action.column,
+        isFetching: true
+      })
+    default:
+      return state
+  }
+}
+
+function tableReducer (state = {}, action) {
+  return state
+}
+
 function messages (state = null, action) {
   return state
 }
 
 const rootReducer = combineReducers({
-  dataset,
+  metadata: metadataReducer,
+  chart: chartReducer,
+  table: tableReducer,
+  columnProps: columnsReducer,
   messages,
   routing
 })

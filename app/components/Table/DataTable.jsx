@@ -78,13 +78,13 @@ class DataTable extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.dataset.id && !this.props.dataset.table) {
+    if (nextProps.metadata.id && !this.props.metadata.table) {
       this.props.loadTable()
     }
   }
 
   componentDidMount () {
-    if (this.props.dataset.id && !this.props.dataset.table) {
+    if (this.props.metadata.id && !this.props.metadata.table) {
       this.props.loadTable()
     }
   }
@@ -94,8 +94,8 @@ class DataTable extends Component {
   }
 
   render () {
-    let { dataset } = this.props
-    let { columns, table, rowCount } = dataset
+    let { metadata } = this.props
+    let { columns, table, rowCount } = metadata
     let tableContainer = null
 
     if (table && table.data && table.data.length > 0) {

@@ -42,17 +42,17 @@ export const shouldRunColumnStats = (type, key) => {
 // Construct URL based on chart options
 
 function constructQuery (state) {
-  let queryStack = state.dataset.query
-  let columns = state.dataset.columns
+  let queryStack = state.metadata.query
+  let columns = state.metadata.columns
   let { selectedColumn, dateBy, filters } = queryStack
   let columnType = columns[selectedColumn].type
 
   let consumerRoot = API_ROOT.split('/')[2]
   let consumer = new soda.Consumer(consumerRoot)
-  let id = state.dataset.migrationId || state.dataset.id
+  let id = state.metadata.migrationId || state.metadata.id
   let query = consumer.query().withDataset(id)
 
-  let {groupBy, sumBy} = state.dataset.query
+  let {groupBy, sumBy} = state.metadata.query
   let dateAggregation = dateBy === 'month' ? 'date_trunc_ym' : 'date_trunc_y'
   let selectAsLabel = selectedColumn + ' as label'
   let orderBy = 'value desc'
@@ -152,8 +152,8 @@ function endpointQuery (state) {
 function endpointTableQuery (state) {
   let consumerRoot = API_ROOT.split('/')[2]
   let consumer = new soda.Consumer(consumerRoot)
-  let id = state.dataset.migrationId || state.dataset.id
-  let table = state.dataset.table
+  let id = state.metadata.migrationId || state.metadata.id
+  let table = state.metadata.table
   let page = table.tablePage || 0
 
   let query = consumer.query()
@@ -163,7 +163,7 @@ function endpointTableQuery (state) {
 
   if (table.sorted && table.sorted.length > 0) {
     table.sorted.forEach((key) => {
-      query.order(key + ' ' + state.dataset.columns[key].sortDir)
+      query.order(key + ' ' + state.metadata.columns[key].sortDir)
     })
   }
 
@@ -238,7 +238,7 @@ function transformMetadata (json) {
 }
 
 function transformQuery (json, state) {
-  let { columns, query, rowLabel } = state.dataset
+  let { columns, query, rowLabel } = state.metadata
   let { selectedColumn, groupBy, sumBy } = query
   let labels = ['x']
   let keys = []
@@ -341,7 +341,8 @@ function transformQuery (json, state) {
   return {
     query: {
       isFetching: false,
-      data: data
+      data: data,
+      originalData: json
     }
   }
 }
@@ -365,8 +366,8 @@ function transformApiMigration (json) {
 
 function transformColumnProperties (json, state, params) {
   let maxRecord = parseInt(_.maxBy(json, function (o) { return parseInt(o.count) }).count)
-  let checkFirst = maxRecord / state.dataset.rowCount
-  let checkNumCategories = json.length / state.dataset.rowCount
+  let checkFirst = maxRecord / state.metadata.rowCount
+  let checkNumCategories = json.length / state.metadata.rowCount
   let transformed = {
     columns: {}
   }

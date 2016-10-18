@@ -31,7 +31,7 @@ class DatasetDetails extends Component {
   }
 
   render () {
-    let { columns } = this.props.dataset
+    let { columns } = this.props.metadata
     let rows = []
     if (columns) {
       let keys = Object.keys(columns)

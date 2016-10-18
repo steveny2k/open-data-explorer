@@ -7,7 +7,7 @@ import {unix} from 'moment'
 
 class DatasetOverview extends Component {
   renderAttachmentsList () {
-    let { attachments, id } = this.props.dataset
+    let { attachments, id } = this.props.metadata
 
     let attachmentList = attachments.map((att, idx, array) => {
       return (
@@ -22,13 +22,13 @@ class DatasetOverview extends Component {
   }
 
   render () {
-    const { description, publishingDepartment, licenseLink, licenseName, rowCount, rowsUpdatedAt, publishingFrequency, notes, attachments, programLink, tags } = this.props.dataset
+    const { description, publishingDepartment, licenseLink, licenseName, rowCount, rowsUpdatedAt, publishingFrequency, notes, attachments, programLink, tags } = this.props.metadata
     let numberFormat = format(',')
     let dayUpdated = unix(rowsUpdatedAt).format('MM/DD/YYYY')
     let timeUpdated = unix(rowsUpdatedAt).format('hh:mm A')
     let overviewContent = null
 
-    if (this.props.dataset) {
+    if (this.props.metadata) {
       // assemble related documents
       let documents = []
       let tagList = null

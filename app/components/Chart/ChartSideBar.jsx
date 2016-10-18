@@ -7,8 +7,8 @@ import './_Chart.scss'
 
 class ChartSideBar extends Component {
   render () {
-    let { chartType, displayChartOptions, selectedColumn, dataset, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, applyChartType, selectColumn } = this.props
-    let { columns, query } = dataset
+    let { chartType, displayChartOptions, selectedColumn, metadata, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, applyChartType, selectColumn } = this.props
+    let { columns, query } = metadata
 
     return (
       <Col md={3}>
@@ -27,7 +27,7 @@ class ChartSideBar extends Component {
             displayChartOptions={displayChartOptions}
             chartType={chartType} />
           <ChartColumns
-            dataset={dataset}
+            metadata={metadata}
             selectColumn={selectColumn}
             columns={columns}
             selectedColumn={selectedColumn} />

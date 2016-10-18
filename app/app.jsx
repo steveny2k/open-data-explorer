@@ -10,7 +10,7 @@ import airbrakeJs from 'airbrake-js'
 window.airbrake = new airbrakeJs({projectId: 129600, projectKey: 'b8fe4ddb8be71382afa569e93c9b0d87'}) // eslint-disable-line
 
 const initialState = {
-  dataset: {
+  metadata: {
     query: {
       dateBy: 'year'
     },
@@ -20,6 +20,7 @@ const initialState = {
   }
 }
 const store = configureStore(initialState)
+console.log(store.getState())
 const history = syncHistoryWithStore(hashHistory, store)
 render(
   <Root store={store} history={history} />,
