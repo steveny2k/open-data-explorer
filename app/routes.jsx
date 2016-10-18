@@ -10,7 +10,7 @@ import DatasetDetails from './containers/DatasetDetails'
 import Charts from './containers/Charts'
 import DataTable from './containers/DataTable'
 import AboutPage from './components/AboutPage/AboutPage'
-
+import ChartExperimental from './components/ChartExperimental/ChartExperimental'
 export default (
   <Route component={App} path='/'>
     <IndexRoute component={HomePage} />
@@ -29,6 +29,7 @@ export default (
       <Route path='charts' component={Charts} />
       <Route path='map' component={Dataset} />
       <Route path='table' component={DataTable} />
+      <Route path='chart_experimental' component={ChartExperimental} />
     </Route>
   </Route>
 )
