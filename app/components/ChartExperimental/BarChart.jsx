@@ -71,20 +71,9 @@ class BarChart extends Component {
     }
 
     render() {
-      let data=[
-            { month:'Jan', value:800 },
-            { month:'Feb', value:50 },
-            { month:'Mar', value:65 },
-            { month:'Apr', value:602 },
-            { month:'May', value:70 },
-            { month:'Jun', value:155 },
-            { month:'Jul', value:280 },
-            { month:'Aug', value:55 },
-            { month:'Sep', value:175 },
-            { month:'Oct', value:50 },
-            { month:'Nov', value:160 },
-            { month:'Dec', value:75 }
-      ]
+      let chart_data = this.props.chart_data
+      let {chartId, barColor, yAxisTicks, yGridTicks} =  this.props
+
 
       let margin = {top: 5, right: 50, bottom: 20, left: 40}
       let w = this.state.width - (margin.left + margin.right)
@@ -94,41 +83,47 @@ class BarChart extends Component {
 
 
       let x=d3.scale.ordinal()
-            .domain(data.map(function(d){
-                return d.month;
+            .domain(chart_data.map(function(d){
+                return d.key;
             }))
-            .rangeRoundBands([0,this.state.width],.07);
+            .rangeRoundBands([0,this.state.width-100],.07);
 
       let y = d3.scale.linear()
-            .domain([0,d3.max(data,function(d){
-                return d.value+100;
+            .domain([0,d3.max(chart_data,function(d){
+                return d.value+(d.value*.15);
             })]).range([h, 0])
+
+      let x_domain = d3.extent(chart_data, function(d) { return d.key; })
 
       let xAxis = d3.svg.axis()
             .scale(x)
             .orient("bottom")
+            .tickValues(chart_data.map(function(d,i){
+                    return d.key;
+            }).splice(1))
 
       let yAxis = d3.svg.axis()
             .scale(y)
             .orient('left')
-            .ticks(5)
+            .ticks(yAxisTicks)
             .tickSize(-w, 0, 0)
 
       let yGrid = d3.svg.axis()
             .scale(y)
             .orient('left')
-            .ticks(5)
+            .ticks(yGridTicks)
             .tickSize(-w, 0, 0)
-            .tickFormat("");
+            .tickFormat("")
 
 
         return(
             <div>
-                 <svg id={this.props.chartId} width={this.state.width} height={this.props.height}>
+                 <svg id={chartId} width={this.state.width} height={this.props.height}>
                     <g transform={transform}>
                         <Grid h={h} grid={yGrid} gridType="y"/>
                       <Axis h={h} axis={yAxis} axisType="y" />
-                      <Bars data={data} x={x} y={y} h={h} showToolTip={this.showToolTip} hideToolTip={this.hideToolTip} />
+                        <Axis h={h} axis={xAxis} axisType="x"/>
+                  <Bars chart_data={chart_data} x={x} y={y} h={h} barColor={barColor} showToolTip={this.showToolTip} hideToolTip={this.hideToolTip} />
                       <ToolTip tooltip={this.state.tooltip}/>
                     </g>
                 </svg>
@@ -141,7 +136,7 @@ BarChart.defaultProps = {
     width: 800,
     height: 400,
     chartId: 'vi_chart'
-}
 
+}
 
 export default BarChart

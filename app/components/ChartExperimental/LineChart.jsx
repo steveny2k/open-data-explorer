@@ -14,6 +14,7 @@ class LineChart extends Component {
             //otherChecked: false,
             tooltip:{ display:false,data:{key:'',value:''}},
             width:0,
+            //selectedColumn:"",
         }
     this.hideToolTip = this.hideToolTip.bind(this)
     this.showToolTip = this.showToolTip.bind(this)
@@ -28,7 +29,7 @@ class LineChart extends Component {
         })
 
         this.setState({width: this.props.width})
-
+        console.log(this.props);
     }
     componentDidMount() {
         this.updateSize()
@@ -74,51 +75,44 @@ class LineChart extends Component {
 
     render() {
 
-        let data=[
-            {day:'02-11-2016',count:180},
-            {day:'02-12-2016',count:250},
-            {day:'02-13-2016',count:150},
-            {day:'02-14-2016',count:496},
-            {day:'02-15-2016',count:140},
-            {day:'02-16-2016',count:380},
-            {day:'02-17-2016',count:100},
-            {day:'02-18-2016',count:150}
-        ]
+        let chart_data = this.props.chart_data.slice(0)
 
-        let color =  this.props.color
+        let {chartId, lineColor, yAxisTicks, yGridTicks, dotColorInner,dotColorOuter } =  this.props
         let margin = {top: 5, right: 50, bottom: 20, left: 50}
         let w = this.state.width - (margin.left + margin.right)
         let h = this.props.height - (margin.top + margin.bottom)
 
-        let parseDate = d3.time.format("%m-%d-%Y").parse;
+        let parseDate = d3.time.format("%m-%d-%Y").parse
 
-        data.forEach(function (d) {
-            d.date = parseDate(d.day);
+        //console.log(chart_data);
+        chart_data.forEach(function (d) {
+            //console.log(d.key)
+            d.key = parseDate(d.key)
         })
 
+
         let x = d3.time.scale()
-            .domain(d3.extent(data, function (d) {
-                return d.date;
+            .domain(d3.extent(chart_data, function (d) {
+                return d.key;
             })).rangeRound([0, w])
 
         let y = d3.scale.linear()
-            .domain([0,d3.max(data,function(d){
-                return d.count+100;
+            .domain([0,d3.max(chart_data,function(d){
+                return d.value+100;
             })]).range([h, 0])
 
         let yAxis = d3.svg.axis()
             .scale(y)
             .orient('left')
-            .ticks(5)
+            .ticks(yAxisTicks)
 
         let xAxis = d3.svg.axis()
             .scale(x)
             .orient('bottom')
-            .tickValues(data.map(function(d,i){
+            .tickValues(chart_data.map(function(d,i){
                 if(i>0)
-                    return d.date;
+                    return d.key;
             }).splice(1))
-            .ticks(4);
 
         let xGrid = d3.svg.axis()
             .scale(x)
@@ -131,7 +125,7 @@ class LineChart extends Component {
         let yGrid = d3.svg.axis()
             .scale(y)
             .orient('left')
-            .ticks(5)
+            .ticks(yGridTicks)
             .tickSize(-w, 0, 0)
             .tickFormat("");
 
@@ -148,10 +142,10 @@ class LineChart extends Component {
         let line = d3.svg.line()
         //https://www.dashingd3js.com/svg-paths-and-d3js
             .x(function (d) {
-                return x(d.date);
+                return x(d.key);
             })
             .y(function (d) {
-                return y(d.count);
+                return y(d.value);
             }).interpolate(interpolations[5])
 
 
@@ -160,7 +154,7 @@ class LineChart extends Component {
 
         return (
             <div>
-                <svg id={this.props.chartId} width={this.state.width} height={this.props.height}>
+                <svg id={chartId} width={this.state.width} height={this.props.height}>
                     <g transform={transform}>
 
                         <Grid h={h} grid={yGrid} gridType="y"/>
@@ -169,9 +163,9 @@ class LineChart extends Component {
                         <Axis h={h} axis={yAxis} axisType="y" />
                         <Axis h={h} axis={xAxis} axisType="x"/>
 
-                        <path className="line" d={line(data)} strokeLinecap="round" stroke={color}  strokeWidth="2" fill="none" />
+                        <path className="line" d={line(chart_data)} strokeLinecap="round" stroke={lineColor}  strokeWidth="2" fill="none" />
 
-                        <Dots data={data} x={x} y={y} showToolTip={this.showToolTip} hideToolTip={this.hideToolTip}/>
+                        <Dots chart_data={chart_data} x={x} y={y} showToolTip={this.showToolTip} hideToolTip={this.hideToolTip} dotColorOuter={dotColorOuter} dotColorInner={dotColorInner}/>
 
                         <ToolTip tooltip={this.state.tooltip}/>
                     </g>
