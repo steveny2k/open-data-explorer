@@ -35,7 +35,6 @@ class Charts extends Component {
     otherProps.selectedColumnDef = query.selectedColumn ? columns[query.selectedColumn] : null
     let chartDisplay = this.chartTypeChecks(otherProps, query, columns)
     displayChartOptions = chartDisplay.displayChartOptions
-    console.log(displayChartOptions)
     let chartType = chartDisplay.chartType
     return (
       <Row>

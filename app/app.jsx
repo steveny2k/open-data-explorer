@@ -17,6 +17,9 @@ const initialState = {
     table: {
       tablePage: 0
     }
+  },
+  table: {
+    tablePage: 0
   }
 }
 const store = configureStore(initialState)

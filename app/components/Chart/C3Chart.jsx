@@ -376,7 +376,6 @@ let C3Chart = React.createClass({
     graphObject.data = _.merge(graphObjectData, graphObject.data)
     graphObject.axis = _.merge(graphObjectAxis, graphObject.axis)
     let chart = c3.generate(graphObject)
-    console.log(graphObject)
     return chart
   },
 

@@ -140,8 +140,6 @@ class ChartCanvas extends Component {
     if (((data[0].values && data[0].values.length > 10) || (Array.isArray(data[0]) && data[0].length > 11)) && chartType === 'bar' && type !== 'date') {
       options.rotated = true
       options.padding.left = (maxLabelLength * 4) + 55
-
-      console.log(options.padding.left)
     }
 
     if ((type === 'number' && !selectedColumnDef.categories) || type === 'date') {
