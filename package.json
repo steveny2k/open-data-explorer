@@ -83,6 +83,7 @@
     "isparta": "^4.0.0",
     "isparta-instrumenter-loader": "^1.0.1",
     "json-loader": "^0.5.2",
+    "jsx-control-statements": "^3.1.5",
     "karma": "^0.13.19",
     "karma-babel-preprocessor": "^6.0.1",
     "karma-chai": "^0.1.0",
