@@ -2,6 +2,8 @@ import soda from 'soda-js'
 import pluralize from 'pluralize'
 import { capitalize } from 'underscore.string'
 import _ from 'lodash'
+import uniq from 'lodash/uniq'
+import find from 'lodash/find'
 
 const API_ROOT = 'https://data.sfgov.org/'
 
@@ -17,7 +19,7 @@ export const Endpoints = {
 
 export const Transforms = {
   METADATA: transformMetadata,
-  QUERY: transformQuery,
+  QUERY: transformQueryData,
   TABLEQUERY: transformTableQuery,
   COUNT: transformCount,
   MIGRATION: transformApiMigration,
@@ -237,7 +239,7 @@ function transformMetadata (json) {
   return metadata
 }
 
-function transformQuery (json, state) {
+function transformQueryDataLegacy (json, state) {
   let { columns, query, rowLabel } = state.metadata
   let { selectedColumn, groupBy, sumBy } = query
   let labels = ['x']
@@ -338,6 +340,37 @@ function transformQuery (json, state) {
   }
 
   data = [labels].concat(data)
+  return data
+}
+
+function reduceGroupedData (data, groupBy) {
+  // collect unique labels
+  let groupedData = uniq(data.map((obj) => {
+    return obj['label']
+  })).map((label) => {
+    return {label: label}
+  })
+
+  // add columns to rows
+  let i = 0
+  let dataLength = data.length
+  for (i; i < dataLength; i++) {
+    let groupIdx = groupedData.findIndex((element, idx, array) => {
+      return element['label'] === data[i]['label']
+    })
+    groupedData[groupIdx][data[i][groupBy]] = data[i]['value']
+  }
+
+  return groupedData
+}
+
+function transformQueryData (json, state) {
+  let data = transformQueryDataLegacy(json, state)
+  let { query } = state
+  if (query.groupBy) {
+    json = reduceGroupedData(json, query.groupBy)
+  }
+
   return {
     query: {
       isFetching: false,
