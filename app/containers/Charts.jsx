@@ -4,8 +4,19 @@ import Charts from '../components/Chart/Charts'
 
 const mapStateToProps = (state, ownProps) => {
   const { metadata } = state
+  const { chartType, transformedChartData } = state.chart
+  const { columns } = state.columnProps
+  const { selectedColumn, groupBy, dateBy } = state.query
   return {
-    metadata
+    metadata,
+    chartProps: {
+      chartType,
+      chartData: transformedChartData,
+      selectedColumn,
+      groupBy,
+      dateBy,
+      columns
+    }
   }
 }
 

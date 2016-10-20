@@ -9,6 +9,7 @@ export const chartReducer = (state = {}, action) => {
         if (action.response.query) {
           return Object.assign({}, state, {
             chartData: action.response.query.originalData,
+            transformedChartData: action.response.query.data,
             isFetching: false
           })
         } else {

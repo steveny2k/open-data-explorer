@@ -28,6 +28,8 @@ class Charts extends Component {
   }
 
   renderChartArea (props) {
+    let { chartProps } = this.props
+    console.log(chartProps)
     let { metadata, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType, selectColumn } = this.props
     let { columns, query, ...other } = metadata
     let otherProps = {...other}
@@ -40,7 +42,7 @@ class Charts extends Component {
       <Row>
         <ChartCanvas
           query={query}
-          data={query.data}
+          data={chartProps.data}
           dateBy={query.dateBy}
           changeDateBy={changeDateBy}
           groupBy={query.groupBy}
