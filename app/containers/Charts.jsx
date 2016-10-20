@@ -6,16 +6,17 @@ const mapStateToProps = (state, ownProps) => {
   const { metadata } = state
   const { chartType, transformedChartData } = state.chart
   const { columns } = state.columnProps
-  const { selectedColumn, groupBy, dateBy } = state.query
+  const { selectedColumn, groupBy, dateBy, filters } = state.query
   return {
     metadata,
     chartProps: {
       chartType,
       chartData: transformedChartData,
       selectedColumn,
+      columns,
       groupBy,
       dateBy,
-      columns
+      filters
     }
   }
 }
