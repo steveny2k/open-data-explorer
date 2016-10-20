@@ -59,7 +59,6 @@ class DatasetOverview extends Component {
           <Col sm={7} className={'description'}>
             <h2>Description</h2>
             <p>{description}</p>
-            <p>The {publishingDepartment} is the steward of this data.</p>
             <h2>Publishing Health</h2>
             <p>This data should be <b>updated {publishingFrequency ? publishingFrequency.toLowerCase() : ''}</b>. It was last updated on {dayUpdated} at {timeUpdated}</p>
             {documents}
