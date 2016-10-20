@@ -20,7 +20,15 @@ class ChartCanvas extends Component {
   }
 
   shouldComponentUpdate (nextProps, nextState) {
-    return !_.isEqual(this.props.query, nextProps.query)
+    let thisChart = {
+      chartData: this.props.chartData,
+      chartType: this.props.chartType
+    }
+    let nextChart = {
+      chartData: nextProps.chartData,
+      chartType: nextProps.chartType
+    }
+    return !_.isEqual(thisChart, nextChart)
   }
 
   renderTitle () {
@@ -130,14 +138,14 @@ class ChartCanvas extends Component {
     return maxLabelLength
   }
 
-  renderChartCanvasComponent (chartType, rowLabel, selectedColumnDef, data, columns, sumBy, displayChartOptions) {
+  renderChartCanvasComponent (chartType, rowLabel, selectedColumnDef, chartData, columns, sumBy, displayChartOptions) {
     let type = selectedColumnDef.type
-    let labels = Array.isArray(data[0]) ? data[0] : data[0].values
+    let labels = Array.isArray(chartData[0]) ? chartData[0] : chartData[0].values
     let toggle = <span />
      // chart defaults
     let options = this.renderChartOptions(selectedColumnDef, rowLabel)
-    let maxLabelLength = this.renderMaxLabelLength(labels, data)
-    if (((data[0].values && data[0].values.length > 10) || (Array.isArray(data[0]) && data[0].length > 11)) && chartType === 'bar' && type !== 'date') {
+    let maxLabelLength = this.renderMaxLabelLength(labels, chartData)
+    if (((chartData[0].values && chartData[0].values.length > 10) || (Array.isArray(chartData[0]) && chartData[0].length > 11)) && chartType === 'bar' && type !== 'date') {
       options.rotated = true
       options.padding.left = (maxLabelLength * 4) + 55
     }
@@ -167,7 +175,7 @@ class ChartCanvas extends Component {
           {this.renderTitle()}
           {this.renderSubTitle()}
           <Chart
-            data={data}
+            chartData={chartData}
             type={chartType}
             dataType={type}
             options={options}
@@ -180,7 +188,7 @@ class ChartCanvas extends Component {
 
   render () {
     let chartType = this.props.chartType
-    let { query, rowLabel, selectedColumnDef, data, columns, sumBy, displayChartOptions } = this.props
+    let { rowLabel, selectedColumnDef, chartData, columns, sumBy, displayChartOptions } = this.props
     let chartCanvas = null
     const jumbotronInstance = (
       <Col md={9}>
@@ -190,8 +198,8 @@ class ChartCanvas extends Component {
       </Col>
       )
 
-    if (selectedColumnDef && query) {
-      chartCanvas = this.renderChartCanvasComponent(chartType, rowLabel, selectedColumnDef, data, columns, sumBy, displayChartOptions)
+    if (selectedColumnDef && chartData) {
+      chartCanvas = this.renderChartCanvasComponent(chartType, rowLabel, selectedColumnDef, chartData, columns, sumBy, displayChartOptions)
     } else {
       chartCanvas = jumbotronInstance
     }
