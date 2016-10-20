@@ -44,8 +44,8 @@ export const shouldRunColumnStats = (type, key) => {
 // Construct URL based on chart options
 
 function constructQuery (state) {
-  let queryStack = state.metadata.query
-  let columns = state.metadata.columns
+  let queryStack = state.query
+  let columns = state.columnProps.columns
   let { selectedColumn, dateBy, filters } = queryStack
   let columnType = columns[selectedColumn].type
 

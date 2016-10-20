@@ -133,7 +133,7 @@ export function selectColumn (column) {
   return (dispatch, getState) => {
     dispatch({
       type: SELECT_COLUMN,
-      column})
+      payload: column})
     dispatch(fetchData(getState()))
   }
 }
@@ -142,7 +142,7 @@ export function changeDateBy (dateBy) {
   return (dispatch, getState) => {
     dispatch({
       type: CHANGE_DATEBY,
-      dateBy})
+      payload: dateBy})
     dispatch(fetchData(getState()))
   }
 }
@@ -151,7 +151,7 @@ export function groupBy (key) {
   return (dispatch, getState) => {
     dispatch({
       type: GROUP_BY,
-      key})
+      payload: key})
     dispatch(fetchData(getState()))
   }
 }
@@ -160,7 +160,7 @@ export function sumBy (key) {
   return (dispatch, getState) => {
     dispatch({
       type: SUM_BY,
-      key})
+      payload: key})
     dispatch(fetchData(getState()))
   }
 }
@@ -194,7 +194,7 @@ export const APPLY_CHART_TYPE = 'APPLY_CHART_TYPE'
 export function addFilter (key) {
   return {
     type: ADD_FILTER,
-    key}
+    payload: key}
 }
 
 export function applyChartType (chartType) {
@@ -207,7 +207,7 @@ export function removeFilter (key) {
   return (dispatch, getState) => {
     dispatch({
       type: REMOVE_FILTER,
-      key})
+      payload: key})
     dispatch(fetchData(getState()))
   }
 }
@@ -215,8 +215,11 @@ export function removeFilter (key) {
 export function updateFilter (key, options) {
   return {
     type: UPDATE_FILTER,
-    key,
-    options}
+    payload: {
+      key,
+      options
+    }
+  }
 }
 
 export function applyFilter (key, options) {
