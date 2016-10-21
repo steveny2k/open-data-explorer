@@ -10,9 +10,9 @@ class Charts extends Component {
   // return !nextProps.dataset.query.isFetching
   // }
 
-  chartTypeChecks (otherProps, query, columns) {
+  chartTypeChecks (selectedColumnDef, query, columns) {
     let chartDisplay = { displayChartOptions: false, chartType: null }
-    if (otherProps.selectedColumnDef && otherProps.selectedColumnDef.type === 'date') {
+    if (selectedColumnDef && selectedColumnDef.type === 'date') {
       chartDisplay.chartType = 'area'
       chartDisplay.displayChartOptions = true
     } else {
@@ -29,13 +29,15 @@ class Charts extends Component {
 
   renderChartArea (props) {
     let { chartProps } = this.props
+    let { selectedColumnDef } = chartProps
+    console.log(selectedColumnDef)
     // let { chartType } = chartProps
     let { metadata, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType, selectColumn } = this.props
     let { columns, query, ...other } = metadata
     let otherProps = {...other}
     let displayChartOptions = null
-    otherProps.selectedColumnDef = query.selectedColumn ? columns[query.selectedColumn] : null
-    let chartDisplay = this.chartTypeChecks(otherProps, query, columns)
+    // otherProps.selectedColumnDef = selectedColumn ? columns[selectedColumn] : null
+    let chartDisplay = this.chartTypeChecks(selectedColumnDef, query, columns)
     displayChartOptions = chartDisplay.displayChartOptions
     let chartType = chartDisplay.chartType
     return (
@@ -49,7 +51,8 @@ class Charts extends Component {
           {...otherProps} />
         <ChartSideBar
           {...query}
-          columns={columns}
+          selectedColumn={chartProps.selectedColumn}
+          columns={chartProps.columns}
           handleGroupBy={handleGroupBy}
           handleAddFilter={handleAddFilter}
           handleRemoveFilter={handleRemoveFilter}

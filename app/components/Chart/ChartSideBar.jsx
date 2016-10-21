@@ -15,6 +15,7 @@ class ChartSideBar extends Component {
         <Accordion>
           <ChartOptions
             {...query}
+            selectedColumn={selectedColumn}
             columns={columns}
             handleGroupBy={handleGroupBy}
             handleAddFilter={handleAddFilter}

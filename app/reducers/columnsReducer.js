@@ -3,6 +3,10 @@ import merge from 'lodash/merge'
 import union from 'lodash/union'
 import { updateObject, createReducer } from './reducerUtilities'
 
+// selectors
+export const getColumnDef = (state, column) =>
+  state && state.columns ? state.columns[column] : null
+
 // case reducers
 function initColumns (state, action) {
   return updateObject(state, {
@@ -15,7 +19,9 @@ function loadColumnProperties (state, action) {
   return merge({}, state, action.response)
 }
 
-export const columnsReducer = createReducer({}, {
+const columnsReducer = createReducer({}, {
   [ActionTypes.METADATA_SUCCESS]: initColumns,
   [ActionTypes.COLPROPS_SUCCESS]: loadColumnProperties
 })
+
+export default columnsReducer

@@ -45,8 +45,10 @@ export const shouldRunColumnStats = (type, key) => {
 
 function constructQuery (state) {
   let queryStack = state.query
+  console.log(queryStack)
   let columns = state.columnProps.columns
-  let { selectedColumn, dateBy, filters } = queryStack
+  console.log(columns)
+  let { selectedColumn, dateBy, filters, groupBy, sumBy } = queryStack
   let columnType = columns[selectedColumn].type
 
   let consumerRoot = API_ROOT.split('/')[2]
@@ -54,7 +56,6 @@ function constructQuery (state) {
   let id = state.metadata.migrationId || state.metadata.id
   let query = consumer.query().withDataset(id)
 
-  let {groupBy, sumBy} = state.metadata.query
   let dateAggregation = dateBy === 'month' ? 'date_trunc_ym' : 'date_trunc_y'
   let selectAsLabel = selectedColumn + ' as label'
   let orderBy = 'value desc'
@@ -240,8 +241,10 @@ function transformMetadata (json) {
 }
 
 function transformQueryDataLegacy (json, state) {
-  let { columns, query, rowLabel } = state.metadata
+  let { query, metadata, columnProps } = state
+  let { rowLabel } = metadata
   let { selectedColumn, groupBy, sumBy } = query
+  let { columns } = columnProps
   let labels = ['x']
   let keys = []
   let data = []

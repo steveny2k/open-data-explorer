@@ -1,18 +1,22 @@
 import { connect } from 'react-redux'
 import { selectColumn, groupBy, sumBy, addFilter, applyChartType, removeFilter, applyFilter, updateFilter, changeDateBy } from '../actions'
 import Charts from '../components/Chart/Charts'
+import { getSelectedColumnDef } from '../reducers'
 
 const mapStateToProps = (state, ownProps) => {
-  const { metadata } = state
+  const { metadata, chart, query } = state
   const { chartType, transformedChartData } = state.chart
   const { columns } = state.columnProps
   const { selectedColumn, groupBy, dateBy, filters } = state.query
   return {
     metadata,
+    chart,
+    query,
     chartProps: {
       chartType,
       chartData: transformedChartData,
       selectedColumn,
+      selectedColumnDef: getSelectedColumnDef(state),
       columns,
       groupBy,
       dateBy,
