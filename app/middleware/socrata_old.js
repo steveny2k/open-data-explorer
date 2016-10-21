@@ -2,8 +2,6 @@ import soda from 'soda-js'
 import pluralize from 'pluralize'
 import { capitalize } from 'underscore.string'
 import _ from 'lodash'
-import uniq from 'lodash/uniq'
-import find from 'lodash/find'
 
 const API_ROOT = 'https://data.sfgov.org/'
 
@@ -19,7 +17,7 @@ export const Endpoints = {
 
 export const Transforms = {
   METADATA: transformMetadata,
-  QUERY: transformQueryData,
+  QUERY: transformQuery,
   TABLEQUERY: transformTableQuery,
   COUNT: transformCount,
   MIGRATION: transformApiMigration,
@@ -45,7 +43,7 @@ export const shouldRunColumnStats = (type, key) => {
 
 function constructQuery (state) {
   let queryStack = state.metadata.query
-  let columns = state.columnProps.columns
+  let columns = state.metadata.columns
   let { selectedColumn, dateBy, filters } = queryStack
   let columnType = columns[selectedColumn].type
 
@@ -222,7 +220,8 @@ function transformMetadata (json) {
       name: column['name'].replace(/[_-]/g, ' '),
       description: column['description'] || '',
       type,
-    format}
+      format
+    }
 
     if (column['cachedContents']) {
       col.non_null = column['cachedContents']['non_null'] || 0
@@ -238,7 +237,7 @@ function transformMetadata (json) {
   return metadata
 }
 
-function transformQueryDataLegacy (json, state) {
+function transformQuery (json, state) {
   let { columns, query, rowLabel } = state.metadata
   let { selectedColumn, groupBy, sumBy } = query
   let labels = ['x']
@@ -319,7 +318,7 @@ function transformQueryDataLegacy (json, state) {
       binSize = freedmanDiaconis(vector2)
     }
     binSize = pretty(binSize)
-    let binNumbers = (values, binWidth, array = [] , index = 0) => {
+    let binNumbers = (values, binWidth, array = [], index = 0) => {
       if (index < values.length) {
         let bin = Math.floor(values[index] / binWidth)
         array[bin] = array[bin] ? array[bin] + 1 : 1
@@ -339,47 +338,11 @@ function transformQueryDataLegacy (json, state) {
   }
 
   data = [labels].concat(data)
-  return data
-}
-
-function reduceGroupedData (data, groupBy) {
-  // collect unique labels
-  let groupedData = uniq(data.map((obj) => {
-    return obj['label']
-  })).map((label) => {
-    return {label: label}
-  })
-
-  // add columns to rows
-  let i = 0
-  let dataLength = data.length
-  for (i; i < dataLength; i++) {
-    let groupIdx = groupedData.findIndex((element, idx, array) => {
-      return element['label'] === data[i]['label']
-    })
-    groupedData[groupIdx][data[i][groupBy]] = parseInt(data[i]['value'])
-  }
-
-  return groupedData
-}
-
-function transformQueryData (json, state) {
-  let data = transformQueryDataLegacy(json, state)
-  let { query } = state.metadata
-  let groupKeys = []
-  if (query.groupBy) {
-    groupKeys = uniq(json.map((obj) => {
-      return obj[query.groupBy]
-    }))
-    json = reduceGroupedData(json, query.groupBy)
-  }
-
   return {
     query: {
       isFetching: false,
       data: data,
-      originalData: json,
-      groupKeys: groupKeys
+      originalData: json
     }
   }
 }

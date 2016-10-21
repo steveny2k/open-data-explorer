@@ -1,13 +1,8 @@
 import React, { Component } from 'react'
-import ChartColumns from './PanelColumns'
-import { Col, Accordion } from 'react-bootstrap'
-import pluralize from 'pluralize'
+import _ from 'lodash'
 
-
-class ChartSubTitle extends Component {
-  ///Builds the the chart sub title component for the chart
-
-  buildSubTitle(filters, columns){
+class ChartExperimentalSubTitle extends Component {
+  buildSubTitle (filters, columns) {
     let subtitle = ''
     if (!_.isEmpty(filters)) {
       subtitle = 'Only Showing '
@@ -19,17 +14,19 @@ class ChartSubTitle extends Component {
           } else {
             subtitle += filters[key].options.selected.join(', ')
           }
+        }
+      }
+    }
     return subtitle
   }
   render () {
     let {filters, columns} = this.props
-    let subtitle = this.buildSubTitle(filters,columns)
+    console.log(filters)
+    console.log(columns)
+    let subtitle = this.buildSubTitle(filters, columns)
     return (
-        <h3 className={'chartTitle'}>{subtitle}</h3>
+    <h3 className={'chartTitle'}>{subtitle}</h3>
     )
-
   }
 }
-export default ChartSubTitle
-
-
+export default ChartExperimentalSubTitle

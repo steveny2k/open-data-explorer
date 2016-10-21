@@ -3,9 +3,9 @@ import pluralize from 'pluralize'
 import { toTitleCase } from '../../helpers'
 
 class ChartExperimentalTitle extends Component {
-  ///Builds the the chart title component for the chart
+  // /Builds the the chart title component for the chart
 
-  buildA(sumBy,rowLabel){
+  buildA (sumBy, rowLabel) {
     let a = pluralize(rowLabel)
     if (sumBy) {
       a = 'Sum of ' + columns[sumBy].name
@@ -13,7 +13,7 @@ class ChartExperimentalTitle extends Component {
     return a
   }
 
-  buildTitle(a,b, columns, groupBy){
+  buildTitle (a, b, columns, groupBy) {
     let title = a + ' by ' + b
 
     if (groupBy) {
@@ -25,17 +25,12 @@ class ChartExperimentalTitle extends Component {
 
   render () {
     let {columns, sumBy, rowLabel, groupBy, selectedColumnDef} = this.props
-    let a = this.buildA(sumBy,rowLabel)
+    let a = this.buildA(sumBy, rowLabel)
     let b = selectedColumnDef.name
-    let title =  this.buildTitle(a,b, columns, groupBy)
+    let title = this.buildTitle(a, b, columns, groupBy)
     return (
-        <h2 className={'chartTitle'}>{title}</h2>
+    <h2 className={'chartTitle'}>{title}</h2>
     )
   }
 }
 export default ChartExperimentalTitle
-
-
-
-
-

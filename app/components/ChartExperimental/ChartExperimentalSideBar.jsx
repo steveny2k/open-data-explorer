@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
-import PanelColumns from './PanelColumns'
-import { Col, Accordion } from 'react-bootstrap'
 import ChartOptions from '../Query/ChartOptions'
-import ChartExperimentalType from './ChartExperimentalType'
+import ChartType from './ChartType'
+import ChartColumns from './ChartColumns'
+import { Col, Accordion } from 'react-bootstrap'
 import './_Chart.scss'
-class Panel extends Component {
-  // /Panel component for holding filter functions.
+
+class ChartExperimentalSideBar extends Component {
   render () {
-    let { chartType, displayChartOptions, selectedColumn, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, applyChartType, selectColumn, metadata } = this.props
+    let { chartType, displayChartOptions, selectedColumn, metadata, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, applyChartType, selectColumn } = this.props
     let { columns, query } = metadata
+
     return (
     <Col md={3}>
     <Accordion>
@@ -21,8 +22,8 @@ class Panel extends Component {
         applyFilter={applyFilter}
         updateFilter={updateFilter}
         handleSumBy={handleSumBy} />
-      <ChartExperimentalType applyChartType={applyChartType} displayChartOptions={displayChartOptions} chartType={chartType} />
-      <PanelColumns
+      <ChartType applyChartType={applyChartType} displayChartOptions={displayChartOptions} chartType={chartType} />
+      <ChartColumns
         metadata={metadata}
         selectColumn={selectColumn}
         columns={columns}
@@ -32,4 +33,4 @@ class Panel extends Component {
     )
   }
 }
-export default Panel
+export default ChartExperimentalSideBar
