@@ -2,7 +2,6 @@ import soda from 'soda-js'
 import pluralize from 'pluralize'
 import { capitalize } from 'underscore.string'
 import _ from 'lodash'
-import uniq from 'lodash/uniq'
 
 const API_ROOT = 'https://data.sfgov.org/'
 
@@ -18,7 +17,7 @@ export const Endpoints = {
 
 export const Transforms = {
   METADATA: transformMetadata,
-  QUERY: transformQueryData,
+  QUERY: transformQuery,
   TABLEQUERY: transformTableQuery,
   COUNT: transformCount,
   MIGRATION: transformApiMigration,
@@ -43,11 +42,9 @@ export const shouldRunColumnStats = (type, key) => {
 // Construct URL based on chart options
 
 function constructQuery (state) {
-  let queryStack = state.query
-  console.log(queryStack)
-  let columns = state.columnProps.columns
-  console.log(columns)
-  let { selectedColumn, dateBy, filters, groupBy, sumBy } = queryStack
+  let queryStack = state.metadata.query
+  let columns = state.metadata.columns
+  let { selectedColumn, dateBy, filters } = queryStack
   let columnType = columns[selectedColumn].type
 
   let consumerRoot = API_ROOT.split('/')[2]
@@ -55,6 +52,7 @@ function constructQuery (state) {
   let id = state.metadata.migrationId || state.metadata.id
   let query = consumer.query().withDataset(id)
 
+  let {groupBy, sumBy} = state.metadata.query
   let dateAggregation = dateBy === 'month' ? 'date_trunc_ym' : 'date_trunc_y'
   let selectAsLabel = selectedColumn + ' as label'
   let orderBy = 'value desc'
@@ -222,7 +220,8 @@ function transformMetadata (json) {
       name: column['name'].replace(/[_-]/g, ' '),
       description: column['description'] || '',
       type,
-      format}
+      format
+    }
 
     if (column['cachedContents']) {
       col.non_null = column['cachedContents']['non_null'] || 0
@@ -238,11 +237,9 @@ function transformMetadata (json) {
   return metadata
 }
 
-function transformQueryDataLegacy (json, state) {
-  let { query, metadata, columnProps } = state
-  let { rowLabel } = metadata
+function transformQuery (json, state) {
+  let { columns, query, rowLabel } = state.metadata
   let { selectedColumn, groupBy, sumBy } = query
-  let { columns } = columnProps
   let labels = ['x']
   let keys = []
   let data = []
@@ -341,47 +338,11 @@ function transformQueryDataLegacy (json, state) {
   }
 
   data = [labels].concat(data)
-  return data
-}
-
-function reduceGroupedData (data, groupBy) {
-  // collect unique labels
-  let groupedData = uniq(data.map((obj) => {
-    return obj['label']
-  })).map((label) => {
-    return {label: label}
-  })
-
-  // add columns to rows
-  let i = 0
-  let dataLength = data.length
-  for (i; i < dataLength; i++) {
-    let groupIdx = groupedData.findIndex((element, idx, array) => {
-      return element['label'] === data[i]['label']
-    })
-    groupedData[groupIdx][data[i][groupBy]] = parseInt(data[i]['value'])
-  }
-
-  return groupedData
-}
-
-function transformQueryData (json, state) {
-  let data = transformQueryDataLegacy(json, state)
-  let { query } = state
-  let groupKeys = []
-  if (query.groupBy) {
-    groupKeys = uniq(json.map((obj) => {
-      return obj[query.groupBy]
-    }))
-    json = reduceGroupedData(json, query.groupBy)
-  }
-
   return {
     query: {
       isFetching: false,
       data: data,
-      originalData: json,
-      groupKeys: groupKeys
+      originalData: json
     }
   }
 }
