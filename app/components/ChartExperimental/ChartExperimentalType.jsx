@@ -52,10 +52,10 @@ class ChartExperimentalType extends Component {
   }
 }
 
-ChartExperimentalType.propTypes = {
-  chartType: React.PropTypes.string,
-  applyChartType: React.PropTypes.function,
-  displayChartOptions: React.PropTypes.boolean
-}
+// ChartExperimentalType.propTypes = {
+// chartType: React.PropTypes.string,
+// applyChartType: React.PropTypes.function,
+// displayChartOptions: React.PropTypes.bool
+// }
 
 export default ChartExperimentalType
