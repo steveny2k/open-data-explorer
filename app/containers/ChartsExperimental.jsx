@@ -7,7 +7,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     metadata,
     chart,
-  columnProps}
+    columnProps}
 }
 
 // Note: if we split up action creators, we can probably simplify the mapping, but for now this works

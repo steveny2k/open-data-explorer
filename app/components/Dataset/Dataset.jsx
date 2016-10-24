@@ -25,8 +25,4 @@ class Dataset extends Component {
   }
 }
 
-Dataset.propTypes = {
-  dataset: React.PropTypes.object.isRequired
-}
-
 export default Dataset
