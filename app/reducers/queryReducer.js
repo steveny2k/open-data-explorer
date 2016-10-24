@@ -14,6 +14,13 @@ function updateQueryKeys (state, action) {
   })
 }
 
+function sumBy (state, action) {
+  let sumKey = action.payload ? action.payload.value : null
+  return updateObject(state, {
+    sumBy: sumKey
+  })
+}
+
 function groupBy (state, action) {
   let groupKey = action.payload ? action.payload.value : null
   return updateObject(state, {
@@ -44,7 +51,7 @@ function updateFilter (state, action) {
 export const queryReducer = (state = {}, action) => {
   switch (action.type) {
     case ActionTypes.SELECT_COLUMN: return updateQueryKeys(state, action)
-    case ActionTypes.SUM_BY: return updateQueryKeys(state, action)
+    case ActionTypes.SUM_BY: return sumBy(state, action)
     case ActionTypes.GROUP_BY: return groupBy(state, action)
     case ActionTypes.CHANGE_DATEBY: return updateQueryKeys(state, action)
     case ActionTypes.ADD_FILTER: return addFilter(state, action)
