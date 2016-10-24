@@ -70,7 +70,7 @@ export const metadataReducer = (state = {}, action) => {
       let updatedQuery = {
         query: {
           isFetching: true,
-          selectedColumn: action.column
+          selectedColumn: action.payload
         }
       }
       if (state.query.groupBy === action.column) {
@@ -78,14 +78,14 @@ export const metadataReducer = (state = {}, action) => {
       }
       return merge({}, state, updatedQuery)
     case ActionTypes.GROUP_BY:
-      let groupKey = action.key ? action.key.value : null
+      let groupKey = action.payload ? action.payload.value : null
       return merge({}, state, {
         query: {
           groupBy: groupKey
         }
       })
     case ActionTypes.SUM_BY:
-      let sumKey = action.key ? action.key.value : null
+      let sumKey = action.payload ? action.payload.value : null
       return merge({}, state, {
         query: {
           sumBy: sumKey
@@ -94,14 +94,14 @@ export const metadataReducer = (state = {}, action) => {
     case ActionTypes.CHANGE_DATEBY:
       return merge({}, state, {
         query: {
-          dateBy: action.dateBy
+          dateBy: action.payload
         }
       })
     case ActionTypes.ADD_FILTER:
       return merge({}, state, {
         query: {
           filters: {
-            [action.key.value]: {}
+            [action.payload.value]: {}
           }
         }
       })
@@ -113,25 +113,25 @@ export const metadataReducer = (state = {}, action) => {
       })
     case ActionTypes.REMOVE_FILTER:
       copyState = {...state}
-      delete copyState.query.filters[action.key]
+      delete copyState.query.filters[action.payload]
       return merge({}, state, copyState)
     case ActionTypes.UPDATE_FILTER:
-      let newOptions = action.options
+      let newOptions = action.payload.options
       copyState = Object.assign({}, state)
-      let existingOptions = copyState.query.filters[action.key].options || ''
+      let existingOptions = copyState.query.filters[action.payload.key].options || ''
       let isSelected = (newOptions.selected)
       let newState
 
       if (isSelected && Array.isArray(existingOptions.selected) &&
         (existingOptions.selected.length !== newOptions.selected.length || typeof newOptions.selected === 'string')) {
-        copyState.query.filters[action.key].options.selected = action.options.selected
+        copyState.query.filters[action.payload.key].options.selected = action.payload.options.selected
         newState = merge({}, copyState)
       } else {
         let updatedOptions = {
           query: {
             filters: {
-              [action.key]: {
-                options: action.options
+              [action.payload.key]: {
+                options: action.payload.options
               }
             }
           }

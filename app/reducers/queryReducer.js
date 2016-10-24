@@ -24,20 +24,20 @@ function groupBy (state, action) {
 function addFilter (state, action) {
   return updateObject(state, {
     filters: {
-      [action.key.value]: {}
+      [action.payload.value]: {}
     }
   })
 }
 
 function removeFilter (state, action) {
   return updateObject(state, {
-    filters: removeByKey(state.filters, action.key)
+    filters: removeByKey(state.filters, action.payload)
   })
 }
 
 function updateFilter (state, action) {
   return updateObject(state, {
-    filters: updateByKey(state.filters, action.key, action.options)
+    filters: updateByKey(state.filters, action.payload.key, action.payload.options)
   })
 }
 

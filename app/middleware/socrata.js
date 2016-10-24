@@ -44,10 +44,10 @@ export const shouldRunColumnStats = (type, key) => {
 
 function constructQuery (state) {
   let queryStack = state.query
-  console.log(queryStack)
   let columns = state.columnProps.columns
-  console.log(columns)
-  let { selectedColumn, dateBy, filters, groupBy, sumBy } = queryStack
+  let { selectedColumn, dateBy, groupBy, sumBy } = queryStack
+  let { filters } = state.metadata.query
+
   let columnType = columns[selectedColumn].type
 
   let consumerRoot = API_ROOT.split('/')[2]
@@ -60,6 +60,8 @@ function constructQuery (state) {
   let orderBy = 'value desc'
   if (columnType === 'date') {
     selectAsLabel = dateAggregation + '(' + selectedColumn + ') as label'
+    orderBy = 'label'
+  } else if (columnType === 'number') {
     orderBy = 'label'
   }
 
@@ -129,7 +131,7 @@ function constructQuery (state) {
       }
     }
   }
-  query = query.limit(50000)
+  query = query.limit(9999999)
   return query.getURL()
 }
 
