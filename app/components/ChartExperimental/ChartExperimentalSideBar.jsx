@@ -33,4 +33,9 @@ class ChartExperimentalSideBar extends Component {
     )
   }
 }
+
+ChartExperimentalSideBar.propTypes = {
+
+  // chartData: React.PropTypes.array
+}
 export default ChartExperimentalSideBar

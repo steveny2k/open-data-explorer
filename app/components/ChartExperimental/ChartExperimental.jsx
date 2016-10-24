@@ -11,7 +11,6 @@ class ChartExperimental extends Component {
 
   chartTypeChecks (otherProps, query, columns) {
     let chartDisplay = { displayChartOptions: false, chartType: null }
-
     if (otherProps.selectedColumnDef && otherProps.selectedColumnDef.type === 'date') {
       chartDisplay.chartType = 'area'
       chartDisplay.displayChartOptions = true
@@ -29,8 +28,12 @@ class ChartExperimental extends Component {
 
 
  render () {
-    let {  groupKeys, chart, metadata, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType, selectColumn } = this.props
+    let groupKeys
+    let {  chart, metadata, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType, selectColumn } = this.props
     let { columns, query, ...other } = metadata
+    console.log(this.props)
+    groupKeys = query.groupKeys
+    let chartData = this.props.chart.chartData
     let otherProps = {...other}
     let displayChartOptions = null
     otherProps.selectedColumnDef = query.selectedColumn ? columns[query.selectedColumn] : null
@@ -41,6 +44,8 @@ class ChartExperimental extends Component {
        <Row>
        <ChartExperimentalCanvas
           chart={chart}
+          chartData={chartData}
+          groupKeys={groupKeys}
           changeDateBy={changeDateBy}
           columns={columns}
           {...otherProps}

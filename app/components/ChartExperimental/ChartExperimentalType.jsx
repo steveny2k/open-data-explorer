@@ -4,6 +4,7 @@ import './_Chart.scss'
 import { Panel } from 'react-bootstrap'
 
 class ChartExperimentalType extends Component {
+
   renderChartTypes () {
     let {applyChartType, chartType} = this.props
     if (!chartType) {
@@ -50,4 +51,11 @@ class ChartExperimentalType extends Component {
     )
   }
 }
+
+ChartExperimentalType.propTypes = {
+  chartType: React.PropTypes.string,
+  applyChartType: React.PropTypes.function,
+  displayChartOptions: React.PropTypes.boolean
+}
+
 export default ChartExperimentalType

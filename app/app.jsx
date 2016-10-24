@@ -20,6 +20,9 @@ const initialState = {
   },
   table: {
     tablePage: 0
+  },
+  query: {
+    groupKeys: []
   }
 }
 const store = configureStore(initialState)
