@@ -21,12 +21,16 @@ class ChartExperimentalSubTitle extends Component {
   }
   render () {
     let {filters, columns} = this.props
-    console.log(filters)
-    console.log(columns)
     let subtitle = this.buildSubTitle(filters, columns)
     return (
     <h3 className={'chartTitle'}>{subtitle}</h3>
     )
   }
 }
+
+ChartExperimentalSubTitle.propTypes = {
+  columns: React.PropTypes.object,
+  filters: React.PropTypes.object
+}
+
 export default ChartExperimentalSubTitle

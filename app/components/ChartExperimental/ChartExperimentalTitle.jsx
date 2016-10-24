@@ -33,4 +33,13 @@ class ChartExperimentalTitle extends Component {
     )
   }
 }
+
+ChartExperimentalTitle.propTypes = {
+  columns: React.PropTypes.object,
+  rowLabel: React.PropTypes.string,
+  selectedColumnDef: React.PropTypes.object,
+  groupBy: React.PropTypes.string,
+  sumBy: React.PropTypes.string
+}
+
 export default ChartExperimentalTitle
