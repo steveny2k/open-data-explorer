@@ -137,7 +137,6 @@ class ChartExperimentalCanvas extends Component {
     bars = groupByKeys.map(function (i) {
       if (i) {
         let colorIndex = groupByKeys.indexOf(i)
-        console.log(colorIndex)
         return ( <Bar
                    dataKey={i}
                    key={i}
