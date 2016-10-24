@@ -5,7 +5,7 @@ import { toTitleCase } from '../../helpers'
 class ChartExperimentalTitle extends Component {
   // /Builds the the chart title component for the chart
 
-  buildA (sumBy, rowLabel) {
+  buildA (columns, sumBy, rowLabel) {
     let a = pluralize(rowLabel)
     if (sumBy) {
       a = 'Sum of ' + columns[sumBy].name
@@ -25,7 +25,7 @@ class ChartExperimentalTitle extends Component {
 
   render () {
     let {columns, sumBy, rowLabel, groupBy, selectedColumnDef} = this.props
-    let a = this.buildA(sumBy, rowLabel)
+    let a = this.buildA(columns, sumBy, rowLabel)
     let b = selectedColumnDef.name
     let title = this.buildTitle(a, b, columns, groupBy)
     return (

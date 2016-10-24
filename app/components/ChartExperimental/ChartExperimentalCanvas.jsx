@@ -5,6 +5,7 @@ import { Col } from 'react-bootstrap'
 import BlankChart from './BlankChart'
 import ChartExperimentalTitle from './ChartExperimentalTitle'
 import ChartExperimentalSubTitle from './ChartExperimentalSubTitle'
+import $ from 'jquery'
 
 // https://www.npmjs.com/package/jsx-control-statements
 // import LineChart from './LineChart.jsx'
@@ -12,6 +13,33 @@ import { LineChart, XAxis, BarChart, YAxis, CartesianGrid, Bar, Area, Legend, Li
 
 class ChartExperimentalCanvas extends Component {
 
+  componentWillMount () {
+    var _self = this
+
+    $(window).on('resize', function (e) {
+      _self.updateSize()
+    })
+
+    this.setState({width: this.props.width})
+  }
+  componentDidMount () {
+    this.updateSize()
+  }
+  componentWillUnmount () {
+    $(window).off('resize')
+  }
+
+  updateSize () {
+    var ReactDOM = require('react-dom')
+    var node = ReactDOM.findDOMNode(this)
+    var parentWidth = $(node).width()
+
+    if (parentWidth < this.props.width) {
+      this.setState({width: parentWidth - 20})
+    } else {
+      this.setState({width: this.props.width})
+    }
+  }
   shouldComponentUpdate (nextProps, nextState) {
     let thisChart = {
       thisChartData: this.props.chartData,
@@ -34,21 +62,23 @@ class ChartExperimentalCanvas extends Component {
     let booleanFields = ['checkbox']
 
     let allFields = [categoryFields, numberFields, textFields, dateFields, contactFields, locationFields, booleanFields]
-
+    let selectedColor
     let isType = function (col, fieldList) {
-      if (typeof fieldList === 'function') {
-        return fieldList(col)
-      } else {
-        if (fieldList.indexOf(col['type']) > -1) {
-          return true
+      if (col) {
+        if (typeof fieldList === 'function') {
+          return fieldList(col)
+        } else {
+          if (fieldList.indexOf(col['type']) > -1) {
+            return true
+          }
         }
+        return false
       }
-      return false
-    }
 
-    for (let i = 0; i < allFields.length; i++) {
-      if (isType(col, allFields[i])) {
-        return btnColors[i]
+      for (let i = 0; i < allFields.length; i++) {
+        if (isType(col, allFields[i])) {
+          return btnColors[i]
+        }
       }
     }
   }
@@ -71,13 +101,8 @@ class ChartExperimentalCanvas extends Component {
     }
     return chartData
   }
-  lineTickFormat (d) {
-    let parseDate = d3.time.format('%Y-%m-%dT%H:%M:%S.%L').parse
-    d.key = parseDate(d.key)
-    d.key = d3.time.format('%Y')
-  }
 
-  getChartProperties (chartData, chartType) {
+  getChartProperties (chartData) {
     let chartProperties = {}
     if (chartData) {
       chartProperties = {
@@ -90,19 +115,8 @@ class ChartExperimentalCanvas extends Component {
         chartProperties.layout = 'vertical'
         chartProperties.manyBars = true
       }
-      if (chartType === 'bar' && chartData.length > 20) {
-        chartProperties.direction.horizontal = true
-        chartProperties.direction.vertical = false
-      }
     }
     return chartProperties
-  }
-
-  isSubtitlez (filters) {
-    if (filters) {
-      return true
-    }
-    return false
   }
 
   isGroupByz (groupByKeys, barChartType) {
@@ -114,7 +128,27 @@ class ChartExperimentalCanvas extends Component {
     return false
   }
 
-  makeBars (groupByKeys, chartType) {
+  makeBars (groupByKeys) {
+    let colorScale = d3.scale.linear().domain([1, groupByKeys.length])
+      .interpolate(d3.interpolateHcl)
+      .range([d3.rgb('#007AFF'), d3.rgb('#FFF500')])
+
+    let bars
+    bars = groupByKeys.map(function (i) {
+      if (i) {
+        let colorIndex = groupByKeys.indexOf(i)
+        console.log(colorIndex)
+        return ( <Bar
+                   dataKey={i}
+                   key={i}
+                   stackId="a"
+                   fill={colorScale(colorIndex)} />)
+      }
+    })
+    return bars
+  }
+
+  makeStuff (groupByKeys) {
     let colorScale = d3.scale.linear().domain([1, groupByKeys.length])
       .interpolate(d3.interpolateHcl)
       .range([d3.rgb('#007AFF'), d3.rgb('#FFF500')])
@@ -123,7 +157,13 @@ class ChartExperimentalCanvas extends Component {
     items.bars = groupByKeys.map(function (i) {
       if (i) {
         let colorIndex = groupByKeys.indexOf(i)
-        return (<Bar dataKey={i} stackId='a' fill={colorScale(colorIndex)} />)
+        console.log(colorIndex)
+        return (<Bar
+                  dataKey={i}
+                  stackId='a'
+                  key={i}
+                  fill={colorScale(colorIndex)}
+                  key={i} />)
       }
     })
     items.lines = groupByKeys.map(function (i) {
@@ -134,6 +174,7 @@ class ChartExperimentalCanvas extends Component {
           type='monotone'
           dataKey={i}
           stackId='a'
+          key={i}
           stroke={colorScale(colorIndex)} />
         )
       }
@@ -145,8 +186,9 @@ class ChartExperimentalCanvas extends Component {
         <Area
           type='monotone'
           dataKey={i}
-          stackId='a'
-          stroke={colorScale(colorIndex)}
+          stackId='i'
+          key={i}
+          stroke={colorScale('colorIndex')}
           fill={colorScale(colorIndex)} />
         )
       }
@@ -155,31 +197,43 @@ class ChartExperimentalCanvas extends Component {
   }
 
   render () {
-    console.log(this.props)
-    let chartType, items, manyBars, chartData, gridDirection, barsLayout
+    let barColor, lineColor, chartType,categoryColumns, items, manyBars, chartData, gridDirection, barsLayout
     let { rowLabel, selectedColumnDef, columns, sumBy, groupBy, filters} = this.props
-    let groupKeys = this.props.query.groupKeys
+    let groupKeys
+    let bars
+    groupKeys = this.props.query.groupKeys
     let chartProperties
     let isGroupBy = this.isGroupByz(groupKeys)
     chartType = this.props.chartType
     chartData = this.props.chart.chartData
     console.log('**in here****')
-    chartData = this.convertChartData(chartData)
-    chartProperties = this.getChartProperties(chartData)
-    if (isGroupBy) {
-      items = this.makeBars(chartData)
-      chartProperties = this.getChartProperties(groupKeys)
+    console.log(this.props)
+    if (!isGroupBy) {
+      chartData = this.convertChartData(chartData)
+      chartProperties = this.getChartProperties(chartData)
+    }else {
+      chartProperties = this.getChartProperties(chartData)
+      bars = this.makeBars(groupKeys)
+      console.log(bars)
+      items = this.makeStuff(groupKeys)
     }
-    let barColor = '#7dc7f4'
-    let lineColor = '#7dc7f4'
+    // barColor = this.dataTypeColors(selectedColumnDef, categoryColumns)
+    // console.log(barColor)
+    // lineColor = this.dataTypeColors(selectedColumnDef, categoryColumns)
 
-    let isSubtitle = this.isSubtitlez(filters)
+    barColor = '#7dc7f4'
+    lineColor = '#7dc7f4'
+
     let yAxisTicks = 8
     let yGridTicks = 6
     let chartId = 'test one'
     let dotColorOuter = '#7dc7f4'
     let dotColorInner = '#3f5175'
-    let margin = {top: 20, right: 30, left: 20, bottom: 5}
+    // let margin = {top: 20, right: 30, left: 20, bottom: 5}
+    let margin = {top: 30, right: 50, bottom: 20, left: 40}
+    let w = this.state.width - (margin.left + margin.right)
+    let h = this.props.height - (margin.top + margin.bottom)
+
     return (
     <Col md={9}>
     <Choose>
@@ -191,7 +245,7 @@ class ChartExperimentalCanvas extends Component {
           groupBy={groupBy}
           selectedColumnDef={selectedColumnDef} />
         <Choose>
-          <When condition={isSubtitle}>
+          <When condition={filters}>
             <ChartExperimentalSubTitle columns={columns} filters={filters} />
           </When>
           <Otherwise>
@@ -200,13 +254,13 @@ class ChartExperimentalCanvas extends Component {
         <Choose>
           <When condition={chartType == 'bar' && !isGroupBy && chartProperties.manyBars}>
             <BarChart
-              width={800}
-              height={500}
+              width={w}
+              height={h}
               layout={chartProperties.layout}
               data={chartData}
               margin={margin}>
-              <XAxis/>
-              <YAxis dataKey="key" />
+              <XAxis type="number" />
+              <YAxis dataKey="key" type="category" />
               <CartesianGrid strokeDasharray="3 3" horizontal={chartProperties.horizontal} vertical={chartProperties.vertical} />
               <Tooltip/>
               <Legend />
@@ -215,21 +269,21 @@ class ChartExperimentalCanvas extends Component {
           </When>
           <When condition={chartType == 'bar' && !isGroupBy && !chartProperties.manyBars}>
             <BarChart
-              width={800}
-              height={500}
+              width={w}
+              height={h}
               layout={chartProperties.layout}
               data={chartData}
               margin={margin}>
-              <XAxis type="key" />
-              <YAxis label={rowLabel + ' value'} />
-              <CartesianGrid strokeDasharray="3 3" horizontal={chartProperties.horizontal} vertical={chartProperties.vertical} />
+              <XAxis type="key" type="category" />
+              <YAxis label={rowLabel + ' value'} type="number" />
+              <CartesianGrid strokeDasharray="3 3" vertical={chartProperties.vertical} horizontal={chartProperties.horizontal} />
               <Tooltip/>
               <Legend />
               <Bar dataKey="value" fill={barColor} />
             </BarChart>
           </When>
           <When condition={chartType == 'line' && !isGroupBy}>
-            <LineChart width={800} height={500} data={chartData}>
+            <LineChart width={w} height={h} data={chartData}>
               <XAxis dataKey="key" />
               <YAxis label={rowLabel + ' value'} />
               <CartesianGrid stroke="#eee" strokeDasharray="3 3" vertical={false} />
@@ -240,8 +294,8 @@ class ChartExperimentalCanvas extends Component {
           </When>
           <When condition={chartType == 'area' && !isGroupBy}>
             <AreaChart
-              width={800}
-              height={500}
+              width={w}
+              height={h}
               data={chartData}
               margin={margin}>
               <XAxis dataKey="key" />
@@ -257,13 +311,28 @@ class ChartExperimentalCanvas extends Component {
           </When>
           <When condition={isGroupBy && chartType == 'bar' && !chartProperties.manyBars}>
             <BarChart
-              width={800}
-              height={500}
+              width={w}
+              height={h}
               data={chartData}
               margin={margin}>
-              <XAxis dataKey="label" />
-              <YAxis/>
-              <CartesianGrid strokeDasharray="3 3" vertical={chartProperties.vertical} hortizontal={chartProperties.horizontal} />
+              <XAxis dataKey="label" type="category" />
+              <YAxis type="number" />
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <Tooltip/>
+              <Legend />
+              {items.bars}
+            </BarChart>
+          </When>
+          <When condition={chartType == 'bar' && isGroupBy && chartProperties.manyBars}>
+            <BarChart
+              width={w}
+              height={h}
+              layout={chartProperties.layout}
+              data={chartData}
+              margin={margin}>
+              <XAxis type="number" />
+              <YAxis dataKey="label" type="category" />
+              <CartesianGrid strokeDasharray="3 3" horizontal={chartProperties.horizontal} vertical={chartProperties.vertical} />
               <Tooltip/>
               <Legend />
               {items.bars}
@@ -271,29 +340,29 @@ class ChartExperimentalCanvas extends Component {
           </When>
           <When condition={chartType == 'area' && isGroupBy}>
             <AreaChart
-              width={800}
-              height={500}
+              width={w}
+              height={h}
               data={chartData}
               margin={margin}>
-              <XAxis dataKey="key" />
-              <YAxis label={rowLabel + ' value'} />
+              <XAxis dataKey="label" />
+              <YAxis/>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <Tooltip/>
               {items.areas}
             </AreaChart>
           </When>
           <When condition={chartType == 'line' && isGroupBy}>
-            <AreaChart
-              width={800}
-              height={500}
+            <LineChart
+              width={w}
+              height={h}
               data={chartData}
               margin={margin}>
-              <XAxis dataKey="key" />
-              <YAxis label={rowLabel + ' value'} />
+              <XAxis dataKey="label" />
+              <YAxis/>
               <CartesianGrid strokeDasharray="3 3" vertical={false} />
               <Tooltip/>
               {items.lines}
-            </AreaChart>
+            </LineChart>
           </When>
           <Otherwise>
             <div>
@@ -311,4 +380,9 @@ class ChartExperimentalCanvas extends Component {
   }
 }
 
+ChartExperimentalCanvas.defaultProps = {
+  width: 800,
+  height: 500
+
+}
 export default ChartExperimentalCanvas
