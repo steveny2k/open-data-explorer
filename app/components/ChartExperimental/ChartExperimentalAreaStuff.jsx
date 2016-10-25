@@ -28,7 +28,8 @@ class ChartExperimentalAreaStuff extends Component {
     }
   }
   render () {
-    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, valTickFormater} = this.props
+    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, xAxisPadding, valTickFormater} = this.props
+    console.log('*in area object*')
     console.log(this.props)
     let areas = this.makeAreas(groupKeys)
 
@@ -40,13 +41,13 @@ class ChartExperimentalAreaStuff extends Component {
           height={h}
           data={chartData}
           margin={margin}>
-          <XAxis dataKey='key' />
+          <XAxis dataKey='key' padding={xAxisPadding} />
           <YAxis
             tickFormatter={valTickFormater}
             tickCount={yTickCnt}
             domain={[0, 'dataMax + 100']}
             type='number'
-            label={<CustomYaxisLabel val={rowLabel + ' value'} h={h} />} />
+            label={<CustomYaxisLabel val={rowLabel} h={h} />} />
           <CartesianGrid strokeDasharray='3 3' vertical={false} />
           <Tooltip/>
           <Area

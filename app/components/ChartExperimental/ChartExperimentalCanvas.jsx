@@ -93,8 +93,9 @@ class ChartExperimentalCanvas extends Component {
         for (i = 0; i < len; i++) {
           let newdict = {}
           if (selectedColumnDef) {
-            let reData = /date/
-            if (reData.test(selectedColumnDef.type)) {
+            let reDate = /date/
+            let reNumber = /number/
+            if (reDate.test(selectedColumnDef.type)) {
               newdict['key'] = yrFormat(new Date(chartData[i]['label']))
               newdict['value'] = Number(chartData[i]['value'])
             }else {
@@ -122,6 +123,18 @@ class ChartExperimentalCanvas extends Component {
 
   render () {
     let { rowLabel, selectedColumnDef, columns, sumBy, groupBy, filters, groupKeys, chartData, chartType } = this.props
+    let fillColor
+
+    const fillColorIndex = {
+      'text': '#93c2de',
+      'date': '#93deaf',
+      'calendar_date': '#93deaf',
+      'checkbox': '#deaf93',
+      'number': '#de93c2',
+      'double': '#de93c2',
+      'money': '#de93c2',
+      'other': '#E6FF2E'
+    }
 
     console.log('***grp keys***')
     console.log(groupKeys)
@@ -130,7 +143,11 @@ class ChartExperimentalCanvas extends Component {
     if (!isGroupBy) {
       chartData = this.convertChartData(chartData, selectedColumnDef)
     }
-    let fillColor = '#7dc7f4'
+    // let fillColor = '#7dc7f4',
+    if (selectedColumnDef) {
+      fillColor = fillColorIndex[selectedColumnDef.type]
+    }
+
     console.log('in *canvas*')
     console.log(this.props)
     console.log('in *canvas*')

@@ -42,7 +42,7 @@ class ChartExperimentalLineStuff extends Component {
             padding={xAxisPadding} />
           <YAxis
             type='number'
-            label={<CustomYaxisLabel val={rowLabel + ' value'} h={h} />}
+            label={<CustomYaxisLabel val={rowLabel} h={h} />}
             tickCount={yTickCnt}
             tickFormatter={valTickFormater}
             domain={[0, 'dataMax + 100']} />
@@ -63,7 +63,11 @@ class ChartExperimentalLineStuff extends Component {
           data={chartData}
           margin={margin}>
           <XAxis dataKey="label" />
-          <YAxis tickFormatter={valTickFormater} tickCount={yTickCnt} domain={[0, 'dataMax + 100']} />
+          <YAxis
+            tickFormatter={valTickFormater}
+            tickCount={yTickCnt}
+            domain={[0, 'dataMax + 100']}
+            label={<CustomYaxisLabel val={rowLabel + ' value'} h={h} />} />
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
           <Tooltip/>
           {lines}

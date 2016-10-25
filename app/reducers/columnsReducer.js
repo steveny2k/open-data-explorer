@@ -4,8 +4,7 @@ import union from 'lodash/union'
 import { updateObject, createReducer } from './reducerUtilities'
 
 // selectors
-export const getColumnDef = (state, column) =>
-  state && state.columns ? state.columns[column] : null
+export const getColumnDef = (state, column) => state && state.columns ? state.columns[column] : null
 
 // refactor this to pass in a filter callback to a single column filtering function
 export const getGroupableColumns = (state, selectedColumn) => {
@@ -27,7 +26,7 @@ export const getSelectableColumns = (state) => {
   if (!columns) return []
 
   return Object.keys(columns).filter((col) => {
-    return ((columns[col].categories && ['text', 'number'].indexOf(columns[col].type)) || colTypesAccepted.indexOf(columns[col].type) > -1)
+    return ((columns[col].categories && ['text', 'number'].indexOf(columns[col].type) > -1) || colTypesAccepted.indexOf(columns[col].type) > -1)
   }).map((col) => {
     return {label: columns[col].name, value: columns[col].key, type: columns[col].type}
   })
