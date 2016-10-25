@@ -25,22 +25,22 @@ class ColumnSelector extends Component {
         classNames.push('not-selected')
       }
       return (
-      <ListGroupItem
-        key={option.value}
-        onClick={onSelectColumn.bind(this, option.value)}
-        style={{backgroundColor: colorIndex[option.type]}}
-        className={classNames}>
-        {option.label}
-      </ListGroupItem>)
+        <ListGroupItem
+          key={option.value}
+          onClick={onSelectColumn.bind(this, option.value)}
+          style={{backgroundColor: colorIndex[option.type]}}
+          className={classNames}>
+          {option.label}
+        </ListGroupItem>)
     })
 
     return (
-    <Panel collapsible defaultExpanded header='Select a dataset column'>
-      Help text
-      <ListGroup fill className='ColumnSelector-list-group'>
-        {options}
-      </ListGroup>
-    </Panel>
+      <Panel collapsible defaultExpanded header='Select a dataset column'>
+        Help text
+        <ListGroup fill className='ColumnSelector-list-group'>
+          {options}
+        </ListGroup>
+      </Panel>
     )
   }
 }

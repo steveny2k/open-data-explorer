@@ -3,6 +3,16 @@ import merge from 'lodash/merge'
 import union from 'lodash/union'
 import { updateObject, createReducer } from './reducerUtilities'
 
+function sortColumns (a, b) {
+  if (a.label < b.label) {
+    return -1
+  }
+  if (a.label > b.label) {
+    return 1
+  }
+  return 0
+}
+
 // selectors
 export const getColumnDef = (state, column) => state && state.columns ? state.columns[column] : null
 
@@ -16,7 +26,7 @@ export const getGroupableColumns = (state, selectedColumn) => {
     return (columns[col].key !== selectedColumn && columns[col].categories)
   }).map((col) => {
     return {label: columns[col].name, value: columns[col].key}
-  })
+  }).sort(sortColumns)
 }
 
 export const getSelectableColumns = (state) => {
@@ -34,7 +44,7 @@ export const getSelectableColumns = (state) => {
       type: columns[col].type,
       isCategory: (columns[col].categories)
     }
-  })
+  }).sort(sortColumns)
 }
 
 export const getSummableColumns = (state) => {
@@ -47,7 +57,7 @@ export const getSummableColumns = (state) => {
     return (!columns[col].categories && !columns[col].unique && colTypesAccepted.indexOf(columns[col].type) > -1)
   }).map((col) => {
     return {label: columns[col].name, value: columns[col].key}
-  })
+  }).sort(sortColumns)
 }
 
 // case reducers
