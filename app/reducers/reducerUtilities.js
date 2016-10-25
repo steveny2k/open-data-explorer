@@ -24,6 +24,10 @@ export function updateByKey (myObj, updateKey, payload) {
     }, {})
 }
 
+export function clearState (state, action) {
+  return updateObject(state, {})
+}
+
 export function createReducer (initialState, handlers) {
   return function reducer (state = initialState, action) {
     if (handlers.hasOwnProperty(action.type)) {

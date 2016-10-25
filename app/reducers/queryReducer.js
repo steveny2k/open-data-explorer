@@ -1,6 +1,8 @@
 import * as ActionTypes from '../actions'
 import { updateObject, removeByKey, updateByKey } from './reducerUtilities'
 
+const initialState = {}
+
 const keyMap = {
   [ActionTypes.SUM_BY]: 'sumBy',
   [ActionTypes.GROUP_BY]: 'groupBy',
@@ -48,8 +50,13 @@ function updateFilter (state, action) {
   })
 }
 
-export const queryReducer = (state = {}, action) => {
+function resetState (state, action) {
+  return initialState
+}
+
+export const queryReducer = (state = initialState, action) => {
   switch (action.type) {
+    case ActionTypes.METADATA_REQUEST: return resetState(state, action)
     case ActionTypes.SELECT_COLUMN: return updateQueryKeys(state, action)
     case ActionTypes.SUM_BY: return sumBy(state, action)
     case ActionTypes.GROUP_BY: return groupBy(state, action)
