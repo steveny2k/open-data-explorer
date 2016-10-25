@@ -28,7 +28,7 @@ class Charts extends Component {
   }
 
   renderChartArea (props) {
-    let { chartProps } = this.props
+    let { chartProps, panelProps } = this.props
     let { selectedColumnDef } = chartProps
     console.log(selectedColumnDef)
     // let { chartType } = chartProps
@@ -51,6 +51,7 @@ class Charts extends Component {
           {...otherProps} />
         <ChartSideBar
           {...query}
+          panelProps={panelProps}
           selectedColumn={chartProps.selectedColumn}
           columns={chartProps.columns}
           handleGroupBy={handleGroupBy}
@@ -69,6 +70,7 @@ class Charts extends Component {
   }
 
   render () {
+    console.log(this.props)
     let ChartArea = this.renderChartArea(this.props)
     return (
       <div>

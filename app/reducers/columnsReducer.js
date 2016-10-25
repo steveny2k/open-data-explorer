@@ -7,6 +7,45 @@ import { updateObject, createReducer } from './reducerUtilities'
 export const getColumnDef = (state, column) =>
   state && state.columns ? state.columns[column] : null
 
+// refactor this to pass in a filter callback to a single column filtering function
+export const getGroupableColumns = (state, selectedColumn) => {
+  let { columns } = state
+  selectedColumn = selectedColumn || ''
+  if (!columns) return []
+
+  return Object.keys(columns).filter((col) => {
+    return (columns[col].key !== selectedColumn && columns[col].categories)
+  }).map((col) => {
+    return {label: columns[col].name, value: columns[col].key}
+  })
+}
+
+export const getSelectableColumns = (state) => {
+  let { columns } = state
+  let colTypesAccepted = ['number', 'checkbox', 'date']
+
+  if (!columns) return []
+
+  return Object.keys(columns).filter((col) => {
+    return ((columns[col].categories && ['text', 'number'].indexOf(columns[col].type)) || colTypesAccepted.indexOf(columns[col].type) > -1)
+  }).map((col) => {
+    return {label: columns[col].name, value: columns[col].key, type: columns[col].type}
+  })
+}
+
+export const getSummableColumns = (state) => {
+  let { columns } = state
+  let colTypesAccepted = ['number', 'money', 'double']
+
+  if (!columns) return []
+
+  return Object.keys(columns).filter((col) => {
+    return (!columns[col].categories && !columns[col].unique && colTypesAccepted.indexOf(columns[col].type) > -1)
+  }).map((col) => {
+    return {label: columns[col].name, value: columns[col].key}
+  })
+}
+
 // case reducers
 function initColumns (state, action) {
   return updateObject(state, {
