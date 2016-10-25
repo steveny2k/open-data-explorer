@@ -11,23 +11,23 @@ class Panel extends Component {
     let { columns, query } = metadata
     return (
     <Col md={3}>
-    <Accordion>
-      <ChartOptions
-        {...query}
-        columns={columns}
-        handleGroupBy={handleGroupBy}
-        handleAddFilter={handleAddFilter}
-        handleRemoveFilter={handleRemoveFilter}
-        applyFilter={applyFilter}
-        updateFilter={updateFilter}
-        handleSumBy={handleSumBy} />
-      <ChartExperimentalType applyChartType={applyChartType} displayChartOptions={displayChartOptions} chartType={chartType} />
-      <PanelColumns
-        metadata={metadata}
-        selectColumn={selectColumn}
-        columns={columns}
-        selectedColumn={selectedColumn} />
-    </Accordion>
+      <Accordion>
+        <ChartOptions
+          {...query}
+          columns={columns}
+          handleGroupBy={handleGroupBy}
+          handleAddFilter={handleAddFilter}
+          handleRemoveFilter={handleRemoveFilter}
+          applyFilter={applyFilter}
+          updateFilter={updateFilter}
+          handleSumBy={handleSumBy} />
+        <ChartExperimentalType applyChartType={applyChartType} displayChartOptions={displayChartOptions} chartType={chartType} />
+        <PanelColumns
+          metadata={metadata}
+          selectColumn={selectColumn}
+          columns={columns}
+          selectedColumn={selectedColumn} />
+      </Accordion>
     </Col>
     )
   }
