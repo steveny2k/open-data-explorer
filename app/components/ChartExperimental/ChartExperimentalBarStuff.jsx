@@ -3,15 +3,16 @@ import d3 from 'd3'
 import { Col } from 'react-bootstrap'
 import { XAxis, BarChart, YAxis, CartesianGrid, Bar, Legend, Tooltip } from 'recharts'
 import CustomYaxisLabel from './CustomYaxisLabel'
+import CustomXaxisLabel from './CustomXaxisLabel'
 
 class ChartExperimentalBarStuff extends Component {
-  makeBars (groupKeys) {
+  makeBars (groupKeys, grpColorScale) {
     let bars = []
     if (groupKeys) {
       if (groupKeys.length > 1) {
         let colorScale = d3.scale.linear().domain([1, groupKeys.length])
           .interpolate(d3.interpolateHcl)
-          .range([d3.rgb('#007AFF'), d3.rgb('#FFF500')])
+          .range([d3.rgb(grpColorScale['start']), d3.rgb(grpColorScale['end'])])
         bars = groupKeys.map(function (i) {
           if (i) {
             let colorIndex = groupKeys.indexOf(i)
@@ -44,10 +45,10 @@ class ChartExperimentalBarStuff extends Component {
     return chartProperties
   }
   render () {
-    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, xTickCnt, valTickFormater} = this.props
-    let bars = this.makeBars(groupKeys)
+    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, xTickCnt, valTickFormater, grpColorScale} = this.props
+    let bars = this.makeBars(groupKeys, grpColorScale)
     let chartProperties = this.getChartProperties(chartData)
-
+    let xpadding = {bottom: 300}
     return (
     <Choose>
       <When condition={!isGroupBy && chartProperties.manyBars}>
@@ -61,11 +62,11 @@ class ChartExperimentalBarStuff extends Component {
             tickFormatter={valTickFormater}
             type='number'
             tickCount={xTickCnt}
-            label={<CustomYaxisLabel val={rowLabel} h={h} />} />
+            padding={xpadding}
+            label={<CustomXaxisLabel val={rowLabel} w={w} />} />
           <YAxis dataKey='key' type='category' minTickGap={10} />
           <CartesianGrid strokeDasharray='3 3' horizontal={chartProperties.horizontal} vertical={chartProperties.vertical} />
           <Tooltip/>
-          <Legend />
           <Bar dataKey='value' fill={fillColor} />
         </BarChart>
       </When>
