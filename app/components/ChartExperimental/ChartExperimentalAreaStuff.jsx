@@ -28,7 +28,7 @@ class ChartExperimentalAreaStuff extends Component {
     }
   }
   render () {
-    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData} = this.props
+    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, xTickCnt, valTickFormater} = this.props
     let areas = this.makeAreas(groupKeys)
 
     return (
@@ -40,7 +40,12 @@ class ChartExperimentalAreaStuff extends Component {
           data={chartData}
           margin={margin}>
           <XAxis dataKey='key' />
-          <YAxis label={rowLabel + ' value'} />
+          <YAxis
+            tickFormatter={valTickFormater}
+            tickCount={yTickCnt}
+            domain={[0, 'dataMax + 100']}
+            type='number'
+            label={rowLabel + ' value'} />
           <CartesianGrid strokeDasharray='3 3' vertical={false} />
           <Tooltip/>
           <Area
@@ -48,6 +53,7 @@ class ChartExperimentalAreaStuff extends Component {
             dataKey='value'
             stroke={fillColor}
             fill={fillColor} />
+          <Legend />
         </AreaChart>
       </When>
       <When condition={isGroupBy}>
@@ -57,9 +63,15 @@ class ChartExperimentalAreaStuff extends Component {
           data={chartData}
           margin={margin}>
           <XAxis dataKey='label' />
-          <YAxis/>
+          <YAxis
+            tickFormatter={valTickFormater}
+            tickCount={yTickCnt}
+            domain={[0, 'dataMax + 100']}
+            type='number'
+            label={rowLabel + ' value'} />
           <CartesianGrid strokeDasharray='3 3' vertical={false} />
           <Tooltip/>
+          <Legend />
           {areas}
         </AreaChart>
       </When>

@@ -83,7 +83,8 @@ class ChartExperimentalCanvas extends Component {
     }
   }
 
-  convertChartData (chartData) {
+  convertChartData (chartData, selectedColumnDef) {
+    let yrFormat = d3.time.format('%Y')
     if (chartData) {
       if (chartData.length > 1) {
         let newChartData = []
@@ -91,9 +92,17 @@ class ChartExperimentalCanvas extends Component {
         let len = chartData.length
         for (i = 0; i < len; i++) {
           let newdict = {}
-          // console.log(chart.chartData[i]['label'])
-          newdict['key'] = String(chartData[i]['label'])
-          newdict['value'] = Number(chartData[i]['value'])
+          if (selectedColumnDef) {
+            let reData = /date/
+            if (reData.test(selectedColumnDef.type)) {
+              newdict['key'] = yrFormat(new Date(chartData[i]['label']))
+              newdict['value'] = Number(chartData[i]['value'])
+            }else {
+              // console.log(chart.chartData[i]['label'])
+              newdict['key'] = String(chartData[i]['label'])
+              newdict['value'] = Number(chartData[i]['value'])
+            }
+          }
           newChartData.push(newdict)
         }
         return newChartData
@@ -118,19 +127,28 @@ class ChartExperimentalCanvas extends Component {
     chartType = this.props.chartType
     chartData = this.props.chart.chartData
     if (!isGroupBy) {
-      chartData = this.convertChartData(chartData)
+      chartData = this.convertChartData(chartData, selectedColumnDef)
     }
     let fillColor = '#7dc7f4'
-
-    let yAxisTicks = 8
-    let yGridTicks = 6
+    console.log('in *canvas*')
+    console.log(this.props)
+    let xAxisPadding = { left: 20, right: 20 }
+    let xTickCnt = 5
+    let yTickCnt = 6
     let dotColorOuter = '#7dc7f4'
     let dotColorInner = '#3f5175'
     // let margin = {top: 20, right: 30, left: 20, bottom: 5}
     let margin = {top: 30, right: 10, bottom: 20, left: 10}
     let w = this.state.width - (margin.left + margin.right)
     let h = this.props.height - (margin.top + margin.bottom)
-
+    let formatValue = d3.format('.1s')
+    // let formatValue = d3.format('d')
+    let valTickFormater = function (d) { return formatValue(d)}
+    let ytickCnt = 5
+    let xtickCnt = 5
+    let legendMargin = { bottom: 50 }
+    let AxisPading = { left: 20, right: 20, bottom: 0 }
+    let yAxisPadding = { top: 10 }
     return (
     <Col md={9}>
     <Choose>
@@ -158,7 +176,14 @@ class ChartExperimentalCanvas extends Component {
               rowLabel={rowLabel}
               fillColor={fillColor}
               groupKeys={groupKeys}
-              chartData={chartData} />
+              chartData={chartData}
+              yTickCnt={yTickCnt}
+              xTickCnt={xTickCnt}
+              xAxisPadding={xAxisPadding}
+              valTickFormater={valTickFormater}
+              colType={selectedColumnDef.type}
+              xAxisPadding={xAxisPadding}
+              legendMargin={legendMargin} />
           </When>
           <When condition={chartType == 'line'}>
             <ChartExperimentalLineStuff
@@ -166,10 +191,15 @@ class ChartExperimentalCanvas extends Component {
               h={h}
               isGroupBy={isGroupBy}
               margin={margin}
+              yTickCnt={yTickCnt}
+              xTickCnt={xTickCnt}
               rowLabel={rowLabel}
               fillColor={fillColor}
               groupKeys={groupKeys}
-              chartData={chartData} />
+              chartData={chartData}
+              valTickFormater={valTickFormater}
+              xAxisPadding={xAxisPadding}
+              legendMargin={legendMargin} />
           </When>
           <When condition={chartType == 'area'}>
             <ChartExperimentalAreaStuff
@@ -178,9 +208,14 @@ class ChartExperimentalCanvas extends Component {
               isGroupBy={isGroupBy}
               margin={margin}
               rowLabel={rowLabel}
+              valTickFormater={valTickFormater}
               fillColor={fillColor}
               groupKeys={groupKeys}
-              chartData={chartData} />
+              chartData={chartData}
+              yTickCnt={yTickCnt}
+              xTickCnt={xTickCnt}
+              xAxisPadding={xAxisPadding}
+              valTickFormater={valTickFormater} />
           </When>
           <Otherwise>
             <div>

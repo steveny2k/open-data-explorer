@@ -43,9 +43,10 @@ class ChartExperimentalBarStuff extends Component {
     return chartProperties
   }
   render () {
-    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData} = this.props
+    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, xTickCnt, valTickFormater} = this.props
     let bars = this.makeBars(groupKeys)
     let chartProperties = this.getChartProperties(chartData)
+
     return (
     <Choose>
       <When condition={!isGroupBy && chartProperties.manyBars}>
@@ -55,7 +56,7 @@ class ChartExperimentalBarStuff extends Component {
           layout={chartProperties.layout}
           data={chartData}
           margin={margin}>
-          <XAxis type='number' label={rowLabel + ' value'} />
+          <XAxis tickFormatter={valTickFormater} type='number' tickCount={xTickCnt} />
           <YAxis dataKey='key' type='category' />
           <CartesianGrid strokeDasharray='3 3' horizontal={chartProperties.horizontal} vertical={chartProperties.vertical} />
           <Tooltip/>
@@ -70,7 +71,12 @@ class ChartExperimentalBarStuff extends Component {
           data={chartData}
           margin={margin}>
           <XAxis dataKey='key' type='category' />
-          <YAxis type='number' label={rowLabel + ' value'} />
+          <YAxis
+            tickFormatter={valTickFormater}
+            tickCount={yTickCnt}
+            domain={[0, 'dataMax + 100']}
+            type='number'
+            label={rowLabel + ' value'} />
           <CartesianGrid strokeDasharray='3 3' vertical={false} />
           <Tooltip/>
           <Bar dataKey='value' fill={fillColor} />
@@ -84,7 +90,12 @@ class ChartExperimentalBarStuff extends Component {
           layout={chartProperties.layout}
           data={chartData}
           margin={margin}>
-          <XAxis type='number' label={rowLabel + ' value'} />
+          <XAxis
+            tickFormatter={valTickFormater}
+            tickCount={yTickCnt}
+            domain={[0, 'dataMax + 100']}
+            type='number'
+            label={rowLabel + ' value'} />
           <YAxis dataKey='label' type='category' />
           <CartesianGrid strokeDasharray='3 3' horizontal={chartProperties.horizontal} vertical={chartProperties.vertical} />
           <Tooltip/>
@@ -99,7 +110,12 @@ class ChartExperimentalBarStuff extends Component {
           data={chartData}
           margin={margin}>
           <XAxis dataKey='label' type='category' />
-          <YAxis type='number' label={rowLabel + ' value'} />
+          <YAxis
+            tickFormatter={valTickFormater}
+            tickCount={yTickCnt}
+            domain={[0, 'dataMax + 100']}
+            type='number'
+            label={rowLabel + ' value'} />
           <CartesianGrid strokeDasharray='3 3' vertical={false} />
           <Tooltip/>
           <Legend />
