@@ -27,9 +27,14 @@ export const getSelectableColumns = (state) => {
   if (!columns) return []
 
   return Object.keys(columns).filter((col) => {
-    return ((columns[col].categories && ['text', 'number'].indexOf(columns[col].type)) || colTypesAccepted.indexOf(columns[col].type) > -1)
+    return ((columns[col].categories && ['text', 'number'].indexOf(columns[col].type) > -1) || colTypesAccepted.indexOf(columns[col].type) > -1)
   }).map((col) => {
-    return {label: columns[col].name, value: columns[col].key, type: columns[col].type}
+    return {
+      label: columns[col].name,
+      value: columns[col].key,
+      type: columns[col].type,
+      isCategory: (columns[col].categories)
+    }
   })
 }
 
