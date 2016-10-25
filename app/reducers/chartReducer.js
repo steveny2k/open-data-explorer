@@ -7,7 +7,8 @@ function updateData (state, action) {
     return updateObject(state, {
       chartData: action.response.query.originalData,
       transformedChartData: action.response.query.data,
-      isFetching: false
+      isFetching: false,
+      groupKeys: action.response.query.groupKeys
     })
   } else {
     return state
@@ -20,8 +21,13 @@ function changeChartType (state, action) {
   })
 }
 
+function resetState (state, action) {
+  return {}
+}
+
 // slice reducer - chart
 export const chartReducer = createReducer({}, {
+  [ActionTypes.METADATA_REQUEST]: resetState,
   [ActionTypes.DATA_SUCCESS]: updateData,
   [ActionTypes.APPLY_CHART_TYPE]: changeChartType
 })

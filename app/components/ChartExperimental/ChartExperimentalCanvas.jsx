@@ -147,7 +147,7 @@ class ChartExperimentalCanvas extends Component {
     let AxisPading = { left: 20, right: 20, bottom: 0 }
     let yAxisPadding = { top: 10 }
     return (
-    <Col md={9}>
+    <div>
     <Choose>
       <When condition={selectedColumnDef}>
         <Choose>
@@ -212,7 +212,7 @@ class ChartExperimentalCanvas extends Component {
         <BlankChart/>
       </Otherwise>
     </Choose>
-    </Col>
+    </div>
     )
   }
 }
