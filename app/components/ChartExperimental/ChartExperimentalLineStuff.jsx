@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import d3 from 'd3'
 import { XAxis, LineChart, YAxis, CartesianGrid, Line, Legend, Tooltip } from 'recharts'
 import CustomKeyAxisTick from './CustomKeyAxisTick'
-
+import CustomYaxisLabel from './CustomYaxisLabel'
 class ChartExperimentalLineStuff extends Component {
 
   makeLines (groupKeys) {
@@ -28,7 +28,7 @@ class ChartExperimentalLineStuff extends Component {
     }
   }
   render () {
-    let {h, w, isGroupBy, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, xTickCnt, xAxisPadding, yAxisPadding, legendStyle } = this.props
+    let {h, w, isGroupBy, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, xTickCnt, xAxisPadding, legendStyle } = this.props
     let lines = this.makeLines(groupKeys)
 
     return (
@@ -42,11 +42,10 @@ class ChartExperimentalLineStuff extends Component {
             padding={xAxisPadding} />
           <YAxis
             type='number'
-            label={rowLabel + ' value'}
+            label={<CustomYaxisLabel val={rowLabel + ' value'} h={h} />}
             tickCount={yTickCnt}
             tickFormatter={valTickFormater}
-            domain={[0, 'dataMax + 100']}
-            padding={yAxisPadding} />
+            domain={[0, 'dataMax + 100']} />
           <CartesianGrid stroke='#eee' strokeDasharray='3 3' vertical={false} />
           <Line
             type='monotone'

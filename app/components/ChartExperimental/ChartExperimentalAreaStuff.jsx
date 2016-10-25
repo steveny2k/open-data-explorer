@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import d3 from 'd3'
 import { XAxis, AreaChart, YAxis, CartesianGrid, Area, Legend, Tooltip } from 'recharts'
-
+import CustomYaxisLabel from './CustomYaxisLabel'
 class ChartExperimentalAreaStuff extends Component {
 
   makeAreas (groupKeys) {
@@ -28,7 +28,8 @@ class ChartExperimentalAreaStuff extends Component {
     }
   }
   render () {
-    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, xTickCnt, valTickFormater} = this.props
+    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, valTickFormater} = this.props
+    console.log(this.props)
     let areas = this.makeAreas(groupKeys)
 
     return (
@@ -45,7 +46,7 @@ class ChartExperimentalAreaStuff extends Component {
             tickCount={yTickCnt}
             domain={[0, 'dataMax + 100']}
             type='number'
-            label={rowLabel + ' value'} />
+            label={<CustomYaxisLabel val={rowLabel + ' value'} h={h} />} />
           <CartesianGrid strokeDasharray='3 3' vertical={false} />
           <Tooltip/>
           <Area
@@ -68,7 +69,7 @@ class ChartExperimentalAreaStuff extends Component {
             tickCount={yTickCnt}
             domain={[0, 'dataMax + 100']}
             type='number'
-            label={rowLabel + ' value'} />
+            label={<CustomYaxisLabel val={rowLabel + ' value'} h={h} />} />
           <CartesianGrid strokeDasharray='3 3' vertical={false} />
           <Tooltip/>
           <Legend />
