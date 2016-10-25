@@ -24,6 +24,12 @@ const rootReducer = combineReducers({
 
 const getColumnDef = (state, column) => fromColumns.getColumnDef(state.columnProps, column)
 
+export const getGroupableColumns = state =>
+  fromColumns.getGroupableColumns(state.columnProps, state.query.selectedColumn)
+
+export const getSelectableColumns = state =>
+  fromColumns.getSelectableColumns(state.columnProps)
+
 export const getSelectedColumnDef = state =>
   getColumnDef(state, state.query.selectedColumn)
 
