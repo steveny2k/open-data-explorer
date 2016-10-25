@@ -4,13 +4,13 @@ import { XAxis, AreaChart, YAxis, CartesianGrid, Area, Legend, Tooltip } from 'r
 import CustomYaxisLabel from './CustomYaxisLabel'
 class ChartExperimentalAreaStuff extends Component {
 
-  makeAreas (groupKeys) {
+  makeAreas (groupKeys, grpColorScale) {
     let areas = []
     if (groupKeys) {
       if (groupKeys.length > 1) {
         let colorScale = d3.scale.linear().domain([1, groupKeys.length])
           .interpolate(d3.interpolateHcl)
-          .range([d3.rgb('#007AFF'), d3.rgb('#FFF500')])
+          .range([d3.rgb(grpColorScale['start']), d3.rgb(grpColorScale['end'])])
         areas = groupKeys.map(function (i) {
           if (i) {
             let colorIndex = groupKeys.indexOf(i)
@@ -28,10 +28,8 @@ class ChartExperimentalAreaStuff extends Component {
     }
   }
   render () {
-    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, xAxisPadding, valTickFormater} = this.props
-    console.log('*in area object*')
-    console.log(this.props)
-    let areas = this.makeAreas(groupKeys)
+    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, grpColorScale, valTickFormater} = this.props
+    let areas = this.makeAreas(groupKeys, grpColorScale)
 
     return (
     <Choose>
@@ -41,7 +39,7 @@ class ChartExperimentalAreaStuff extends Component {
           height={h}
           data={chartData}
           margin={margin}>
-          <XAxis dataKey='key' padding={xAxisPadding} />
+          <XAxis dataKey='key' />
           <YAxis
             tickFormatter={valTickFormater}
             tickCount={yTickCnt}
@@ -73,7 +71,7 @@ class ChartExperimentalAreaStuff extends Component {
             label={<CustomYaxisLabel val={rowLabel + ' value'} h={h} />} />
           <CartesianGrid strokeDasharray='3 3' vertical={false} />
           <Tooltip/>
-          <Legend />
+          <Legend/>
           {areas}
         </AreaChart>
       </When>

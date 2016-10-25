@@ -52,37 +52,6 @@ class ChartExperimentalCanvas extends Component {
     return !_.isEqual(thisChart, nextChart)
   }
 
-  dataTypeColors (col, categoryFields) {
-    let btnColors = ['#3498db', '#27ae60', '#16a085', '#7986cb', '#d35400', '#c0392b', '#a97964', '#8e44ad', '#f39c12']
-    let numberFields = ['double', 'money', 'number']
-    let textFields = ['text']
-    let dateFields = ['date', 'calendar_date']
-    let contactFields = ['email', 'phone', 'url']
-    let locationFields = ['location']
-    let booleanFields = ['checkbox']
-
-    let allFields = [categoryFields, numberFields, textFields, dateFields, contactFields, locationFields, booleanFields]
-    let selectedColor
-    let isType = function (col, fieldList) {
-      if (col) {
-        if (typeof fieldList === 'function') {
-          return fieldList(col)
-        } else {
-          if (fieldList.indexOf(col['type']) > -1) {
-            return true
-          }
-        }
-        return false
-      }
-
-      for (let i = 0; i < allFields.length; i++) {
-        if (isType(col, allFields[i])) {
-          return btnColors[i]
-        }
-      }
-    }
-  }
-
   convertChartData (chartData, selectedColumnDef) {
     let yrFormat = d3.time.format('%Y')
     if (chartData) {
@@ -124,6 +93,7 @@ class ChartExperimentalCanvas extends Component {
   render () {
     let { rowLabel, selectedColumnDef, columns, sumBy, groupBy, filters, groupKeys, chartData, chartType } = this.props
     let fillColor
+    let grpColorScale
 
     const fillColorIndex = {
       'text': '#93c2de',
@@ -135,10 +105,16 @@ class ChartExperimentalCanvas extends Component {
       'money': '#de93c2',
       'other': '#E6FF2E'
     }
+    const groupByColorIndex = {
+      'text': {'start': '#55FFFF','end': '#0000ff'},
+      'date': {'start': '#204c39', 'end': '#83F52C' },
+      'calendar_date': {'start': '#204c39', 'end': '#83F52C' },
+      'checkbox': {'start': '#cc8458', 'end': '#F0DACE'},
+      'number': {'start': '#c71585', 'end': '#ffc0cb'},
+      'double': {'start': '#c71585', 'end': '#ffc0cb'},
+      'money': {'start': '#c71585', 'end': '#ffc0cb'}
+    }
 
-    console.log('***grp keys***')
-    console.log(groupKeys)
-    console.log('******')
     let isGroupBy = this.isGroupByz(groupKeys)
     if (!isGroupBy) {
       chartData = this.convertChartData(chartData, selectedColumnDef)
@@ -146,6 +122,8 @@ class ChartExperimentalCanvas extends Component {
     // let fillColor = '#7dc7f4',
     if (selectedColumnDef) {
       fillColor = fillColorIndex[selectedColumnDef.type]
+      grpColorScale = groupByColorIndex[selectedColumnDef.type]
+      console.log(grpColorScale)
     }
 
     console.log('in *canvas*')
@@ -189,7 +167,8 @@ class ChartExperimentalCanvas extends Component {
                 valTickFormater={valTickFormater}
                 colType={selectedColumnDef.type}
                 xAxisPadding={xAxisPadding}
-                legendMargin={legendMargin} />
+                legendMargin={legendMargin}
+                grpColorScale={grpColorScale} />
             </When>
             <When condition={chartType === 'line'}>
               <ChartExperimentalLineStuff
@@ -205,7 +184,8 @@ class ChartExperimentalCanvas extends Component {
                 chartData={chartData}
                 valTickFormater={valTickFormater}
                 xAxisPadding={xAxisPadding}
-                legendMargin={legendMargin} />
+                legendMargin={legendMargin}
+                grpColorScale={grpColorScale} />
             </When>
             <When condition={chartType === 'area'}>
               <ChartExperimentalAreaStuff
@@ -221,7 +201,8 @@ class ChartExperimentalCanvas extends Component {
                 yTickCnt={yTickCnt}
                 xTickCnt={xTickCnt}
                 xAxisPadding={xAxisPadding}
-                valTickFormater={valTickFormater} />
+                valTickFormater={valTickFormater}
+                grpColorScale={grpColorScale} />
             </When>
             <Otherwise>
               <div>

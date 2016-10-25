@@ -13,6 +13,7 @@ import FilterOptions from '../components/Query/FilterOptions'
 import SumOptions from '../components/Query/SumOptions'
 import ChartTypeOptions from '../components/Chart/ChartTypeOptions'
 import { Row, Col, Accordion } from 'react-bootstrap'
+import './_containers.scss'
 
 const VizContainer = ({ props, actions }) => (
   <Row>
