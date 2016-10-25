@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { getSelectedColumnDef, getGroupableColumns, getSelectableColumns, getSummableColumns } from '../reducers'
-
 import { selectColumn, groupBy, sumBy, addFilter, applyChartType, removeFilter, applyFilter, updateFilter, changeDateBy } from '../actions'
 import BlankChart from '../components/ChartExperimental/BlankChart'
 import ConditionalOnSelect from '../components/ConditionalOnSelect'
@@ -18,57 +17,44 @@ import { Row, Col, Accordion } from 'react-bootstrap'
 const VizContainer = ({ props, actions }) => (
   <Row>
     <Col md={9}>
-      <ConditionalOnSelect selectedColumn={props.selectedColumn} displayBlank={<BlankChart />}>
+    <ConditionalOnSelect selectedColumn={props.selectedColumn} displayBlank={<BlankChart />}>
+      <div className='chartHeader'>
         <ChartExperimentalTitle
           columns={props.columns}
           rowLabel={props.rowLabel}
           selectedColumnDef={props.selectedColumnDef}
           groupBy={props.groupBy}
           sumBy={props.sumBy} />
-        <ChartExperimentalSubTitle
-          columns={props.columns}
-          filters={props.filters} />
-        <ChartExperimentalCanvas
-          chartData={props.chartData}
-          chartType={props.chartType}
-          groupKeys={props.groupKeys}
-          columns={props.columns}
-          filters={props.filters}
-          rowLabel={props.rowLabel}
-          selectedColumnDef={props.selectedColumnDef}
-          groupBy={props.groupBy}
-          sumBy={props.sumBy} />
-      </ConditionalOnSelect>
+        <ChartExperimentalSubTitle columns={props.columns} filters={props.filters} />
+      </div>
+      <ChartExperimentalCanvas
+        chartData={props.chartData}
+        chartType={props.chartType}
+        groupKeys={props.groupKeys}
+        columns={props.columns}
+        filters={props.filters}
+        rowLabel={props.rowLabel}
+        selectedColumnDef={props.selectedColumnDef}
+        groupBy={props.groupBy}
+        sumBy={props.sumBy} />
+    </ConditionalOnSelect>
     </Col>
     <Col md={3}>
-      <Accordion>
-        <ConditionalOnSelect selectedColumn={props.selectedColumn}>
-          <GroupOptions
-            columns={props.groupableColumns}
-            selected={props.groupBy}
-            onGroupBy={actions.handleGroupBy} />
-          <SumOptions
-            columns={props.summableColumns}
-            selected={props.sumBy}
-            onSumBy={actions.handleSumBy} />
-          <FilterOptions
-            filters={props.filters}
-            columns={props.columns}
-            handleAddFilter={actions.handleAddFilter}
-            handleRemoveFilter={actions.handleRemoveFilter}
-            applyFilter={actions.applyFilter}
-            updateFilter={actions.updateFilter} />
-          <ChartTypeOptions
-            applyChartType={actions.applyChartType}
-            chartType={props.chartType}
-          />
-        </ConditionalOnSelect>
-        <ColumnSelector
-          columns={props.selectableColumns}
-          selected={props.selectedColumn}
-          onSelectColumn={actions.selectColumn}
-          />
-      </Accordion>
+    <Accordion>
+      <ConditionalOnSelect selectedColumn={props.selectedColumn}>
+        <GroupOptions columns={props.groupableColumns} selected={props.groupBy} onGroupBy={actions.handleGroupBy} />
+        <SumOptions columns={props.summableColumns} selected={props.sumBy} onSumBy={actions.handleSumBy} />
+        <FilterOptions
+          filters={props.filters}
+          columns={props.columns}
+          handleAddFilter={actions.handleAddFilter}
+          handleRemoveFilter={actions.handleRemoveFilter}
+          applyFilter={actions.applyFilter}
+          updateFilter={actions.updateFilter} />
+        <ChartTypeOptions applyChartType={actions.applyChartType} chartType={props.chartType} />
+      </ConditionalOnSelect>
+      <ColumnSelector columns={props.selectableColumns} selected={props.selectedColumn} onSelectColumn={actions.selectColumn} />
+    </Accordion>
     </Col>
   </Row>
 )
@@ -119,8 +105,7 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    actions:
-    {
+    actions: {
       selectColumn: (key) => {
         return dispatch(selectColumn(key))
       },

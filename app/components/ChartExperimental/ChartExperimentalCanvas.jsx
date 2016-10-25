@@ -93,8 +93,9 @@ class ChartExperimentalCanvas extends Component {
         for (i = 0; i < len; i++) {
           let newdict = {}
           if (selectedColumnDef) {
-            let reData = /date/
-            if (reData.test(selectedColumnDef.type)) {
+            let reDate = /date/
+            let reNumber = /number/
+            if (reDate.test(selectedColumnDef.type)) {
               newdict['key'] = yrFormat(new Date(chartData[i]['label']))
               newdict['value'] = Number(chartData[i]['value'])
             }else {
@@ -122,20 +123,41 @@ class ChartExperimentalCanvas extends Component {
 
   render () {
     let { rowLabel, selectedColumnDef, columns, sumBy, groupBy, filters, groupKeys, chartData, chartType } = this.props
+    let fillColor
+
+    const fillColorIndex = {
+      'text': '#93c2de',
+      'date': '#93deaf',
+      'calendar_date': '#93deaf',
+      'checkbox': '#deaf93',
+      'number': '#de93c2',
+      'double': '#de93c2',
+      'money': '#de93c2',
+      'other': '#E6FF2E'
+    }
+
+    console.log('***grp keys***')
+    console.log(groupKeys)
+    console.log('******')
     let isGroupBy = this.isGroupByz(groupKeys)
     if (!isGroupBy) {
       chartData = this.convertChartData(chartData, selectedColumnDef)
     }
-    let fillColor = '#7dc7f4'
+    // let fillColor = '#7dc7f4',
+    if (selectedColumnDef) {
+      fillColor = fillColorIndex[selectedColumnDef.type]
+    }
+
     console.log('in *canvas*')
     console.log(this.props)
+    console.log('in *canvas*')
     let xAxisPadding = { left: 20, right: 20 }
     let xTickCnt = 5
     let yTickCnt = 6
     let dotColorOuter = '#7dc7f4'
     let dotColorInner = '#3f5175'
     // let margin = {top: 20, right: 30, left: 20, bottom: 5}
-    let margin = {top: 30, right: 10, bottom: 20, left: 10}
+    let margin = {top: 1, right: 5, bottom: 1, left: 5}
     let w = this.state.width - (margin.left + margin.right)
     let h = this.props.height - (margin.top + margin.bottom)
     let formatValue = d3.format('.1s')
@@ -148,70 +170,70 @@ class ChartExperimentalCanvas extends Component {
     let yAxisPadding = { top: 10 }
     return (
     <div>
-    <Choose>
-      <When condition={selectedColumnDef}>
-        <Choose>
-          <When condition={chartType === 'bar'}>
-            <ChartExperimentalBarStuff
-              w={w}
-              h={h}
-              isGroupBy={isGroupBy}
-              margin={margin}
-              rowLabel={rowLabel}
-              fillColor={fillColor}
-              groupKeys={groupKeys}
-              chartData={chartData}
-              yTickCnt={yTickCnt}
-              xTickCnt={xTickCnt}
-              xAxisPadding={xAxisPadding}
-              valTickFormater={valTickFormater}
-              colType={selectedColumnDef.type}
-              xAxisPadding={xAxisPadding}
-              legendMargin={legendMargin} />
-          </When>
-          <When condition={chartType === 'line'}>
-            <ChartExperimentalLineStuff
-              w={w}
-              h={h}
-              isGroupBy={isGroupBy}
-              margin={margin}
-              yTickCnt={yTickCnt}
-              xTickCnt={xTickCnt}
-              rowLabel={rowLabel}
-              fillColor={fillColor}
-              groupKeys={groupKeys}
-              chartData={chartData}
-              valTickFormater={valTickFormater}
-              xAxisPadding={xAxisPadding}
-              legendMargin={legendMargin} />
-          </When>
-          <When condition={chartType === 'area'}>
-            <ChartExperimentalAreaStuff
-              w={w}
-              h={h}
-              isGroupBy={isGroupBy}
-              margin={margin}
-              rowLabel={rowLabel}
-              valTickFormater={valTickFormater}
-              fillColor={fillColor}
-              groupKeys={groupKeys}
-              chartData={chartData}
-              yTickCnt={yTickCnt}
-              xTickCnt={xTickCnt}
-              xAxisPadding={xAxisPadding}
-              valTickFormater={valTickFormater} />
-          </When>
-          <Otherwise>
-            <div>
-              hello world
-            </div>
-          </Otherwise>
-        </Choose>
-      </When>
-      <Otherwise>
-        <BlankChart/>
-      </Otherwise>
-    </Choose>
+      <Choose>
+        <When condition={selectedColumnDef}>
+          <Choose>
+            <When condition={chartType === 'bar'}>
+              <ChartExperimentalBarStuff
+                w={w}
+                h={h}
+                isGroupBy={isGroupBy}
+                margin={margin}
+                rowLabel={rowLabel}
+                fillColor={fillColor}
+                groupKeys={groupKeys}
+                chartData={chartData}
+                yTickCnt={yTickCnt}
+                xTickCnt={xTickCnt}
+                xAxisPadding={xAxisPadding}
+                valTickFormater={valTickFormater}
+                colType={selectedColumnDef.type}
+                xAxisPadding={xAxisPadding}
+                legendMargin={legendMargin} />
+            </When>
+            <When condition={chartType === 'line'}>
+              <ChartExperimentalLineStuff
+                w={w}
+                h={h}
+                isGroupBy={isGroupBy}
+                margin={margin}
+                yTickCnt={yTickCnt}
+                xTickCnt={xTickCnt}
+                rowLabel={rowLabel}
+                fillColor={fillColor}
+                groupKeys={groupKeys}
+                chartData={chartData}
+                valTickFormater={valTickFormater}
+                xAxisPadding={xAxisPadding}
+                legendMargin={legendMargin} />
+            </When>
+            <When condition={chartType === 'area'}>
+              <ChartExperimentalAreaStuff
+                w={w}
+                h={h}
+                isGroupBy={isGroupBy}
+                margin={margin}
+                rowLabel={rowLabel}
+                valTickFormater={valTickFormater}
+                fillColor={fillColor}
+                groupKeys={groupKeys}
+                chartData={chartData}
+                yTickCnt={yTickCnt}
+                xTickCnt={xTickCnt}
+                xAxisPadding={xAxisPadding}
+                valTickFormater={valTickFormater} />
+            </When>
+            <Otherwise>
+              <div>
+                hello world
+              </div>
+            </Otherwise>
+          </Choose>
+        </When>
+        <Otherwise>
+          <BlankChart/>
+        </Otherwise>
+      </Choose>
     </div>
     )
   }

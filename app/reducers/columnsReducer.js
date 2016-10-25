@@ -4,8 +4,7 @@ import union from 'lodash/union'
 import { updateObject, createReducer } from './reducerUtilities'
 
 // selectors
-export const getColumnDef = (state, column) =>
-  state && state.columns ? state.columns[column] : null
+export const getColumnDef = (state, column) => state && state.columns ? state.columns[column] : null
 
 // refactor this to pass in a filter callback to a single column filtering function
 export const getGroupableColumns = (state, selectedColumn) => {
