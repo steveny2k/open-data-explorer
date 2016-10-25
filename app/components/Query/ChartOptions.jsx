@@ -2,7 +2,7 @@ require('react-select/dist/react-select.css')
 
 import React, { Component } from 'react'
 import Select from 'react-select'
-import ChartFilters from './ChartFilters'
+import FilterOptions from './FilterOptions'
 import './_Query.scss'
 import { Panel, Row } from 'react-bootstrap'
 
@@ -96,16 +96,6 @@ class ChartOptions extends Component {
       selectedColumn
       ? (
         <Panel collapsible defaultExpanded className='chart' header={panelTitle}>
-          {groupByOptions}
-          <ChartFilters
-            columns={columns}
-            filters={filters}
-            handleAddFilter={handleAddFilter}
-            handleRemoveFilter={handleRemoveFilter}
-            applyFilter={applyFilter}
-            updateFilter={updateFilter}
-            selectedColumn={columns[selectedColumn]}
-            />
         {sumByOptions}
         </Panel>
       ) : false

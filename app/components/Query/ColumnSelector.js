@@ -1,16 +1,17 @@
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { Panel, ListGroupItem, ListGroup } from 'react-bootstrap'
 
 class ColumnSelector extends Component {
   render () {
     let { columns, selected, onSelectColumn } = this.props
     const options = columns.map((option) => {
-      return (<ListGroupItem onClick={onSelectColumn.bind(this, option.value)}>{option.label}</ListGroupItem>)
+      return (<ListGroupItem key={option.value} onClick={onSelectColumn.bind(this, option.value)}>{option.label}</ListGroupItem>)
     })
 
     return (
-      <Panel header='Select a dataset column'>
-        <ListGroup fill>
+      <Panel collapsible defaultExpanded header='Select a dataset column'>
+        Help text
+        <ListGroup fill className='ColumnSelector-list-group'>
           {options}
         </ListGroup>
       </Panel>
@@ -18,10 +19,10 @@ class ColumnSelector extends Component {
   }
 }
 
-ColumnSelector.PropTypes = {
-  columns: React.PropTypes.array,
-  selected: React.PropTypes.string,
-  onSelectColumn: React.PropTypes.func
+ColumnSelector.propTypes = {
+  columns: PropTypes.array,
+  selected: PropTypes.string,
+  onSelectColumn: PropTypes.func
 }
 
 export default ColumnSelector
