@@ -30,6 +30,9 @@ export const getGroupableColumns = state =>
 export const getSelectableColumns = state =>
   fromColumns.getSelectableColumns(state.columnProps)
 
+export const getSummableColumns = state =>
+  fromColumns.getSummableColumns(state.columnProps)
+
 export const getSelectedColumnDef = state =>
   getColumnDef(state, state.query.selectedColumn)
 

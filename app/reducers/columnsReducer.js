@@ -27,9 +27,22 @@ export const getSelectableColumns = (state) => {
   if (!columns) return []
 
   return Object.keys(columns).filter((col) => {
-    return (columns[col].categories || colTypesAccepted.indexOf(columns[col].type))
+    return ((columns[col].categories && ['text', 'number'].indexOf(columns[col].type)) || colTypesAccepted.indexOf(columns[col].type) > -1)
   }).map((col) => {
     return {label: columns[col].name, value: columns[col].key, type: columns[col].type}
+  })
+}
+
+export const getSummableColumns = (state) => {
+  let { columns } = state
+  let colTypesAccepted = ['number', 'money', 'double']
+
+  if (!columns) return []
+
+  return Object.keys(columns).filter((col) => {
+    return (!columns[col].categories && !columns[col].unique && colTypesAccepted.indexOf(columns[col].type) > -1)
+  }).map((col) => {
+    return {label: columns[col].name, value: columns[col].key}
   })
 }
 

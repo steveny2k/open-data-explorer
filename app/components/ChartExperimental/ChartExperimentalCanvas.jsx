@@ -112,11 +112,8 @@ class ChartExperimentalCanvas extends Component {
   }
 
   render () {
-    let chartType,categoryColumns,  chartData
-    let { rowLabel, selectedColumnDef, columns, sumBy, groupBy, filters, groupKeys} = this.props
+    let { rowLabel, selectedColumnDef, columns, sumBy, groupBy, filters, groupKeys, chartData, chartType } = this.props
     let isGroupBy = this.isGroupByz(groupKeys)
-    chartType = this.props.chartType
-    chartData = this.props.chart.chartData
     if (!isGroupBy) {
       chartData = this.convertChartData(chartData)
     }
@@ -135,21 +132,8 @@ class ChartExperimentalCanvas extends Component {
     <Col md={9}>
     <Choose>
       <When condition={selectedColumnDef}>
-        <ChartExperimentalTitle
-          columns={columns}
-          sumBy={sumBy}
-          rowLabel={rowLabel}
-          groupBy={groupBy}
-          selectedColumnDef={selectedColumnDef} />
         <Choose>
-          <When condition={filters}>
-            <ChartExperimentalSubTitle columns={columns} filters={filters} />
-          </When>
-          <Otherwise>
-          </Otherwise>
-        </Choose>
-        <Choose>
-          <When condition={chartType == 'bar'}>
+          <When condition={chartType === 'bar'}>
             <ChartExperimentalBarStuff
               w={w}
               h={h}
@@ -160,7 +144,7 @@ class ChartExperimentalCanvas extends Component {
               groupKeys={groupKeys}
               chartData={chartData} />
           </When>
-          <When condition={chartType == 'line'}>
+          <When condition={chartType === 'line'}>
             <ChartExperimentalLineStuff
               w={w}
               h={h}
@@ -171,7 +155,7 @@ class ChartExperimentalCanvas extends Component {
               groupKeys={groupKeys}
               chartData={chartData} />
           </When>
-          <When condition={chartType == 'area'}>
+          <When condition={chartType === 'area'}>
             <ChartExperimentalAreaStuff
               w={w}
               h={h}
@@ -199,6 +183,8 @@ class ChartExperimentalCanvas extends Component {
 }
 
 ChartExperimentalCanvas.propTypes = {
+  chartData: React.PropTypes.array,
+  chartType: React.PropTypes.string,
   groupKeys: React.PropTypes.array,
   columns: React.PropTypes.object,
   filters: React.PropTypes.object,
@@ -210,7 +196,7 @@ ChartExperimentalCanvas.propTypes = {
 
 ChartExperimentalCanvas.defaultProps = {
   width: 800,
-  height: 500
-
+  height: 500,
+  chartType: 'bar'
 }
 export default ChartExperimentalCanvas

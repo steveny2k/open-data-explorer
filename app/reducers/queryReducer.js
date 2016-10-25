@@ -44,7 +44,7 @@ function removeFilter (state, action) {
 
 function updateFilter (state, action) {
   return updateObject(state, {
-    filters: updateByKey(state.filters, action.payload.key, action.payload.options)
+    filters: updateByKey(state.filters, action.payload.key, action.payload)
   })
 }
 
