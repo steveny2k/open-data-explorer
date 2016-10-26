@@ -49,6 +49,7 @@ function constructQuery (state) {
   let { filters } = state.metadata.query
 
   let columnType = columns[selectedColumn].type
+  let isCategory = (columns[selectedColumn].categories)
 
   let consumerRoot = API_ROOT.split('/')[2]
   let consumer = new soda.Consumer(consumerRoot)
@@ -90,7 +91,7 @@ function constructQuery (state) {
   }
 
   // Where (filter)
-  if (columnType === 'date' || columnType === 'number') query = query.where('label is not null')
+  if (columnType === 'date' || (columnType === 'number' && !isCategory)) query = query.where('label is not null')
   if (filters) {
     for (let key in filters) {
       let column = key !== 'checkboxes' ? columns[key] : {type: 'checkbox'}
