@@ -173,6 +173,6 @@ export default class CatalogBrowse extends React.Component {
           </Col>
         </Row>
       </Grid>
-      )
+    )
   }
 }

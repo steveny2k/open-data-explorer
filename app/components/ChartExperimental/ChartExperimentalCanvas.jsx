@@ -67,7 +67,7 @@ class ChartExperimentalCanvas extends Component {
             if (reDate.test(selectedColumnDef.type)) {
               newdict['key'] = yrFormat(new Date(chartData[i]['label']))
               newdict['value'] = Number(chartData[i]['value'])
-            }else {
+            } else {
               // console.log(chart.chartData[i]['label'])
               newdict['key'] = String(chartData[i]['label'])
               newdict['value'] = Number(chartData[i]['value'])
@@ -106,7 +106,7 @@ class ChartExperimentalCanvas extends Component {
       'other': '#E6FF2E'
     }
     const groupByColorIndex = {
-      'text': {'start': '#55FFFF','end': '#0000ff'},
+      'text': {'start': '#55FFFF', 'end': '#0000ff'},
       'date': {'start': '#204c39', 'end': '#83F52C' },
       'calendar_date': {'start': '#204c39', 'end': '#83F52C' },
       'checkbox': {'start': '#cc8458', 'end': '#F0DACE'},
@@ -141,82 +141,82 @@ class ChartExperimentalCanvas extends Component {
     let h = this.props.height - (margin.top + margin.bottom)
     let formatValue = d3.format('.1s')
     // let formatValue = d3.format('d')
-    let valTickFormater = function (d) { return formatValue(d)}
+    let valTickFormater = function (d) { return formatValue(d) }
     let ytickCnt = 5
     let xtickCnt = 5
     let legendMargin = { bottom: 50 }
     let AxisPading = { left: 20, right: 20, bottom: 0 }
     let yAxisPadding = { top: 10 }
     return (
-    <div>
-      <Choose>
-        <When condition={selectedColumnDef}>
-          <Choose>
-            <When condition={chartType === 'bar'}>
-              <ChartExperimentalBarStuff
-                w={w}
-                h={h}
-                isGroupBy={isGroupBy}
-                margin={margin}
-                rowLabel={rowLabel}
-                fillColor={fillColor}
-                groupKeys={groupKeys}
-                chartData={chartData}
-                yTickCnt={yTickCnt}
-                xTickCnt={xTickCnt}
-                xAxisPadding={xAxisPadding}
-                valTickFormater={valTickFormater}
-                colType={selectedColumnDef.type}
-                xAxisPadding={xAxisPadding}
-                legendMargin={legendMargin}
-                grpColorScale={grpColorScale} />
-            </When>
-            <When condition={chartType === 'line'}>
-              <ChartExperimentalLineStuff
-                w={w}
-                h={h}
-                isGroupBy={isGroupBy}
-                margin={margin}
-                yTickCnt={yTickCnt}
-                xTickCnt={xTickCnt}
-                rowLabel={rowLabel}
-                fillColor={fillColor}
-                groupKeys={groupKeys}
-                chartData={chartData}
-                valTickFormater={valTickFormater}
-                xAxisPadding={xAxisPadding}
-                legendMargin={legendMargin}
-                grpColorScale={grpColorScale} />
-            </When>
-            <When condition={chartType === 'area'}>
-              <ChartExperimentalAreaStuff
-                w={w}
-                h={h}
-                isGroupBy={isGroupBy}
-                margin={margin}
-                rowLabel={rowLabel}
-                valTickFormater={valTickFormater}
-                fillColor={fillColor}
-                groupKeys={groupKeys}
-                chartData={chartData}
-                yTickCnt={yTickCnt}
-                xTickCnt={xTickCnt}
-                xAxisPadding={xAxisPadding}
-                valTickFormater={valTickFormater}
-                grpColorScale={grpColorScale} />
-            </When>
-            <Otherwise>
-              <div>
+      <div>
+        <Choose>
+          <When condition={selectedColumnDef}>
+            <Choose>
+              <When condition={chartType === 'bar'}>
+                <ChartExperimentalBarStuff
+                  w={w}
+                  h={h}
+                  isGroupBy={isGroupBy}
+                  margin={margin}
+                  rowLabel={rowLabel}
+                  fillColor={fillColor}
+                  groupKeys={groupKeys}
+                  chartData={chartData}
+                  yTickCnt={yTickCnt}
+                  xTickCnt={xTickCnt}
+                  xAxisPadding={xAxisPadding}
+                  valTickFormater={valTickFormater}
+                  colType={selectedColumnDef.type}
+                  xAxisPadding={xAxisPadding}
+                  legendMargin={legendMargin}
+                  grpColorScale={grpColorScale} />
+              </When>
+              <When condition={chartType === 'line'}>
+                <ChartExperimentalLineStuff
+                  w={w}
+                  h={h}
+                  isGroupBy={isGroupBy}
+                  margin={margin}
+                  yTickCnt={yTickCnt}
+                  xTickCnt={xTickCnt}
+                  rowLabel={rowLabel}
+                  fillColor={fillColor}
+                  groupKeys={groupKeys}
+                  chartData={chartData}
+                  valTickFormater={valTickFormater}
+                  xAxisPadding={xAxisPadding}
+                  legendMargin={legendMargin}
+                  grpColorScale={grpColorScale} />
+              </When>
+              <When condition={chartType === 'area'}>
+                <ChartExperimentalAreaStuff
+                  w={w}
+                  h={h}
+                  isGroupBy={isGroupBy}
+                  margin={margin}
+                  rowLabel={rowLabel}
+                  valTickFormater={valTickFormater}
+                  fillColor={fillColor}
+                  groupKeys={groupKeys}
+                  chartData={chartData}
+                  yTickCnt={yTickCnt}
+                  xTickCnt={xTickCnt}
+                  xAxisPadding={xAxisPadding}
+                  valTickFormater={valTickFormater}
+                  grpColorScale={grpColorScale} />
+              </When>
+              <Otherwise>
+                <div>
                 hello world
               </div>
-            </Otherwise>
-          </Choose>
-        </When>
-        <Otherwise>
-          <BlankChart/>
-        </Otherwise>
-      </Choose>
-    </div>
+              </Otherwise>
+            </Choose>
+          </When>
+          <Otherwise>
+            <BlankChart />
+          </Otherwise>
+        </Choose>
+      </div>
     )
   }
 }

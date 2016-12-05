@@ -14,13 +14,13 @@ class ChartExperimentalAreaStuff extends Component {
         areas = groupKeys.map(function (i) {
           if (i) {
             let colorIndex = groupKeys.indexOf(i)
-            return (  <Area
-                        type='monotone'
-                        dataKey={i}
-                        stackId='i'
-                        key={i}
-                        stroke={colorScale('colorIndex')}
-                        fill={colorScale(colorIndex)} />)
+            return (<Area
+              type='monotone'
+              dataKey={i}
+              stackId='i'
+              key={i}
+              stroke={colorScale('colorIndex')}
+              fill={colorScale(colorIndex)} />)
           }
         })
         return areas
@@ -32,50 +32,50 @@ class ChartExperimentalAreaStuff extends Component {
     let areas = this.makeAreas(groupKeys, grpColorScale)
 
     return (
-    <Choose>
-      <When condition={!isGroupBy}>
-        <AreaChart
-          width={w}
-          height={h}
-          data={chartData}
-          margin={margin}>
-          <XAxis dataKey='key' />
-          <YAxis
-            tickFormatter={valTickFormater}
-            tickCount={yTickCnt}
-            domain={[0, 'dataMax + 100']}
-            type='number'
-            label={<CustomYaxisLabel val={rowLabel} h={h} />} />
-          <CartesianGrid strokeDasharray='3 3' vertical={false} />
-          <Tooltip/>
-          <Area
-            type='monotone'
-            dataKey='value'
-            stroke={fillColor}
-            fill={fillColor} />
-          <Legend />
-        </AreaChart>
-      </When>
-      <When condition={isGroupBy}>
-        <AreaChart
-          width={w}
-          height={h}
-          data={chartData}
-          margin={margin}>
-          <XAxis dataKey='label' />
-          <YAxis
-            tickFormatter={valTickFormater}
-            tickCount={yTickCnt}
-            domain={[0, 'dataMax + 100']}
-            type='number'
-            label={<CustomYaxisLabel val={rowLabel + ' value'} h={h} />} />
-          <CartesianGrid strokeDasharray='3 3' vertical={false} />
-          <Tooltip/>
-          <Legend/>
-          {areas}
-        </AreaChart>
-      </When>
-    </Choose>
+      <Choose>
+        <When condition={!isGroupBy}>
+          <AreaChart
+            width={w}
+            height={h}
+            data={chartData}
+            margin={margin}>
+            <XAxis dataKey='key' />
+            <YAxis
+              tickFormatter={valTickFormater}
+              tickCount={yTickCnt}
+              domain={[0, 'dataMax + 100']}
+              type='number'
+              label={<CustomYaxisLabel val={rowLabel} h={h} />} />
+            <CartesianGrid strokeDasharray='3 3' vertical={false} />
+            <Tooltip />
+            <Area
+              type='monotone'
+              dataKey='value'
+              stroke={fillColor}
+              fill={fillColor} />
+            <Legend />
+          </AreaChart>
+        </When>
+        <When condition={isGroupBy}>
+          <AreaChart
+            width={w}
+            height={h}
+            data={chartData}
+            margin={margin}>
+            <XAxis dataKey='label' />
+            <YAxis
+              tickFormatter={valTickFormater}
+              tickCount={yTickCnt}
+              domain={[0, 'dataMax + 100']}
+              type='number'
+              label={<CustomYaxisLabel val={rowLabel + ' value'} h={h} />} />
+            <CartesianGrid strokeDasharray='3 3' vertical={false} />
+            <Tooltip />
+            <Legend />
+            {areas}
+          </AreaChart>
+        </When>
+      </Choose>
     )
   }
 }

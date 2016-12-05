@@ -16,7 +16,7 @@ function updateQueryKeys (state, action) {
   })
 }
 
-function selectColumn (state, action)  {
+function selectColumn (state, action) {
   return updateObject(state, {
     selectedColumn: action.payload
   })

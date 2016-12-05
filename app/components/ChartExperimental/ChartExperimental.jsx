@@ -1,5 +1,5 @@
 
-//import { BarChart } from 'react-d3';
+// import { BarChart } from 'react-d3';
 import React, { Component } from 'react'
 import { Grid } from 'react-bootstrap'
 import { Row } from 'react-bootstrap'
@@ -26,10 +26,9 @@ class ChartExperimental extends Component {
     return chartDisplay
   }
 
-
- render () {
+  render () {
     let groupKeys
-    let {  chart, metadata, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType, selectColumn } = this.props
+    let { chart, metadata, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType, selectColumn } = this.props
     let { columns, query, ...other } = metadata
     console.log(this.props)
     groupKeys = query.groupKeys
@@ -41,8 +40,8 @@ class ChartExperimental extends Component {
     displayChartOptions = chartDisplay.displayChartOptions
     let chartType = chartDisplay.chartType
     return (
-       <Row>
-       <ChartExperimentalCanvas
+      <Row>
+        <ChartExperimentalCanvas
           chart={chart}
           chartData={chartData}
           groupKeys={groupKeys}
@@ -61,8 +60,8 @@ class ChartExperimental extends Component {
           applyChartType={applyChartType}
           displayChartOptions={displayChartOptions}
           />
-         <Panel
-         {...query}
+        <Panel
+          {...query}
           columns={columns}
           handleGroupBy={handleGroupBy}
           handleAddFilter={handleAddFilter}
@@ -74,7 +73,7 @@ class ChartExperimental extends Component {
           displayChartOptions={displayChartOptions}
           chartType={chartType}
           metadata={metadata}
-          selectColumn={selectColumn}/>
+          selectColumn={selectColumn} />
       </Row>
     )
   }

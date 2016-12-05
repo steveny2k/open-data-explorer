@@ -10,25 +10,25 @@ class Panel extends Component {
     let { chartType, displayChartOptions, selectedColumn, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, applyChartType, selectColumn, metadata } = this.props
     let { columns, query } = metadata
     return (
-    <Col md={3}>
-      <Accordion>
-        <ChartOptions
-          {...query}
-          columns={columns}
-          handleGroupBy={handleGroupBy}
-          handleAddFilter={handleAddFilter}
-          handleRemoveFilter={handleRemoveFilter}
-          applyFilter={applyFilter}
-          updateFilter={updateFilter}
-          handleSumBy={handleSumBy} />
-        <ChartExperimentalType applyChartType={applyChartType} displayChartOptions={displayChartOptions} chartType={chartType} />
-        <PanelColumns
-          metadata={metadata}
-          selectColumn={selectColumn}
-          columns={columns}
-          selectedColumn={selectedColumn} />
-      </Accordion>
-    </Col>
+      <Col md={3}>
+        <Accordion>
+          <ChartOptions
+            {...query}
+            columns={columns}
+            handleGroupBy={handleGroupBy}
+            handleAddFilter={handleAddFilter}
+            handleRemoveFilter={handleRemoveFilter}
+            applyFilter={applyFilter}
+            updateFilter={updateFilter}
+            handleSumBy={handleSumBy} />
+          <ChartExperimentalType applyChartType={applyChartType} displayChartOptions={displayChartOptions} chartType={chartType} />
+          <PanelColumns
+            metadata={metadata}
+            selectColumn={selectColumn}
+            columns={columns}
+            selectedColumn={selectedColumn} />
+        </Accordion>
+      </Col>
     )
   }
 }

@@ -11,30 +11,30 @@ class ChartExperimentalType extends Component {
       chartType = 'line'
     }
     const panelTitle = (
-    <div>
+      <div>
       Chart Type Options
     </div>
     )
     return (
-    <Panel collapsible defaultExpanded header={panelTitle}>
-      <div className={'chartTypeRadio'}>
-        <RadioGroup name='chartTypes' selectedValue={chartType} onChange={applyChartType}>
-          {Radio => (
-             <div>
-               <label className={'chartTypeRadioLabel'}>
-                 <Radio value='bar' />Bar
+      <Panel collapsible defaultExpanded header={panelTitle}>
+        <div className={'chartTypeRadio'}>
+          <RadioGroup name='chartTypes' selectedValue={chartType} onChange={applyChartType}>
+            {Radio => (
+              <div>
+                <label className={'chartTypeRadioLabel'}>
+                  <Radio value='bar' />Bar
                </label>
-               <label className={'chartTypeRadioLabel'}>
-                 <Radio value='line' />Line
+                <label className={'chartTypeRadioLabel'}>
+                  <Radio value='line' />Line
                </label>
-               <label className={'chartTypeRadioLabel'}>
-                 <Radio value='area' />Area
+                <label className={'chartTypeRadioLabel'}>
+                  <Radio value='area' />Area
                </label>
-             </div>
+              </div>
            )}
-        </RadioGroup>
-      </div>
-    </Panel>
+          </RadioGroup>
+        </div>
+      </Panel>
     )
   }
 
@@ -45,9 +45,9 @@ class ChartExperimentalType extends Component {
       chartTypeOptions = this.renderChartTypes()
     }
     return (
-    <div>
-      {chartTypeOptions}
-    </div>
+      <div>
+        {chartTypeOptions}
+      </div>
     )
   }
 }

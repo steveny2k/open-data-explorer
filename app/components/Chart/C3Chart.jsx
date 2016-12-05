@@ -121,7 +121,7 @@ let C3Chart = React.createClass({
       }
       graphObject.data.xFormat = '%Y-%m-%dT%H:%M:%S.%L'
       graphObject.axis.x =
-        {type: 'timeseries', tick: {culling: true, format: format}
+      {type: 'timeseries', tick: {culling: true, format: format}
       }
     }
     if (options.subchart) {
