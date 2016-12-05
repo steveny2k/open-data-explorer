@@ -11,6 +11,7 @@ import ColumnSelector from '../components/Query/ColumnSelector'
 import GroupOptions from '../components/Query/GroupOptions'
 import FilterOptions from '../components/Query/FilterOptions'
 import SumOptions from '../components/Query/SumOptions'
+import Loading from '../components/Loading'
 import ChartTypeOptions from '../components/Chart/ChartTypeOptions'
 import { Row, Col, Accordion } from 'react-bootstrap'
 import './_containers.scss'
@@ -19,25 +20,27 @@ const VizContainer = ({ props, actions }) => (
   <Row>
     <Col md={9}>
     <ConditionalOnSelect selectedColumn={props.selectedColumn} displayBlank={<BlankChart />}>
-      <div className='chartHeader'>
-        <ChartExperimentalTitle
+      <Loading isFetching={props.isFetching}>
+        <div className='chartHeader'>
+          <ChartExperimentalTitle
+            columns={props.columns}
+            rowLabel={props.rowLabel}
+            selectedColumnDef={props.selectedColumnDef}
+            groupBy={props.groupBy}
+            sumBy={props.sumBy} />
+          <ChartExperimentalSubTitle columns={props.columns} filters={props.filters} />
+        </div>
+        <ChartExperimentalCanvas
+          chartData={props.chartData}
+          chartType={props.chartType}
+          groupKeys={props.groupKeys}
           columns={props.columns}
+          filters={props.filters}
           rowLabel={props.rowLabel}
           selectedColumnDef={props.selectedColumnDef}
           groupBy={props.groupBy}
           sumBy={props.sumBy} />
-        <ChartExperimentalSubTitle columns={props.columns} filters={props.filters} />
-      </div>
-      <ChartExperimentalCanvas
-        chartData={props.chartData}
-        chartType={props.chartType}
-        groupKeys={props.groupKeys}
-        columns={props.columns}
-        filters={props.filters}
-        rowLabel={props.rowLabel}
-        selectedColumnDef={props.selectedColumnDef}
-        groupBy={props.groupBy}
-        sumBy={props.sumBy} />
+      </Loading>
     </ConditionalOnSelect>
     </Col>
     <Col md={3}>
@@ -62,6 +65,7 @@ const VizContainer = ({ props, actions }) => (
 
 VizContainer.propTypes = {
   props: PropTypes.shape({
+    isFetching: PropTypes.bool,
     chartType: PropTypes.string,
     chartData: PropTypes.array,
     groupKeys: PropTypes.array,
@@ -88,6 +92,7 @@ const mapStateToProps = (state, ownProps) => {
       selectedColumn: query.selectedColumn,
       selectedColumnDef: getSelectedColumnDef(state),
       columns: columnProps.columns,
+      isFetching: query.isFetching,
       groupBy: query.groupBy,
       sumBy: query.sumBy,
       dateBy: query.dateBy,
