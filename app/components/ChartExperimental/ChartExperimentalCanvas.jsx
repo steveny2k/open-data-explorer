@@ -123,12 +123,13 @@ class ChartExperimentalCanvas extends Component {
     if (selectedColumnDef) {
       fillColor = fillColorIndex[selectedColumnDef.type]
       grpColorScale = groupByColorIndex[selectedColumnDef.type]
-      console.log(grpColorScale)
+      // console.log(grpColorScale)
     }
-
+    /*
     console.log('in *canvas*')
     console.log(this.props)
     console.log('in *canvas*')
+    */
     let xAxisPadding = { left: 20, right: 20 }
     let xTickCnt = 5
     let yTickCnt = 6
