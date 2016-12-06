@@ -10,6 +10,7 @@ import ChartExperimentalBarStuff from './ChartExperimentalBarStuff'
 import ChartExperimentalLineStuff from './ChartExperimentalLineStuff'
 import ChartExperimentalAreaStuff from './ChartExperimentalAreaStuff'
 // https://www.npmjs.com/package/jsx-control-statements
+import { findMaxObjKeyValue } from '../../helpers'
 
 class ChartExperimentalCanvas extends Component {
 
@@ -78,6 +79,7 @@ class ChartExperimentalCanvas extends Component {
         return newChartData
       }
     }
+
     return chartData
   }
 
@@ -119,16 +121,11 @@ class ChartExperimentalCanvas extends Component {
     if (!isGroupBy) {
       chartData = this.convertChartData(chartData, selectedColumnDef)
     }
-    // let fillColor = '#7dc7f4',
     if (selectedColumnDef) {
       fillColor = fillColorIndex[selectedColumnDef.type]
       grpColorScale = groupByColorIndex[selectedColumnDef.type]
       console.log(grpColorScale)
     }
-
-    console.log('in *canvas*')
-    console.log(this.props)
-    console.log('in *canvas*')
     let xAxisPadding = { left: 20, right: 20 }
     let xTickCnt = 5
     let yTickCnt = 6
@@ -138,14 +135,16 @@ class ChartExperimentalCanvas extends Component {
     let margin = {top: 1, right: 5, bottom: 1, left: 5}
     let w = this.state.width - (margin.left + margin.right)
     let h = this.props.height - (margin.top + margin.bottom)
-    let formatValue = d3.format('.1s')
+    let formatValue = d3.format('.3s')
     // let formatValue = d3.format('d')
     let valTickFormater = function (d) { return formatValue(d)}
-    let ytickCnt = 5
-    let xtickCnt = 5
+    // let ytickCnt = 5
+    // let xtickCnt = 5
     let legendMargin = { bottom: 50 }
     let AxisPading = { left: 20, right: 20, bottom: 0 }
     let yAxisPadding = { top: 10 }
+    let maxValue = findMaxObjKeyValue(chartData, 'value')
+    let domainMax = maxValue + (maxValue * 0.03)
     return (
     <div>
       <Choose>
@@ -155,6 +154,7 @@ class ChartExperimentalCanvas extends Component {
               <ChartExperimentalBarStuff
                 w={w}
                 h={h}
+                domainMax={domainMax}
                 isGroupBy={isGroupBy}
                 margin={margin}
                 rowLabel={rowLabel}
@@ -176,6 +176,7 @@ class ChartExperimentalCanvas extends Component {
                 h={h}
                 isGroupBy={isGroupBy}
                 margin={margin}
+                domainMax={domainMax}
                 yTickCnt={yTickCnt}
                 xTickCnt={xTickCnt}
                 rowLabel={rowLabel}
@@ -192,6 +193,7 @@ class ChartExperimentalCanvas extends Component {
                 w={w}
                 h={h}
                 isGroupBy={isGroupBy}
+                domainMax={domainMax}
                 margin={margin}
                 rowLabel={rowLabel}
                 valTickFormater={valTickFormater}

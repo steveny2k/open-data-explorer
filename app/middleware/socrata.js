@@ -3,6 +3,7 @@ import pluralize from 'pluralize'
 import { capitalize } from 'underscore.string'
 import _ from 'lodash'
 import uniq from 'lodash/uniq'
+import { replacePropertyNameValue } from '../helpers'
 
 const API_ROOT = 'https://data.sfgov.org/'
 
@@ -225,7 +226,7 @@ function transformMetadata (json) {
       name: column['name'].replace(/[_-]/g, ' '),
       description: column['description'] || '',
       type,
-      format}
+    format}
 
     if (column['cachedContents']) {
       col.non_null = column['cachedContents']['non_null'] || 0
@@ -324,7 +325,7 @@ function transformQueryDataLegacy (json, state) {
       binSize = freedmanDiaconis(vector2)
     }
     binSize = pretty(binSize)
-    let binNumbers = (values, binWidth, array = [], index = 0) => {
+    let binNumbers = (values, binWidth, array = [] , index = 0) => {
       if (index < values.length) {
         let bin = Math.floor(values[index] / binWidth)
         array[bin] = array[bin] ? array[bin] + 1 : 1
@@ -378,7 +379,7 @@ function transformQueryData (json, state) {
     }))
     json = reduceGroupedData(json, query.groupBy)
   }
-
+  json = replacePropertyNameValue(json, 'label', 'undefined', 'blank')
   return {
     query: {
       isFetching: false,

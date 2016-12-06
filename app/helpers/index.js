@@ -7,6 +7,9 @@ function H (value) {
 }
 
 H.toTitleCase = require('./toTitleCase')
+H.findMinObjKeyValue = require('./findMinObjKeyValue.js')
+H.findMaxObjKeyValue = require('./findMaxObjKeyValue.js')
+H.replacePropertyNameValue = require('./replacePropertyNameValue')
 
 // Implement chaining
 H.prototype = {
@@ -27,5 +30,4 @@ function fn2method (key, fn) {
 
 // Copy functions to instance methods for chaining
 for (var key in H) fn2method(key, H[key])
-
 module.exports = H

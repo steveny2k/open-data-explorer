@@ -28,7 +28,7 @@ class ChartExperimentalAreaStuff extends Component {
     }
   }
   render () {
-    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, grpColorScale, valTickFormater} = this.props
+    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, grpColorScale, valTickFormater, domainMax} = this.props
     let areas = this.makeAreas(groupKeys, grpColorScale)
 
     return (
@@ -43,7 +43,7 @@ class ChartExperimentalAreaStuff extends Component {
           <YAxis
             tickFormatter={valTickFormater}
             tickCount={yTickCnt}
-            domain={[0, 'dataMax + 100']}
+            domain={[0, domainMax]}
             type='number'
             label={<CustomYaxisLabel val={rowLabel} h={h} />} />
           <CartesianGrid strokeDasharray='3 3' vertical={false} />
@@ -66,7 +66,7 @@ class ChartExperimentalAreaStuff extends Component {
           <YAxis
             tickFormatter={valTickFormater}
             tickCount={yTickCnt}
-            domain={[0, 'dataMax + 100']}
+            domain={[0, domainMax]}
             type='number'
             label={<CustomYaxisLabel val={rowLabel + ' value'} h={h} />} />
           <CartesianGrid strokeDasharray='3 3' vertical={false} />

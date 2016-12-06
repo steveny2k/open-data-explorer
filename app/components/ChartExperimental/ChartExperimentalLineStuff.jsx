@@ -28,7 +28,7 @@ class ChartExperimentalLineStuff extends Component {
     }
   }
   render () {
-    let {h, w, isGroupBy, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, xTickCnt, xAxisPadding, legendStyle } = this.props
+    let {h, w, isGroupBy, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, xAxisPadding, legendStyle, domainMax } = this.props
     let lines = this.makeLines(groupKeys)
 
     return (
@@ -37,15 +37,15 @@ class ChartExperimentalLineStuff extends Component {
         <LineChart width={w} height={h} data={chartData}>
           <XAxis
             dataKey='key'
-            tickCount={xTickCnt}
+            //tickCount={xTickCnt}
             tick={<CustomKeyAxisTick/>}
             padding={xAxisPadding} />
           <YAxis
             type='number'
             label={<CustomYaxisLabel val={rowLabel} h={h} />}
-            tickCount={yTickCnt}
+            //tickCount={yTickCnt}
             tickFormatter={valTickFormater}
-            domain={[0, 'dataMax + 100']} />
+            domain={[0, domainMax]} />
           <CartesianGrid stroke='#eee' strokeDasharray='3 3' vertical={false} />
           <Line
             type='monotone'
@@ -66,7 +66,7 @@ class ChartExperimentalLineStuff extends Component {
           <YAxis
             tickFormatter={valTickFormater}
             tickCount={yTickCnt}
-            domain={[0, 'dataMax + 100']}
+            domain={[0, domainMax]}
             label={<CustomYaxisLabel val={rowLabel + ' value'} h={h} />} />
           <CartesianGrid strokeDasharray="3 3" vertical={false} />
           <Tooltip/>
