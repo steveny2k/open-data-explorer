@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import d3 from 'd3'
-import { Col } from 'react-bootstrap'
 import { XAxis, BarChart, YAxis, CartesianGrid, Bar, Legend, Tooltip } from 'recharts'
 import CustomYaxisLabel from './CustomYaxisLabel'
 import CustomXaxisLabel from './CustomXaxisLabel'

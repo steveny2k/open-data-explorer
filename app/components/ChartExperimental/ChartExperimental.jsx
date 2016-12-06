@@ -1,7 +1,6 @@
 
 // import { BarChart } from 'react-d3';
 import React, { Component } from 'react'
-import { Grid } from 'react-bootstrap'
 import { Row } from 'react-bootstrap'
 import Panel from './Panel'
 require('./_ChartExperimental.scss')
@@ -49,13 +48,10 @@ class ChartExperimental extends Component {
           columns={columns}
           {...otherProps}
           query={query}
-          groupKeys={groupKeys}
           dateBy={query.dateBy}
-          changeDateBy={changeDateBy}
           groupBy={query.groupBy}
           sumBy={query.sumBy}
           filters={query.filters}
-          columns={columns}
           chartType={chartType}
           applyChartType={applyChartType}
           displayChartOptions={displayChartOptions}
