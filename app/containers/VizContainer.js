@@ -20,16 +20,16 @@ const VizContainer = ({ props, actions }) => (
   <Row>
     <Col md={9}>
       <ConditionalOnSelect selectedColumn={props.selectedColumn} displayBlank={<BlankChart />}>
+        <div className='chartHeader'>
+          <ChartExperimentalTitle
+            columns={props.columns}
+            rowLabel={props.rowLabel}
+            selectedColumnDef={props.selectedColumnDef}
+            groupBy={props.groupBy}
+            sumBy={props.sumBy} />
+          <ChartExperimentalSubTitle columns={props.columns} filters={props.filters} />
+        </div>
         <Loading isFetching={props.isFetching}>
-          <div className='chartHeader'>
-            <ChartExperimentalTitle
-              columns={props.columns}
-              rowLabel={props.rowLabel}
-              selectedColumnDef={props.selectedColumnDef}
-              groupBy={props.groupBy}
-              sumBy={props.sumBy} />
-            <ChartExperimentalSubTitle columns={props.columns} filters={props.filters} />
-          </div>
           <ChartExperimentalCanvas
             chartData={props.chartData}
             chartType={props.chartType}
