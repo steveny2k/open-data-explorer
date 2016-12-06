@@ -34,7 +34,8 @@ class Loading extends Component {
 }
 
 Loading.propTypes = {
-  isFetching: PropTypes.bool
+  isFetching: PropTypes.bool,
+  height: PropTypes.number
 }
 
 export default Loading
