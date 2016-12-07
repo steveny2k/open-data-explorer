@@ -15,12 +15,13 @@ class ChartExperimentalLineStuff extends Component {
         lines = groupKeys.map(function (i) {
           if (i) {
             let colorIndex = groupKeys.indexOf(i)
-            return (<Line
-              type='monotone'
-              dataKey={i}
-              stackId='a'
-              key={i}
-              stroke={colorScale(colorIndex)} />)
+            return (
+              <Line
+                type='monotone'
+                dataKey={i}
+                stackId='a'
+                key={i}
+                stroke={colorScale(colorIndex)} />)
           }
         })
         return lines
@@ -28,9 +29,8 @@ class ChartExperimentalLineStuff extends Component {
     }
   }
   render () {
-    let {h, w, isGroupBy, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, xTickCnt, xAxisPadding, legendStyle } = this.props
+    let {h, w, isGroupBy, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, xAxisPadding, legendStyle, domainMax, xTickCnt, yTickCnt} = this.props
     let lines = this.makeLines(groupKeys)
-
     return (
       <Choose>
         <When condition={!isGroupBy}>
@@ -45,7 +45,7 @@ class ChartExperimentalLineStuff extends Component {
               label={<CustomYaxisLabel val={rowLabel} h={h} />}
               tickCount={yTickCnt}
               tickFormatter={valTickFormater}
-              domain={[0, 'dataMax + 100']} />
+              domain={[0, domainMax]} />
             <CartesianGrid stroke='#eee' strokeDasharray='3 3' vertical={false} />
             <Line
               type='monotone'
@@ -54,19 +54,19 @@ class ChartExperimentalLineStuff extends Component {
               stroke={fillColor} />
             <Tooltip />
             <Legend wrapperStyle={legendStyle} />
-          </LineChart>
+          </ LineChart>
         </When>
         <When condition={isGroupBy}>
           <LineChart
             width={w}
             height={h}
             data={chartData}
-            margin={margin}>
+            margin={margin} >
             <XAxis dataKey='label' />
             <YAxis
               tickFormatter={valTickFormater}
               tickCount={yTickCnt}
-              domain={[0, 'dataMax + 100']}
+              domain={[0, domainMax]}
               label={<CustomYaxisLabel val={rowLabel + ' value'} h={h} />} />
             <CartesianGrid strokeDasharray='3 3' vertical={false} />
             <Tooltip />

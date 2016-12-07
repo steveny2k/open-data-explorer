@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 
 class CustomYaxisLabel extends Component {
   render () {
-    const {x, y, h, val } = this.props
+    // review this, you can also pass in x, y, width
+    const { h, val } = this.props
     let xVal = (0 - ((h / 2) - 50))
     return (
       <g>
@@ -16,7 +17,6 @@ class CustomYaxisLabel extends Component {
           {'Number of ' + val + 's'}
         </text>
       </g>
-
     )
   }
 }

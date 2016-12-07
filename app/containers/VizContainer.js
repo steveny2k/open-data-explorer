@@ -11,9 +11,10 @@ import ColumnSelector from '../components/Query/ColumnSelector'
 import GroupOptions from '../components/Query/GroupOptions'
 import FilterOptions from '../components/Query/FilterOptions'
 import SumOptions from '../components/Query/SumOptions'
-import Loading from '../components/Loading'
-import ChartTypeOptions from '../components/Chart/ChartTypeOptions'
 import { Row, Col, Accordion } from 'react-bootstrap'
+import DateToggle from '../components/Query/DateToggle'
+import ChartTypeDisplay from '../components/Query/ChartTypeDisplay'
+import Loading from '../components/Loading'
 import './_containers.scss'
 
 const VizContainer = ({ props, actions }) => (
@@ -27,12 +28,25 @@ const VizContainer = ({ props, actions }) => (
             selectedColumnDef={props.selectedColumnDef}
             groupBy={props.groupBy}
             sumBy={props.sumBy} />
-          <ChartExperimentalSubTitle columns={props.columns} filters={props.filters} />
+          <ChartExperimentalSubTitle
+            columns={props.columns}
+            filters={props.filters} />
         </div>
         <Loading isFetching={props.isFetching}>
+          <Row>
+            <Col md={9} />
+            <Col md={2}>
+              <DateToggle
+                dateBy={props.dateBy}
+                changeDateBy={actions.changeDateBy}
+                selectedColumnDef={props.selectedColumnDef} />
+            </Col>
+            <Col md={1} />
+          </Row>
           <ChartExperimentalCanvas
             chartData={props.chartData}
             chartType={props.chartType}
+            dateBy={props.dateBy}
             groupKeys={props.groupKeys}
             columns={props.columns}
             filters={props.filters}
@@ -55,7 +69,10 @@ const VizContainer = ({ props, actions }) => (
             handleRemoveFilter={actions.handleRemoveFilter}
             applyFilter={actions.applyFilter}
             updateFilter={actions.updateFilter} />
-          <ChartTypeOptions applyChartType={actions.applyChartType} chartType={props.chartType} />
+          <ChartTypeDisplay
+            applyChartType={actions.applyChartType}
+            chartType={props.chartType}
+            selectedColumnDef={props.selectedColumnDef} />
         </ConditionalOnSelect>
         <ColumnSelector columns={props.selectableColumns} selected={props.selectedColumn} onSelectColumn={actions.selectColumn} />
       </Accordion>

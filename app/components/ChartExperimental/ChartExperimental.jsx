@@ -1,5 +1,3 @@
-
-// import { BarChart } from 'react-d3';
 import React, { Component } from 'react'
 import { Row } from 'react-bootstrap'
 import Panel from './Panel'
@@ -24,12 +22,10 @@ class ChartExperimental extends Component {
     }
     return chartDisplay
   }
-
   render () {
     let groupKeys
-    let { chart, metadata, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType, selectColumn } = this.props
-    let { columns, query, ...other } = metadata
-    console.log(this.props)
+    let {chart, metadata, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType, selectColumn} = this.props
+    let {columns, query, ...other} = metadata
     groupKeys = query.groupKeys
     let chartData = this.props.chart.chartData
     let otherProps = {...other}

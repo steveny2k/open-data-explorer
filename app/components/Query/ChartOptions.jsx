@@ -78,11 +78,13 @@ class ChartOptions extends Component {
   }
 
   render () {
+    // let {columns, handleAddFilter, handleRemoveFilter, filters, applyFilter, updateFilter, selectedColumn} = this.props
     let {columns, selectedColumn} = this.props
+    // let groupByOptions = null
     let sumByOptions = null
-    console.log(selectedColumn)
     if (columns[selectedColumn]) {
       if (columns[selectedColumn].type !== 'number' || columns[selectedColumn].categories) {
+        // groupByOptions = this.renderGroupByOptions()
         sumByOptions = this.renderSumByOptions()
       }
     }

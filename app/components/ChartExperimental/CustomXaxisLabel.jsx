@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 
 class CustomXaxisLabel extends Component {
   render () {
-    const {x, y, width, val } = this.props
-    let xVal = (0 - ((width / 2) - 50))
+    // review this, you can also pass in x, y, width
+    const {val} = this.props
+    // let xVal = (0 - ((width / 2) - 50))
     return (
       <g>
         <text

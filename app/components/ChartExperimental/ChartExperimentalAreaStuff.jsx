@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import d3 from 'd3'
 import { XAxis, AreaChart, YAxis, CartesianGrid, Area, Legend, Tooltip } from 'recharts'
 import CustomYaxisLabel from './CustomYaxisLabel'
+import CustomKeyAxisTick from './CustomKeyAxisTick'
+
 class ChartExperimentalAreaStuff extends Component {
 
   makeAreas (groupKeys, grpColorScale) {
@@ -14,13 +16,14 @@ class ChartExperimentalAreaStuff extends Component {
         areas = groupKeys.map(function (i) {
           if (i) {
             let colorIndex = groupKeys.indexOf(i)
-            return (<Area
-              type='monotone'
-              dataKey={i}
-              stackId='i'
-              key={i}
-              stroke={colorScale('colorIndex')}
-              fill={colorScale(colorIndex)} />)
+            return (
+              <Area
+                type='monotone'
+                dataKey={i}
+                stackId='i'
+                key={i}
+                stroke={colorScale('colorIndex')}
+                fill={colorScale(colorIndex)} />)
           }
         })
         return areas
@@ -28,7 +31,7 @@ class ChartExperimentalAreaStuff extends Component {
     }
   }
   render () {
-    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, grpColorScale, valTickFormater} = this.props
+    let {h, w, isGroupBy, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, grpColorScale, valTickFormater, domainMax} = this.props
     let areas = this.makeAreas(groupKeys, grpColorScale)
 
     return (
@@ -39,11 +42,13 @@ class ChartExperimentalAreaStuff extends Component {
             height={h}
             data={chartData}
             margin={margin}>
-            <XAxis dataKey='key' />
+            <XAxis
+              dataKey='key'
+              tick={<CustomKeyAxisTick />} />
             <YAxis
               tickFormatter={valTickFormater}
               tickCount={yTickCnt}
-              domain={[0, 'dataMax + 100']}
+              domain={[0, domainMax]}
               type='number'
               label={<CustomYaxisLabel val={rowLabel} h={h} />} />
             <CartesianGrid strokeDasharray='3 3' vertical={false} />
@@ -62,11 +67,13 @@ class ChartExperimentalAreaStuff extends Component {
             height={h}
             data={chartData}
             margin={margin}>
-            <XAxis dataKey='label' />
+            <XAxis
+              dataKey='label'
+              tick={<CustomKeyAxisTick />} />
             <YAxis
               tickFormatter={valTickFormater}
               tickCount={yTickCnt}
-              domain={[0, 'dataMax + 100']}
+              domain={[0, domainMax]}
               type='number'
               label={<CustomYaxisLabel val={rowLabel + ' value'} h={h} />} />
             <CartesianGrid strokeDasharray='3 3' vertical={false} />
