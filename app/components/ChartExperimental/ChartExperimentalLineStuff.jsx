@@ -15,12 +15,13 @@ class ChartExperimentalLineStuff extends Component {
         lines = groupKeys.map(function (i) {
           if (i) {
             let colorIndex = groupKeys.indexOf(i)
-            return ( <Line
-                       type='monotone'
-                       dataKey={i}
-                       stackId='a'
-                       key={i}
-                       stroke={colorScale(colorIndex)} />)
+            return (
+              <Line
+                type='monotone'
+                dataKey={i}
+                stackId='a'
+                key={i}
+                stroke={colorScale(colorIndex)} />)
           }
         })
         return lines
@@ -28,52 +29,51 @@ class ChartExperimentalLineStuff extends Component {
     }
   }
   render () {
-    let {h, w, isGroupBy, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, yTickCnt, xTickCnt, xAxisPadding, legendStyle } = this.props
+    let {h, w, isGroupBy, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, xAxisPadding, legendStyle, domainMax, xTickCnt, yTickCnt} = this.props
     let lines = this.makeLines(groupKeys)
-
     return (
-    <Choose>
-      <When condition={!isGroupBy}>
-        <LineChart width={w} height={h} data={chartData}>
-          <XAxis
-            dataKey='key'
-            tickCount={xTickCnt}
-            tick={<CustomKeyAxisTick/>}
-            padding={xAxisPadding} />
-          <YAxis
-            type='number'
-            label={<CustomYaxisLabel val={rowLabel} h={h} />}
-            tickCount={yTickCnt}
-            tickFormatter={valTickFormater}
-            domain={[0, 'dataMax + 100']} />
-          <CartesianGrid stroke='#eee' strokeDasharray='3 3' vertical={false} />
-          <Line
-            type='monotone'
-            strokeWidth='3'
-            dataKey='value'
-            stroke={fillColor} />
-          <Tooltip />
-          <Legend wrapperStyle={legendStyle} />
-        </LineChart>
-      </When>
-      <When condition={isGroupBy}>
-        <LineChart
-          width={w}
-          height={h}
-          data={chartData}
-          margin={margin}>
-          <XAxis dataKey="label" />
-          <YAxis
-            tickFormatter={valTickFormater}
-            tickCount={yTickCnt}
-            domain={[0, 'dataMax + 100']}
-            label={<CustomYaxisLabel val={rowLabel + ' value'} h={h} />} />
-          <CartesianGrid strokeDasharray="3 3" vertical={false} />
-          <Tooltip/>
-          {lines}
-        </LineChart>
-      </When>
-    </Choose>
+      <Choose>
+        <When condition={!isGroupBy}>
+          <LineChart width={w} height={h} data={chartData}>
+            <XAxis
+              dataKey='key'
+              tickCount={xTickCnt}
+              tick={<CustomKeyAxisTick />}
+              padding={xAxisPadding} />
+            <YAxis
+              type='number'
+              label={<CustomYaxisLabel val={rowLabel} h={h} />}
+              tickCount={yTickCnt}
+              tickFormatter={valTickFormater}
+              domain={[0, domainMax]} />
+            <CartesianGrid stroke='#eee' strokeDasharray='3 3' vertical={false} />
+            <Line
+              type='monotone'
+              strokeWidth='3'
+              dataKey='value'
+              stroke={fillColor} />
+            <Tooltip />
+            <Legend wrapperStyle={legendStyle} />
+          </ LineChart>
+        </When>
+        <When condition={isGroupBy}>
+          <LineChart
+            width={w}
+            height={h}
+            data={chartData}
+            margin={margin} >
+            <XAxis dataKey='label' />
+            <YAxis
+              tickFormatter={valTickFormater}
+              tickCount={yTickCnt}
+              domain={[0, domainMax]}
+              label={<CustomYaxisLabel val={rowLabel + ' value'} h={h} />} />
+            <CartesianGrid strokeDasharray='3 3' vertical={false} />
+            <Tooltip />
+            {lines}
+          </LineChart>
+        </When>
+      </Choose>
     )
   }
 }
@@ -87,7 +87,7 @@ ChartExperimentalLineStuff.propTypes = {
   margin: React.PropTypes.object,
   rowLabel: React.PropTypes.string,
   groupKeys: React.PropTypes.array,
-  fillColor: React.PropTypes.string,
+  fillColor: React.PropTypes.string
 // valTickFormater: React.PropTypes.function
 }
 

@@ -24,14 +24,12 @@ class ChartExperimentalTitle extends Component {
   }
 
   render () {
-    console.log('***title****')
-    console.log(this.props)
     let {columns, sumBy, rowLabel, groupBy, selectedColumnDef} = this.props
     let a = this.buildA(columns, sumBy, rowLabel)
     let b = selectedColumnDef.name
     let title = this.buildTitle(a, b, columns, groupBy)
     return (
-    <h2 className={'chartTitle'}>{title}</h2>
+      <h2 className={'chartTitle'}>{title}</h2>
     )
   }
 }
