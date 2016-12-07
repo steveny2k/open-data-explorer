@@ -1,4 +1,9 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component} from 'react'
+import FilterDateTime from './FilterDateTime'
+import FilterNumeric from './FilterNumeric'
+import FilterCategory from './FilterCategory'
+import FilterBoolean from './FilterBoolean'
+import {Well, Button} from 'react-bootstrap'
 
 export class FilterList extends Component {
   render () {
@@ -20,17 +25,17 @@ export class FilterList extends Component {
           return {value: columns[option].key, label: columns[option].name}
         })
       }
-
       switch (filterType) {
         case 'date':
           let startDate = filters[key].options ? filters[key].options.min : filter.min
           let endDate = filters[key].options ? filters[key].options.max : filter.max
-          filterContent = <FilterDateTime
-            key={filter.key}
-            fieldKey={filter.key}
-            startDate={startDate}
-            endDate={endDate}
-            applyFilter={applyFilter} />
+          filterContent =
+            <FilterDateTime
+              key={filter.key}
+              fieldKey={filter.key}
+              startDate={startDate}
+              endDate={endDate}
+              applyFilter={applyFilter} />
           break
         case 'category':
           let optionsForFilter = filter.categories.map(function (record) {
@@ -69,22 +74,16 @@ export class FilterList extends Component {
             updateFilter={updateFilter} />
           break
       }
-
-      let filterOption = (
+      let filterOption =
         <Well bsSize='small' className='filter' key={filter.key}>
           <div className='filter-content'>
-            <Button className='close' onClick={handleRemoveFilter.bind(this, filter.key)}>
-              &times;
-            </Button>
+            <Button className='close' onClick={handleRemoveFilter.bind(this, filter.key)}> &times; </Button>
             <h4>{filter.name}</h4>
             {filterContent}
           </div>
-        </Well>)
-
+        </Well>
       return filterOption
     })
-    return filterOptions
-  }
     return (
       {filterOptions}
     )

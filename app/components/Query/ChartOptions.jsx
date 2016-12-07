@@ -2,7 +2,6 @@ require('react-select/dist/react-select.css')
 
 import React, { Component } from 'react'
 import Select from 'react-select'
-import FilterOptions from './FilterOptions'
 import './_Query.scss'
 import { Panel, Row } from 'react-bootstrap'
 
@@ -79,13 +78,13 @@ class ChartOptions extends Component {
   }
 
   render () {
-    let {columns, handleAddFilter, handleRemoveFilter, filters, applyFilter, updateFilter, selectedColumn} = this.props
-    let groupByOptions = null
+    // let {columns, handleAddFilter, handleRemoveFilter, filters, applyFilter, updateFilter, selectedColumn} = this.props
+    let {columns, selectedColumn} = this.props
+    // let groupByOptions = null
     let sumByOptions = null
-    console.log(selectedColumn)
     if (columns[selectedColumn]) {
       if (columns[selectedColumn].type !== 'number' || columns[selectedColumn].categories) {
-        groupByOptions = this.renderGroupByOptions()
+        // groupByOptions = this.renderGroupByOptions()
         sumByOptions = this.renderSumByOptions()
       }
     }
@@ -96,7 +95,7 @@ class ChartOptions extends Component {
       selectedColumn
       ? (
         <Panel collapsible defaultExpanded className='chart' header={panelTitle}>
-        {sumByOptions}
+          {sumByOptions}
         </Panel>
       ) : false
     )

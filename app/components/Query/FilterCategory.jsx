@@ -63,7 +63,7 @@ class FilterCategory extends Component {
           onChange={this.onFilter}
           />
       </div>
-      )
+    )
   }
 }
 

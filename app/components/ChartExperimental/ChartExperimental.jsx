@@ -1,7 +1,4 @@
-
-//import { BarChart } from 'react-d3';
 import React, { Component } from 'react'
-import { Grid } from 'react-bootstrap'
 import { Row } from 'react-bootstrap'
 import Panel from './Panel'
 require('./_ChartExperimental.scss')
@@ -25,13 +22,10 @@ class ChartExperimental extends Component {
     }
     return chartDisplay
   }
-
-
- render () {
+  render () {
     let groupKeys
-    let {  chart, metadata, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType, selectColumn } = this.props
-    let { columns, query, ...other } = metadata
-    console.log(this.props)
+    let {chart, metadata, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType, selectColumn} = this.props
+    let {columns, query, ...other} = metadata
     groupKeys = query.groupKeys
     let chartData = this.props.chart.chartData
     let otherProps = {...other}
@@ -41,8 +35,8 @@ class ChartExperimental extends Component {
     displayChartOptions = chartDisplay.displayChartOptions
     let chartType = chartDisplay.chartType
     return (
-       <Row>
-       <ChartExperimentalCanvas
+      <Row>
+        <ChartExperimentalCanvas
           chart={chart}
           chartData={chartData}
           groupKeys={groupKeys}
@@ -50,19 +44,16 @@ class ChartExperimental extends Component {
           columns={columns}
           {...otherProps}
           query={query}
-          groupKeys={groupKeys}
           dateBy={query.dateBy}
-          changeDateBy={changeDateBy}
           groupBy={query.groupBy}
           sumBy={query.sumBy}
           filters={query.filters}
-          columns={columns}
           chartType={chartType}
           applyChartType={applyChartType}
           displayChartOptions={displayChartOptions}
           />
-         <Panel
-         {...query}
+        <Panel
+          {...query}
           columns={columns}
           handleGroupBy={handleGroupBy}
           handleAddFilter={handleAddFilter}
@@ -74,7 +65,7 @@ class ChartExperimental extends Component {
           displayChartOptions={displayChartOptions}
           chartType={chartType}
           metadata={metadata}
-          selectColumn={selectColumn}/>
+          selectColumn={selectColumn} />
       </Row>
     )
   }

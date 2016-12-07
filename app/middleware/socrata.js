@@ -3,6 +3,7 @@ import pluralize from 'pluralize'
 import { capitalize } from 'underscore.string'
 import _ from 'lodash'
 import uniq from 'lodash/uniq'
+import { replacePropertyNameValue } from '../helpers'
 
 const API_ROOT = 'https://data.sfgov.org/'
 
@@ -377,7 +378,7 @@ function transformQueryData (json, state) {
     }))
     json = reduceGroupedData(json, query.groupBy)
   }
-
+  json = replacePropertyNameValue(json, 'label', 'undefined', 'blank')
   return {
     query: {
       isFetching: false,
