@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { getSelectedColumnDef, getGroupableColumns, getSelectableColumns, getSummableColumns } from '../reducers'
-import { selectColumn, groupBy, sumBy, addFilter, applyChartType, removeFilter, applyFilter, updateFilter, changeDateBy, updateQueryStateFromUrl } from '../actions'
+import { selectColumn, groupBy, sumBy, addFilter, applyChartType, removeFilter, applyFilter, updateFilter, changeDateBy } from '../actions'
 import BlankChart from '../components/ChartExperimental/BlankChart'
 import ConditionalOnSelect from '../components/ConditionalOnSelect'
 import ChartExperimentalCanvas from '../components/ChartExperimental/ChartExperimentalCanvas'
@@ -15,6 +15,7 @@ import SumOptions from '../components/Query/SumOptions'
 import { Row, Col, Accordion } from 'react-bootstrap'
 import DateToggle from '../components/Query/DateToggle'
 import ChartTypeDisplay from '../components/Query/ChartTypeDisplay'
+import Loading from '../components/Loading'
 import './_containers.scss'
 
 const VizContainer = ({ props, actions }) => (
@@ -32,28 +33,29 @@ const VizContainer = ({ props, actions }) => (
             columns={props.columns}
             filters={props.filters} />
         </div>
-        <Row>
-          <Col md={9} />
-          <Col md={2}>
-            <DateToggle
-              dateBy={props.dateBy}
-              changeDateBy={actions.changeDateBy}
-              selectedColumnDef={props.selectedColumnDef} />
-          </Col>
-          <Col md={1} />
-        </Row>
-        <ChartExperimentalCanvas
-          chartData={props.chartData}
-          chartType={props.chartType}
-          dateBy={props.dateBy}
-          groupKeys={props.groupKeys}
-          columns={props.columns}
-          filters={props.filters}
-          rowLabel={props.rowLabel}
-          selectedColumnDef={props.selectedColumnDef}
-          groupBy={props.groupBy}
-          sumBy={props.sumBy} />
-        <CopyEmbedLink link='https://link.com' />
+        <Loading isFetching={props.isFetching}>
+          <Row>
+            <Col md={9} />
+            <Col md={2}>
+              <DateToggle
+                dateBy={props.dateBy}
+                changeDateBy={actions.changeDateBy}
+                selectedColumnDef={props.selectedColumnDef} />
+            </Col>
+            <Col md={1} />
+          </Row>
+          <ChartExperimentalCanvas
+            chartData={props.chartData}
+            chartType={props.chartType}
+            dateBy={props.dateBy}
+            groupKeys={props.groupKeys}
+            columns={props.columns}
+            filters={props.filters}
+            rowLabel={props.rowLabel}
+            selectedColumnDef={props.selectedColumnDef}
+            groupBy={props.groupBy}
+            sumBy={props.sumBy} />
+        </Loading>
       </ConditionalOnSelect>
     </Col>
     <Col md={3}>
@@ -81,6 +83,7 @@ const VizContainer = ({ props, actions }) => (
 
 VizContainer.propTypes = {
   props: PropTypes.shape({
+    isFetching: PropTypes.bool,
     chartType: PropTypes.string,
     chartData: PropTypes.array,
     groupKeys: PropTypes.array,
@@ -108,6 +111,7 @@ const mapStateToProps = (state, ownProps) => {
       selectedColumn: query.selectedColumn,
       selectedColumnDef: getSelectedColumnDef(state),
       columns: columnProps.columns,
+      isFetching: query.isFetching,
       groupBy: query.groupBy,
       sumBy: query.sumBy,
       dateBy: query.dateBy,
@@ -153,9 +157,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       },
       applyChartType: (chartType) => {
         return dispatch(applyChartType(chartType))
-      },
-      updateQueryStateFromUrl: (q) => {
-        return dispatch(updateQueryStateFromUrl(q))
       }
     }
   }

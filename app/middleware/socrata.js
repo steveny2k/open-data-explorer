@@ -62,7 +62,7 @@ function constructQuery (state) {
   if (columnType === 'date') {
     selectAsLabel = dateAggregation + '(' + selectedColumn + ') as label'
     orderBy = 'label'
-  } else if (columnType === 'number') {
+  } else if (columnType === 'number' && !isCategory) {
     orderBy = 'label'
   }
 
