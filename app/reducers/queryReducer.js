@@ -16,6 +16,24 @@ function updateQueryKeys (state, action) {
   })
 }
 
+function selectColumn (state, action) {
+  return updateObject(state, {
+    selectedColumn: action.payload
+  })
+}
+
+function dataRequest (state, action) {
+  return updateObject(state, {
+    isFetching: true
+  })
+}
+
+function dataSuccess (state, action) {
+  return updateObject(state, {
+    isFetching: false
+  })
+}
+
 function sumBy (state, action) {
   let sumKey = action.payload ? action.payload.value : null
   return updateObject(state, {
@@ -57,7 +75,9 @@ function resetState (state, action) {
 export const queryReducer = (state = initialState, action) => {
   switch (action.type) {
     case ActionTypes.METADATA_REQUEST: return resetState(state, action)
-    case ActionTypes.SELECT_COLUMN: return updateQueryKeys(state, action)
+    case ActionTypes.SELECT_COLUMN: return selectColumn(state, action)
+    case ActionTypes.DATA_REQUEST: return dataRequest(state, action)
+    case ActionTypes.DATA_SUCCESS: return dataSuccess(state, action)
     case ActionTypes.SUM_BY: return sumBy(state, action)
     case ActionTypes.GROUP_BY: return groupBy(state, action)
     case ActionTypes.CHANGE_DATEBY: return updateQueryKeys(state, action)
