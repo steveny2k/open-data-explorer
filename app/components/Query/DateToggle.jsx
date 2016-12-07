@@ -5,8 +5,8 @@ import './_Query.scss'
 import { Button, ButtonGroup } from 'react-bootstrap'
 class DateToggle extends Component {
 
-  isDateCol(selectedColumnDef){
-    if(selectedColumnDef.type === 'date'){
+  isDateCol (selectedColumnDef) {
+    if (selectedColumnDef.type === 'date') {
       return true
     }
     return false
@@ -15,7 +15,12 @@ class DateToggle extends Component {
   render () {
     let {dateBy, changeDateBy, selectedColumnDef} = this.props
     let isRenderToggle = this.isDateCol(selectedColumnDef)
-    console.log(this.props)
+    // console.log("*****dateby panel***")
+    // console.log(dateBy)
+    // set the button year button active as default
+    if (!(dateBy)) {
+      dateBy = 'year'
+    }
     let monthActive = dateBy === 'month' ? 'active' : ''
     let yearActive = dateBy === 'year' ? 'active' : ''
     return (
@@ -39,12 +44,9 @@ class DateToggle extends Component {
               </Button>
             </ButtonGroup>
           </When>
-          <Otherwise>
-            <div></div>
-          </Otherwise>
         </Choose>
       </div>
-      )
+    )
   }
 }
 

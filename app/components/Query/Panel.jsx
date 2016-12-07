@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import ChartOptions from './ChartOptions'
 import '../ChartExperimental/_Chart.scss'
 import ColumnSelector from './ColumnSelector'
 import GroupOptions from './GroupOptions'
@@ -12,7 +11,7 @@ import ConditionalOnSelect from '../ConditionalOnSelect'
 class Panel extends Component {
   // /Panel component for holding filter functions.
   render () {
-    let {selectedColumn, groupableColumns, groupBy, handleGroupBy, summableColumns, sumBy, handleSumBy, filters, columns,handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, applyChartType, chartType, selectableColumns, selectColumn} = this.props
+    let {selectedColumn, groupableColumns, groupBy, handleGroupBy, summableColumns, sumBy, handleSumBy, filters, columns, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, applyChartType, chartType, selectableColumns, selectColumn} = this.props
     return (
       <Accordion>
         <ConditionalOnSelect selectedColumn={selectedColumn}>

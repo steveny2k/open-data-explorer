@@ -11,7 +11,6 @@ import ColumnSelector from '../components/Query/ColumnSelector'
 import GroupOptions from '../components/Query/GroupOptions'
 import FilterOptions from '../components/Query/FilterOptions'
 import SumOptions from '../components/Query/SumOptions'
-import ChartTypeOptions from '../components/Chart/ChartTypeOptions'
 import { Row, Col, Accordion } from 'react-bootstrap'
 import DateToggle from '../components/Query/DateToggle'
 import ChartTypeDisplay from '../components/Query/ChartTypeDisplay'
@@ -45,6 +44,7 @@ const VizContainer = ({ props, actions }) => (
         <ChartExperimentalCanvas
           chartData={props.chartData}
           chartType={props.chartType}
+          dateBy={props.dateBy}
           groupKeys={props.groupKeys}
           columns={props.columns}
           filters={props.filters}

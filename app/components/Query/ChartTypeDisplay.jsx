@@ -4,18 +4,16 @@ import './_chartTypeDisplay.scss'
 import { Panel } from 'react-bootstrap'
 
 class ChartTypeDisplay extends Component {
-  isDateColTest(selectedColumnDef){
-    if(selectedColumnDef.type === 'date'){
+  isDateColTest (selectedColumnDef) {
+    if (selectedColumnDef.type === 'date') {
       return true
     }
     return false
   }
 
   render () {
-    console.log("************")
-    console.log(this.props)
-    let {applyChartType,  chartType, selectedColumnDef } = this.props
-    if(!(chartType)){
+    let {applyChartType, chartType, selectedColumnDef} = this.props
+    if (!(chartType)) {
       chartType = 'bar'
     }
     let isDateCol = this.isDateColTest(selectedColumnDef)
@@ -67,7 +65,8 @@ class ChartTypeDisplay extends Component {
 
 ChartTypeDisplay.propTypes = {
   chartType: React.PropTypes.string,
-  displayChartOptions: React.PropTypes.bool
+  displayChartOptions: React.PropTypes.bool,
+  selectedColumnDef: React.PropTypes.object
 }
 
 export default ChartTypeDisplay
