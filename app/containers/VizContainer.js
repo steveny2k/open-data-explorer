@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { getSelectedColumnDef, getGroupableColumns, getSelectableColumns, getSummableColumns } from '../reducers'
-import { selectColumn, groupBy, sumBy, addFilter, applyChartType, removeFilter, applyFilter, updateFilter, changeDateBy } from '../actions'
+import { selectColumn, groupBy, sumBy, addFilter, applyChartType, removeFilter, applyFilter, updateFilter, changeDateBy, updateQueryStateFromUrl } from '../actions'
 import BlankChart from '../components/ChartExperimental/BlankChart'
 import ConditionalOnSelect from '../components/ConditionalOnSelect'
 import ChartExperimentalCanvas from '../components/ChartExperimental/ChartExperimentalCanvas'
@@ -13,51 +13,54 @@ import FilterOptions from '../components/Query/FilterOptions'
 import SumOptions from '../components/Query/SumOptions'
 import ChartTypeOptions from '../components/Chart/ChartTypeOptions'
 import { Row, Col, Accordion } from 'react-bootstrap'
+import URLReader from '../components/URLReader'
 import './_containers.scss'
 
 const VizContainer = ({ props, actions }) => (
-  <Row>
-    <Col md={9}>
-    <ConditionalOnSelect selectedColumn={props.selectedColumn} displayBlank={<BlankChart />}>
-      <div className='chartHeader'>
-        <ChartExperimentalTitle
+  <URLReader processUrl={actions.updateQueryStateFromUrl} pathname={props.pathname} urlQuery={props.urlQuery} param={'q'} columns={props.columns} id={props.id}>
+    <Row>
+      <Col md={9}>
+      <ConditionalOnSelect selectedColumn={props.selectedColumn} displayBlank={<BlankChart />}>
+        <div className='chartHeader'>
+          <ChartExperimentalTitle
+            columns={props.columns}
+            rowLabel={props.rowLabel}
+            selectedColumnDef={props.selectedColumnDef}
+            groupBy={props.groupBy}
+            sumBy={props.sumBy} />
+          <ChartExperimentalSubTitle columns={props.columns} filters={props.filters} />
+        </div>
+        <ChartExperimentalCanvas
+          chartData={props.chartData}
+          chartType={props.chartType}
+          groupKeys={props.groupKeys}
           columns={props.columns}
+          filters={props.filters}
           rowLabel={props.rowLabel}
           selectedColumnDef={props.selectedColumnDef}
           groupBy={props.groupBy}
           sumBy={props.sumBy} />
-        <ChartExperimentalSubTitle columns={props.columns} filters={props.filters} />
-      </div>
-      <ChartExperimentalCanvas
-        chartData={props.chartData}
-        chartType={props.chartType}
-        groupKeys={props.groupKeys}
-        columns={props.columns}
-        filters={props.filters}
-        rowLabel={props.rowLabel}
-        selectedColumnDef={props.selectedColumnDef}
-        groupBy={props.groupBy}
-        sumBy={props.sumBy} />
-    </ConditionalOnSelect>
-    </Col>
-    <Col md={3}>
-    <Accordion>
-      <ConditionalOnSelect selectedColumn={props.selectedColumn}>
-        <GroupOptions columns={props.groupableColumns} selected={props.groupBy} onGroupBy={actions.handleGroupBy} />
-        <SumOptions columns={props.summableColumns} selected={props.sumBy} onSumBy={actions.handleSumBy} />
-        <FilterOptions
-          filters={props.filters}
-          columns={props.columns}
-          handleAddFilter={actions.handleAddFilter}
-          handleRemoveFilter={actions.handleRemoveFilter}
-          applyFilter={actions.applyFilter}
-          updateFilter={actions.updateFilter} />
-        <ChartTypeOptions applyChartType={actions.applyChartType} chartType={props.chartType} />
       </ConditionalOnSelect>
-      <ColumnSelector columns={props.selectableColumns} selected={props.selectedColumn} onSelectColumn={actions.selectColumn} />
-    </Accordion>
-    </Col>
-  </Row>
+      </Col>
+      <Col md={3}>
+      <Accordion>
+        <ConditionalOnSelect selectedColumn={props.selectedColumn}>
+          <GroupOptions columns={props.groupableColumns} selected={props.groupBy} onGroupBy={actions.handleGroupBy} />
+          <SumOptions columns={props.summableColumns} selected={props.sumBy} onSumBy={actions.handleSumBy} />
+          <FilterOptions
+            filters={props.filters}
+            columns={props.columns}
+            handleAddFilter={actions.handleAddFilter}
+            handleRemoveFilter={actions.handleRemoveFilter}
+            applyFilter={actions.applyFilter}
+            updateFilter={actions.updateFilter} />
+          <ChartTypeOptions applyChartType={actions.applyChartType} chartType={props.chartType} />
+        </ConditionalOnSelect>
+        <ColumnSelector columns={props.selectableColumns} selected={props.selectedColumn} onSelectColumn={actions.selectColumn} />
+      </Accordion>
+      </Col>
+    </Row>
+  </URLReader>
 )
 
 VizContainer.propTypes = {
@@ -74,14 +77,17 @@ VizContainer.propTypes = {
     filters: PropTypes.object,
     rowLabel: PropTypes.string,
     groupableColumns: PropTypes.array,
-    selectableColumns: PropTypes.array
+    selectableColumns: PropTypes.array,
+    pathname: PropTypes.string,
+    urlQuery: PropTypes.object
   })
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const { metadata, chart, columnProps, query } = state
+  const { metadata, chart, columnProps, query, routing } = state
   return {
     props: {
+      id: ownProps.params.id,
       chartType: chart.chartType,
       chartData: chart.chartData,
       groupKeys: chart.groupKeys,
@@ -95,7 +101,9 @@ const mapStateToProps = (state, ownProps) => {
       rowLabel: metadata.rowLabel,
       summableColumns: getSummableColumns(state),
       groupableColumns: getGroupableColumns(state),
-      selectableColumns: getSelectableColumns(state)
+      selectableColumns: getSelectableColumns(state),
+      pathname: routing.locationBeforeTransitions.pathname,
+      urlQuery: routing.locationBeforeTransitions.query
     }
   }
 }
@@ -133,6 +141,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       },
       applyChartType: (chartType) => {
         return dispatch(applyChartType(chartType))
+      },
+      updateQueryStateFromUrl: (q) => {
+        return dispatch(updateQueryStateFromUrl(q))
       }
     }
   }

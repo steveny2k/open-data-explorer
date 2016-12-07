@@ -190,6 +190,7 @@ export const REMOVE_FILTER = 'REMOVE_FILTER'
 export const UPDATE_FILTER = 'UPDATE_FILTER'
 export const APPLY_FILTER = 'APPLY_FILTER'
 export const APPLY_CHART_TYPE = 'APPLY_CHART_TYPE'
+export const UPDATE_FROM_QS = 'UPDATE_FROM_QS'
 
 export function addFilter (key) {
   return {
@@ -225,6 +226,20 @@ export function updateFilter (key, options) {
 export function applyFilter (key, options) {
   return (dispatch, getState) => {
     dispatch(updateFilter(key, options))
+    dispatch(fetchData(getState()))
+  }
+}
+
+export function loadQueryStateFromString (q) {
+  let payload = {}
+  if (typeof q === 'string') {
+    payload = JSON.parse(q)
+  }
+  return (dispatch, getState) => {
+    dispatch({
+      type: UPDATE_FROM_QS,
+      payload: payload
+    })
     dispatch(fetchData(getState()))
   }
 }
