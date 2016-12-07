@@ -28,22 +28,21 @@ class ChartExperimentalLineStuff extends Component {
     }
   }
   render () {
-    let {h, w, isGroupBy, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, xAxisPadding, legendStyle, domainMax } = this.props
+    let {h, w, isGroupBy, valTickFormater, margin, rowLabel, groupKeys, fillColor, chartData, xAxisPadding, legendStyle, domainMax, xTickCnt, yTickCnt } = this.props
     let lines = this.makeLines(groupKeys)
-
     return (
     <Choose>
       <When condition={!isGroupBy}>
         <LineChart width={w} height={h} data={chartData}>
           <XAxis
             dataKey='key'
-            //tickCount={xTickCnt}
+            tickCount={xTickCnt}
             tick={<CustomKeyAxisTick/>}
             padding={xAxisPadding} />
           <YAxis
             type='number'
             label={<CustomYaxisLabel val={rowLabel} h={h} />}
-            //tickCount={yTickCnt}
+            tickCount={yTickCnt}
             tickFormatter={valTickFormater}
             domain={[0, domainMax]} />
           <CartesianGrid stroke='#eee' strokeDasharray='3 3' vertical={false} />

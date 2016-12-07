@@ -13,49 +13,66 @@ import FilterOptions from '../components/Query/FilterOptions'
 import SumOptions from '../components/Query/SumOptions'
 import ChartTypeOptions from '../components/Chart/ChartTypeOptions'
 import { Row, Col, Accordion } from 'react-bootstrap'
+import DateToggle from '../components/Query/DateToggle'
+import ChartTypeDisplay from '../components/Query/ChartTypeDisplay'
 import './_containers.scss'
 
 const VizContainer = ({ props, actions }) => (
   <Row>
     <Col md={9}>
-    <ConditionalOnSelect selectedColumn={props.selectedColumn} displayBlank={<BlankChart />}>
-      <div className='chartHeader'>
-        <ChartExperimentalTitle
+      <ConditionalOnSelect selectedColumn={props.selectedColumn} displayBlank={<BlankChart />}>
+        <div className='chartHeader'>
+          <ChartExperimentalTitle
+            columns={props.columns}
+            rowLabel={props.rowLabel}
+            selectedColumnDef={props.selectedColumnDef}
+            groupBy={props.groupBy}
+            sumBy={props.sumBy} />
+          <ChartExperimentalSubTitle
+            columns={props.columns}
+            filters={props.filters} />
+        </div>
+        <Row>
+          <Col md={9} />
+          <Col md={2}>
+            <DateToggle
+              dateBy={props.dateBy}
+              changeDateBy={actions.changeDateBy}
+              selectedColumnDef={props.selectedColumnDef} />
+          </Col>
+          <Col md={1} />
+        </Row>
+        <ChartExperimentalCanvas
+          chartData={props.chartData}
+          chartType={props.chartType}
+          groupKeys={props.groupKeys}
           columns={props.columns}
+          filters={props.filters}
           rowLabel={props.rowLabel}
           selectedColumnDef={props.selectedColumnDef}
           groupBy={props.groupBy}
           sumBy={props.sumBy} />
-        <ChartExperimentalSubTitle columns={props.columns} filters={props.filters} />
-      </div>
-      <ChartExperimentalCanvas
-        chartData={props.chartData}
-        chartType={props.chartType}
-        groupKeys={props.groupKeys}
-        columns={props.columns}
-        filters={props.filters}
-        rowLabel={props.rowLabel}
-        selectedColumnDef={props.selectedColumnDef}
-        groupBy={props.groupBy}
-        sumBy={props.sumBy} />
-    </ConditionalOnSelect>
+      </ConditionalOnSelect>
     </Col>
     <Col md={3}>
-    <Accordion>
-      <ConditionalOnSelect selectedColumn={props.selectedColumn}>
-        <GroupOptions columns={props.groupableColumns} selected={props.groupBy} onGroupBy={actions.handleGroupBy} />
-        <SumOptions columns={props.summableColumns} selected={props.sumBy} onSumBy={actions.handleSumBy} />
-        <FilterOptions
-          filters={props.filters}
-          columns={props.columns}
-          handleAddFilter={actions.handleAddFilter}
-          handleRemoveFilter={actions.handleRemoveFilter}
-          applyFilter={actions.applyFilter}
-          updateFilter={actions.updateFilter} />
-        <ChartTypeOptions applyChartType={actions.applyChartType} chartType={props.chartType} />
-      </ConditionalOnSelect>
-      <ColumnSelector columns={props.selectableColumns} selected={props.selectedColumn} onSelectColumn={actions.selectColumn} />
-    </Accordion>
+      <Accordion>
+        <ConditionalOnSelect selectedColumn={props.selectedColumn}>
+          <GroupOptions columns={props.groupableColumns} selected={props.groupBy} onGroupBy={actions.handleGroupBy} />
+          <SumOptions columns={props.summableColumns} selected={props.sumBy} onSumBy={actions.handleSumBy} />
+          <FilterOptions
+            filters={props.filters}
+            columns={props.columns}
+            handleAddFilter={actions.handleAddFilter}
+            handleRemoveFilter={actions.handleRemoveFilter}
+            applyFilter={actions.applyFilter}
+            updateFilter={actions.updateFilter} />
+          <ChartTypeDisplay
+            applyChartType={actions.applyChartType}
+            chartType={props.chartType}
+            selectedColumnDef={props.selectedColumnDef} />
+        </ConditionalOnSelect>
+        <ColumnSelector columns={props.selectableColumns} selected={props.selectedColumn} onSelectColumn={actions.selectColumn} />
+      </Accordion>
     </Col>
   </Row>
 )

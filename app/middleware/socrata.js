@@ -226,7 +226,7 @@ function transformMetadata (json) {
       name: column['name'].replace(/[_-]/g, ' '),
       description: column['description'] || '',
       type,
-    format}
+      format}
 
     if (column['cachedContents']) {
       col.non_null = column['cachedContents']['non_null'] || 0
@@ -325,7 +325,7 @@ function transformQueryDataLegacy (json, state) {
       binSize = freedmanDiaconis(vector2)
     }
     binSize = pretty(binSize)
-    let binNumbers = (values, binWidth, array = [] , index = 0) => {
+    let binNumbers = (values, binWidth, array = [], index = 0) => {
       if (index < values.length) {
         let bin = Math.floor(values[index] / binWidth)
         array[bin] = array[bin] ? array[bin] + 1 : 1

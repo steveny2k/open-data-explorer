@@ -29,7 +29,7 @@ class ChartExperimentalTitle extends Component {
     let b = selectedColumnDef.name
     let title = this.buildTitle(a, b, columns, groupBy)
     return (
-    <h2 className={'chartTitle'}>{title}</h2>
+      <h2 className={'chartTitle'}>{title}</h2>
     )
   }
 }

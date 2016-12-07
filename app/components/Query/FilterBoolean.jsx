@@ -60,7 +60,7 @@ class FilterBoolean extends Component {
           value={selected}
           onChange={this.onFilter} />
       </div>
-      )
+    )
   }
 }
 

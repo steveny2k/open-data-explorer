@@ -35,7 +35,7 @@ class ChartExperimentalCanvas extends Component {
     var node = ReactDOM.findDOMNode(this)
     var parentWidth = $(node).width()
 
-    if (parentWidth < this.props.width) {
+    if (!(parentWidth === this.props.width)) {
       this.setState({width: parentWidth - 20})
     } else {
       this.setState({width: this.props.width})
@@ -69,7 +69,6 @@ class ChartExperimentalCanvas extends Component {
               newdict['key'] = yrFormat(new Date(chartData[i]['label']))
               newdict['value'] = Number(chartData[i]['value'])
             }else {
-              // console.log(chart.chartData[i]['label'])
               newdict['key'] = String(chartData[i]['label'])
               newdict['value'] = Number(chartData[i]['value'])
             }
@@ -124,7 +123,6 @@ class ChartExperimentalCanvas extends Component {
     if (selectedColumnDef) {
       fillColor = fillColorIndex[selectedColumnDef.type]
       grpColorScale = groupByColorIndex[selectedColumnDef.type]
-      console.log(grpColorScale)
     }
     let xAxisPadding = { left: 20, right: 20 }
     let xTickCnt = 5
