@@ -7,19 +7,18 @@ import ConditionalOnSelect from '../components/ConditionalOnSelect'
 import ChartExperimentalCanvas from '../components/ChartExperimental/ChartExperimentalCanvas'
 import ChartExperimentalTitle from '../components/ChartExperimental/ChartExperimentalTitle'
 import ChartExperimentalSubTitle from '../components/ChartExperimental/ChartExperimentalSubTitle'
+import CopyEmbedLink from '../components/ChartExperimental/CopyEmbedLink'
 import ColumnSelector from '../components/Query/ColumnSelector'
 import GroupOptions from '../components/Query/GroupOptions'
 import FilterOptions from '../components/Query/FilterOptions'
 import SumOptions from '../components/Query/SumOptions'
 import ChartTypeOptions from '../components/Chart/ChartTypeOptions'
 import { Row, Col, Accordion } from 'react-bootstrap'
-import URLReader from '../components/URLReader'
 import './_containers.scss'
 
 const VizContainer = ({ props, actions }) => (
-  <URLReader processUrl={actions.updateQueryStateFromUrl} pathname={props.pathname} urlQuery={props.urlQuery} param={'q'} columns={props.columns} id={props.id}>
-    <Row>
-      <Col md={9}>
+  <Row>
+    <Col md={9}>
       <ConditionalOnSelect selectedColumn={props.selectedColumn} displayBlank={<BlankChart />}>
         <div className='chartHeader'>
           <ChartExperimentalTitle
@@ -40,9 +39,10 @@ const VizContainer = ({ props, actions }) => (
           selectedColumnDef={props.selectedColumnDef}
           groupBy={props.groupBy}
           sumBy={props.sumBy} />
+        <CopyEmbedLink link='https://link.com' />
       </ConditionalOnSelect>
-      </Col>
-      <Col md={3}>
+    </Col>
+    <Col md={3}>
       <Accordion>
         <ConditionalOnSelect selectedColumn={props.selectedColumn}>
           <GroupOptions columns={props.groupableColumns} selected={props.groupBy} onGroupBy={actions.handleGroupBy} />
@@ -58,9 +58,8 @@ const VizContainer = ({ props, actions }) => (
         </ConditionalOnSelect>
         <ColumnSelector columns={props.selectableColumns} selected={props.selectedColumn} onSelectColumn={actions.selectColumn} />
       </Accordion>
-      </Col>
-    </Row>
-  </URLReader>
+    </Col>
+  </Row>
 )
 
 VizContainer.propTypes = {
