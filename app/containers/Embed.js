@@ -2,10 +2,26 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { getSelectedColumnDef } from '../reducers'
 import { loadMetadata, loadColumnProps, loadQueryStateFromString } from '../actions'
-import ChartExperimentalCanvas from '../components/ChartExperimental/ChartExperimentalCanvas'
-import ChartExperimentalTitle from '../components/ChartExperimental/ChartExperimentalTitle'
-import ChartExperimentalSubTitle from '../components/ChartExperimental/ChartExperimentalSubTitle'
+import { ButtonToolbar, Button } from 'react-bootstrap'
+import slugify from 'underscore.string/slugify'
+
+import ChartCanvas from '../components/ChartExperimental/ChartExperimentalCanvas'
+import ChartTitle from '../components/ChartExperimental/ChartExperimentalTitle'
+import ChartSubTitle from '../components/ChartExperimental/ChartExperimentalSubTitle'
 import Loading from '../components/Loading'
+
+import { BASE_HREF } from '../constants/AppConstants'
+
+const EmbedContextLinks = (props) => {
+  return (
+    <div className='EmbedContextLinks-wrapper'>
+      <ButtonToolbar>
+        <Button bsSize='small' bsStyle='primary' href={props.datasetLink}>Learn more about {props.datasetName}</Button>
+        <Button bsSize='small' bsStyle='primary' href={props.exploreLink}>Explore this data</Button>
+      </ButtonToolbar>
+    </div>
+  )
+}
 
 class Embed extends Component {
   componentWillMount () {
@@ -23,27 +39,27 @@ class Embed extends Component {
   }
 
   render () {
-    let { columns, rowLabel, isFetching, selectedColumnDef, groupBy, sumBy, filters } = this.props
+    let { columns, rowLabel, isFetching, selectedColumnDef, groupBy, sumBy, filters, datasetName, datasetLink, exploreLink } = this.props
     let { chartData, chartType, groupKeys } = this.props
-    console.log()
+
     return (
       <div className='Embed'>
         <Loading isFetching={isFetching} style='centered'>
           <div className='chartHeader'>
-            <ChartExperimentalTitle
+            <ChartTitle
               columns={columns}
               rowLabel={rowLabel}
               selectedColumnDef={selectedColumnDef}
               groupBy={groupBy}
               sumBy={sumBy} />
-            <ChartExperimentalSubTitle columns={columns} filters={filters} />
+            <ChartSubTitle columns={columns} filters={filters} />
+            <EmbedContextLinks datasetName={datasetName} datasetLink={datasetLink} exploreLink={exploreLink} />
           </div>
-          <ChartExperimentalCanvas
+          <ChartCanvas
             embed
             chartData={chartData}
             chartType={chartType}
             groupKeys={groupKeys}
-            columns={columns}
             filters={filters}
             rowLabel={rowLabel}
             selectedColumnDef={selectedColumnDef}
@@ -60,7 +76,10 @@ Embed.propTypes = {
   queryString: PropTypes.string,
   onLoad: PropTypes.func,
   loadColumnProps: PropTypes.func,
-  loadQueryStateFromString: PropTypes.func
+  loadQueryStateFromString: PropTypes.func,
+  datasetName: PropTypes.string,
+  datasetLink: PropTypes.string,
+  exploreLink: PropTypes.string
 }
 
 Embed.defaultProps = {
@@ -69,9 +88,11 @@ Embed.defaultProps = {
 
 const mapStateToProps = (state, ownProps) => {
   const { query, columnProps, chart, metadata } = state
-
+  const id = ownProps.params.id
+  const datasetPath = '/' + slugify(metadata.category) + '/' + slugify(metadata.name) + '/' + id
+  const datasetLink = BASE_HREF + '/#' + datasetPath
   return {
-    id: ownProps.params.id,
+    id,
     queryString: ownProps.location.query.q,
     chartType: chart.chartType,
     chartData: chart.chartData,
@@ -84,7 +105,9 @@ const mapStateToProps = (state, ownProps) => {
     dateBy: query.dateBy,
     filters: query.filters,
     rowLabel: metadata.rowLabel,
-    isFetching: query.isFetching
+    isFetching: query.isFetching,
+    datasetLink,
+    exploreLink: datasetLink
   }
 }
 

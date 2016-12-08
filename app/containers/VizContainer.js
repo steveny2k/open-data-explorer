@@ -18,6 +18,8 @@ import ChartTypeDisplay from '../components/Query/ChartTypeDisplay'
 import Loading from '../components/Loading'
 import './_containers.scss'
 
+import { BASE_HREF } from '../constants/AppConstants'
+
 const VizContainer = ({ props, actions }) => (
   <Row>
     <Col md={9}>
@@ -103,9 +105,9 @@ VizContainer.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const { metadata, chart, columnProps, query } = state
   const id = ownProps.params.id
-  const queryState = Object.assign({}, query)
+  let queryState = Object.assign({}, query)
   delete queryState.isFetching
-  const embedLink = 'http://localhost:8000/#/e/' + id + '?q=' + encodeURIComponent(JSON.stringify(queryState))
+  const embedLink = BASE_HREF + '/#/e/' + id + '?q=' + encodeURIComponent(JSON.stringify(queryState))
   const embedCode = '<iframe src="' + embedLink + '" width="100%" height="400" allowfullscreen frameborder="0"></iframe>'
   return {
     props: {
