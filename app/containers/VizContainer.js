@@ -7,7 +7,7 @@ import ConditionalOnSelect from '../components/ConditionalOnSelect'
 import ChartExperimentalCanvas from '../components/ChartExperimental/ChartExperimentalCanvas'
 import ChartExperimentalTitle from '../components/ChartExperimental/ChartExperimentalTitle'
 import ChartExperimentalSubTitle from '../components/ChartExperimental/ChartExperimentalSubTitle'
-import CopyEmbedLink from '../components/ChartExperimental/CopyEmbedLink'
+import CopyEmbedCode from '../components/ChartExperimental/CopyEmbedCode'
 import ColumnSelector from '../components/Query/ColumnSelector'
 import GroupOptions from '../components/Query/GroupOptions'
 import FilterOptions from '../components/Query/FilterOptions'
@@ -49,12 +49,12 @@ const VizContainer = ({ props, actions }) => (
             chartType={props.chartType}
             dateBy={props.dateBy}
             groupKeys={props.groupKeys}
-            columns={props.columns}
             filters={props.filters}
             rowLabel={props.rowLabel}
             selectedColumnDef={props.selectedColumnDef}
             groupBy={props.groupBy}
             sumBy={props.sumBy} />
+          <CopyEmbedCode snippet={props.embedCode} />
         </Loading>
       </ConditionalOnSelect>
     </Col>
@@ -101,10 +101,16 @@ VizContainer.propTypes = {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const { metadata, chart, columnProps, query, routing } = state
+  const { metadata, chart, columnProps, query } = state
+  const id = ownProps.params.id
+  const queryState = Object.assign({}, query)
+  delete queryState.isFetching
+  const embedLink = 'http://localhost:8000/#/e/' + id + '?q=' + encodeURIComponent(JSON.stringify(queryState))
+  const embedCode = '<iframe src="' + embedLink + '" width="100%" height="400" allowfullscreen frameborder="0"></iframe>'
   return {
     props: {
-      id: ownProps.params.id,
+      id,
+      embedCode,
       chartType: chart.chartType,
       chartData: chart.chartData,
       groupKeys: chart.groupKeys,
