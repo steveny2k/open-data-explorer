@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import _ from 'lodash'
+// import _ from 'lodash'
 import d3 from 'd3'
 import BlankChart from './BlankChart'
 import $ from 'jquery'
