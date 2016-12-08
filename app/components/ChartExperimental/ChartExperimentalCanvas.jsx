@@ -41,21 +41,31 @@ class ChartExperimentalCanvas extends Component {
     } else {
       this.setState({width: this.props.width})
     }
-    console.log(embed)
     if (embed) {
-      this.setState({height: window.innerHeight - 100})
+      // this is a hack for now, we'll lift the state up to make handling layout simpler
+      let offset = $('#Embed-chartHeader').outerHeight(true) + 21
+      console.log(offset)
+      this.setState({height: window.innerHeight - offset})
     }
   }
   shouldComponentUpdate (nextProps, nextState) {
+    /*
+    This component needs to be refactored to handle resizing on a container, for now, we'll update the component always
+    We should also not rerender the char
     let thisChart = {
-      thisChartData: this.props.chartData,
-      thisChartType: this.props.chartType
+      chartData: this.props.chartData,
+      chartType: this.props.chartType,
+      height: this.props.height,
+      width: this.props.width
     }
     let nextChart = {
-      nextChartData: nextProps.chartData,
-      nextChartType: nextProps.chartType
+      chartData: nextProps.chartData,
+      chartType: nextProps.chartType,
+      height: nextProps.height,
+      width: nextProps.width
     }
-    return !_.isEqual(thisChart, nextChart)
+    return !_.isEqual(thisChart, nextChart) */
+    return true
   }
 
   isSelectedColDate (selectedColumnDef) {
