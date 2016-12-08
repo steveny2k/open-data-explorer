@@ -203,6 +203,7 @@ function transformMetadata (json) {
     programLink: json.metadata.custom_fields['Detailed Descriptive']['Program link'] || null,
     rowLabel: json.metadata.rowLabel || 'Record',
     tags: json.tags || null,
+    category: json['category'] || 'dataset',
     columns: {}
   }
 
