@@ -16,8 +16,7 @@ const EmbedContextLinks = (props) => {
   return (
     <div className='EmbedContextLinks-wrapper'>
       <ButtonToolbar>
-        <Button bsSize='small' bsStyle='primary' href={props.datasetLink}>Learn more about {props.datasetName}</Button>
-        <Button bsSize='small' bsStyle='primary' href={props.exploreLink}>Explore this data</Button>
+        <Button bsSize='small' bsStyle='primary' href={props.exploreLink} target='_blank'>Explore this data</Button>
       </ButtonToolbar>
     </div>
   )
@@ -45,7 +44,7 @@ class Embed extends Component {
     return (
       <div className='Embed'>
         <Loading isFetching={isFetching} style='centered'>
-          <div className='chartHeader'>
+          <div id='Embed-chartHeader' className='chartHeader'>
             <ChartTitle
               columns={columns}
               rowLabel={rowLabel}
@@ -107,7 +106,8 @@ const mapStateToProps = (state, ownProps) => {
     rowLabel: metadata.rowLabel,
     isFetching: query.isFetching,
     datasetLink,
-    exploreLink: datasetLink
+    exploreLink: datasetLink + '/chart_experimental',
+    datasetName: metadata.name
   }
 }
 
