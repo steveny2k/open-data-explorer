@@ -12,15 +12,13 @@ import Loading from '../components/Loading'
 
 import { BASE_HREF } from '../constants/AppConstants'
 
-const EmbedContextLinks = (props) => {
-  return (
-    <div className='EmbedContextLinks-wrapper'>
-      <ButtonToolbar>
-        <Button bsSize='small' bsStyle='primary' href={props.exploreLink} target='_blank'>Explore this data</Button>
-      </ButtonToolbar>
-    </div>
-  )
-}
+const EmbedContextLinks = (props) => (
+  <div className='EmbedContextLinks-wrapper'>
+    <ButtonToolbar>
+      <Button bsSize='small' bsStyle='primary' href={props.exploreLink} target='_blank'>Explore this data</Button>
+    </ButtonToolbar>
+  </div>
+)
 
 class Embed extends Component {
   componentWillMount () {
