@@ -11,8 +11,6 @@ class CopySnippet extends Component {
     this.state = {
       copied: false
     }
-
-    // this.handleCopy = this.handleCopy.bind(this)
   }
 
   handleFocus (ev) {
