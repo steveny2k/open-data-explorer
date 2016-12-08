@@ -5,8 +5,7 @@ import { loadMetadata, loadColumnProps, loadQueryStateFromString } from '../acti
 import ChartExperimentalCanvas from '../components/ChartExperimental/ChartExperimentalCanvas'
 import ChartExperimentalTitle from '../components/ChartExperimental/ChartExperimentalTitle'
 import ChartExperimentalSubTitle from '../components/ChartExperimental/ChartExperimentalSubTitle'
-import ConditionalOnSelect from '../components/ConditionalOnSelect'
-import BlankChart from '../components/ChartExperimental/BlankChart'
+import Loading from '../components/Loading'
 
 class Embed extends Component {
   componentWillMount () {
@@ -24,32 +23,33 @@ class Embed extends Component {
   }
 
   render () {
-    let { columns, rowLabel, selectedColumn, selectedColumnDef, groupBy, sumBy, filters } = this.props
+    let { columns, rowLabel, isFetching, selectedColumnDef, groupBy, sumBy, filters } = this.props
     let { chartData, chartType, groupKeys } = this.props
     console.log()
     return (
       <div className='Embed'>
-        <ConditionalOnSelect selectedColumn={selectedColumn} displayBlank={<BlankChart />}>
-        <div className='chartHeader'>
-          <ChartExperimentalTitle
+        <Loading isFetching={isFetching} style='centered'>
+          <div className='chartHeader'>
+            <ChartExperimentalTitle
+              columns={columns}
+              rowLabel={rowLabel}
+              selectedColumnDef={selectedColumnDef}
+              groupBy={groupBy}
+              sumBy={sumBy} />
+            <ChartExperimentalSubTitle columns={columns} filters={filters} />
+          </div>
+          <ChartExperimentalCanvas
+            embed
+            chartData={chartData}
+            chartType={chartType}
+            groupKeys={groupKeys}
             columns={columns}
+            filters={filters}
             rowLabel={rowLabel}
             selectedColumnDef={selectedColumnDef}
             groupBy={groupBy}
             sumBy={sumBy} />
-          <ChartExperimentalSubTitle columns={columns} filters={filters} />
-        </div>
-        <ChartExperimentalCanvas
-          chartData={chartData}
-          chartType={chartType}
-          groupKeys={groupKeys}
-          columns={columns}
-          filters={filters}
-          rowLabel={rowLabel}
-          selectedColumnDef={selectedColumnDef}
-          groupBy={groupBy}
-          sumBy={sumBy} />
-        </ConditionalOnSelect>
+        </Loading>
       </div>
     )
   }
@@ -61,6 +61,10 @@ Embed.propTypes = {
   onLoad: PropTypes.func,
   loadColumnProps: PropTypes.func,
   loadQueryStateFromString: PropTypes.func
+}
+
+Embed.defaultProps = {
+  isFetching: true
 }
 
 const mapStateToProps = (state, ownProps) => {
@@ -79,7 +83,8 @@ const mapStateToProps = (state, ownProps) => {
     sumBy: query.sumBy,
     dateBy: query.dateBy,
     filters: query.filters,
-    rowLabel: metadata.rowLabel
+    rowLabel: metadata.rowLabel,
+    isFetching: query.isFetching
   }
 }
 
