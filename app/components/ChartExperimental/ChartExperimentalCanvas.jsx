@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import _ from 'lodash'
+// import _ from 'lodash'
 import d3 from 'd3'
 import BlankChart from './BlankChart'
 import $ from 'jquery'
@@ -18,7 +18,10 @@ class ChartExperimentalCanvas extends Component {
       _self.updateSize()
     })
 
-    this.setState({width: this.props.width})
+    this.setState({
+      width: this.props.width,
+      height: this.props.height
+    })
   }
   componentDidMount () {
     this.updateSize()
@@ -31,23 +34,38 @@ class ChartExperimentalCanvas extends Component {
     var ReactDOM = require('react-dom')
     var node = ReactDOM.findDOMNode(this)
     var parentWidth = $(node).width()
+    let { embed } = this.props
 
     if (!(parentWidth === this.props.width)) {
       this.setState({width: parentWidth - 20})
     } else {
       this.setState({width: this.props.width})
     }
+    if (embed) {
+      // this is a hack for now, we'll lift the state up to make handling layout simpler
+      let offset = $('#Embed-chartHeader').outerHeight(true) + 21
+      console.log(offset)
+      this.setState({height: window.innerHeight - offset})
+    }
   }
   shouldComponentUpdate (nextProps, nextState) {
+    /*
+    This component needs to be refactored to handle resizing on a container, for now, we'll update the component always
+    We should also not rerender the char
     let thisChart = {
-      thisChartData: this.props.chartData,
-      thisChartType: this.props.chartType
+      chartData: this.props.chartData,
+      chartType: this.props.chartType,
+      height: this.props.height,
+      width: this.props.width
     }
     let nextChart = {
-      nextChartData: nextProps.chartData,
-      nextChartType: nextProps.chartType
+      chartData: nextProps.chartData,
+      chartType: nextProps.chartType,
+      height: nextProps.height,
+      width: nextProps.width
     }
-    return !_.isEqual(thisChart, nextChart)
+    return !_.isEqual(thisChart, nextChart) */
+    return true
   }
 
   isSelectedColDate (selectedColumnDef) {
@@ -142,7 +160,7 @@ class ChartExperimentalCanvas extends Component {
     // let margin = {top: 20, right: 30, left: 20, bottom: 5}
     let margin = {top: 1, right: 5, bottom: 1, left: 5}
     let w = this.state.width - (margin.left + margin.right)
-    let h = this.props.height - (margin.top + margin.bottom)
+    let h = this.state.height - (margin.top + margin.bottom)
     let formatValue = d3.format('.3s')
     // let formatValue = d3.format('d')
     let valTickFormater = function (d) { return formatValue(d) }

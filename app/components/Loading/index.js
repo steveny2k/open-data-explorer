@@ -5,10 +5,12 @@ class Loading extends Component {
 
   render () {
     let { isFetching } = this.props
+    let style = this.props.style ? this.props.style : ''
+    let classNames = `Loading-wrapper ${style}`
     return (
       <div>
         {isFetching
-        ? <div className='Loading-wrapper'>
+        ? <div className={classNames}>
           <div className='Loading-indicator'>
             <svg viewBox='0 0 32 16' width='220' fill='#476481'>
               <circle transform='translate(8 0)' cx='0' cy='8' r='0'>

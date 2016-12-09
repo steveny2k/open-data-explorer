@@ -14,3 +14,14 @@
   bottom: 0;
   right: 0;
 }
+
+.Loading-wrapper.centered {
+  text-align: center;
+  border: none;
+}
+
+.Loading-wrapper.centered .Loading-indicator {
+  top: 30%
+}
+
+

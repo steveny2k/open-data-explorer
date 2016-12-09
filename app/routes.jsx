@@ -11,9 +11,11 @@ import Charts from './containers/Charts'
 import DataTable from './containers/DataTable'
 import AboutPage from './components/AboutPage/AboutPage'
 import VizContainer from './containers/VizContainer'
+import Embed from './containers/Embed'
 
 export default (
   <Route component={App} path='/'>
+    <Route path='/e/:id' component={Embed} />
     <IndexRoute component={HomePage} />
     <Route path='/catalog' component={Catalog}>
       <IndexRoute component={Catalog} />

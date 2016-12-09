@@ -13,16 +13,31 @@ const pages = [
     title: 'Data Catalog'
   }]
 
+const FullLayout = (props) => (
+  <div className='FullLayout-wrapper'>
+    <Navigation pages={pages} />
+    <div className={'content-wrapper'}>
+      {props.children}
+    </div>
+    <Footer />
+  </div>
+  )
+
+const EmbedLayout = (props) => (
+  <div className='EmbedLayout-wrapper'>
+    {props.children}
+  </div>
+  )
+
 class App extends Component {
   render () {
-    const { children } = this.props
+    let { children } = this.props
+    let isEmbed = /\/e\//.test(this.props.location.pathname)
     return (
-      <div>
-        <Navigation pages={pages} />
-        <div className={'content-wrapper'}>
-          {children}
-        </div>
-        <Footer />
+      <div className='App'>
+        { isEmbed
+        ? <EmbedLayout children={children} /> : <FullLayout children={children} />
+        }
       </div>
     )
   }

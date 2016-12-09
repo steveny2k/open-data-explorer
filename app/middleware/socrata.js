@@ -42,12 +42,11 @@ export const shouldRunColumnStats = (type, key) => {
 }
 
 // Construct URL based on chart options
+// TODO - break into smaller functions
 
 function constructQuery (state) {
-  let queryStack = state.query
   let columns = state.columnProps.columns
-  let { selectedColumn, dateBy, groupBy, sumBy } = queryStack
-  let { filters } = state.metadata.query
+  let { selectedColumn, dateBy, groupBy, sumBy, filters } = state.query
 
   let columnType = columns[selectedColumn].type
   let isCategory = (columns[selectedColumn].categories)
@@ -63,7 +62,7 @@ function constructQuery (state) {
   if (columnType === 'date') {
     selectAsLabel = dateAggregation + '(' + selectedColumn + ') as label'
     orderBy = 'label'
-  } else if (columnType === 'number') {
+  } else if (columnType === 'number' && !isCategory) {
     orderBy = 'label'
   }
 
@@ -204,6 +203,7 @@ function transformMetadata (json) {
     programLink: json.metadata.custom_fields['Detailed Descriptive']['Program link'] || null,
     rowLabel: json.metadata.rowLabel || 'Record',
     tags: json.tags || null,
+    category: json['category'] || 'dataset',
     columns: {}
   }
 

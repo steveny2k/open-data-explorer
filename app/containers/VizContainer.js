@@ -7,6 +7,7 @@ import ConditionalOnSelect from '../components/ConditionalOnSelect'
 import ChartExperimentalCanvas from '../components/ChartExperimental/ChartExperimentalCanvas'
 import ChartExperimentalTitle from '../components/ChartExperimental/ChartExperimentalTitle'
 import ChartExperimentalSubTitle from '../components/ChartExperimental/ChartExperimentalSubTitle'
+import CopyEmbedCode from '../components/CopySnippet'
 import ColumnSelector from '../components/Query/ColumnSelector'
 import GroupOptions from '../components/Query/GroupOptions'
 import FilterOptions from '../components/Query/FilterOptions'
@@ -16,6 +17,8 @@ import DateToggle from '../components/Query/DateToggle'
 import ChartTypeDisplay from '../components/Query/ChartTypeDisplay'
 import Loading from '../components/Loading'
 import './_containers.scss'
+
+import { BASE_HREF } from '../constants/AppConstants'
 
 const VizContainer = ({ props, actions }) => (
   <Row>
@@ -48,12 +51,12 @@ const VizContainer = ({ props, actions }) => (
             chartType={props.chartType}
             dateBy={props.dateBy}
             groupKeys={props.groupKeys}
-            columns={props.columns}
             filters={props.filters}
             rowLabel={props.rowLabel}
             selectedColumnDef={props.selectedColumnDef}
             groupBy={props.groupBy}
             sumBy={props.sumBy} />
+          <CopyEmbedCode snippet={props.embedCode} />
         </Loading>
       </ConditionalOnSelect>
     </Col>
@@ -101,8 +104,15 @@ VizContainer.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   const { metadata, chart, columnProps, query } = state
+  const id = ownProps.params.id
+  let queryState = Object.assign({}, query)
+  delete queryState.isFetching
+  const embedLink = BASE_HREF + '/#/e/' + id + '?q=' + encodeURIComponent(JSON.stringify(queryState))
+  const embedCode = '<iframe src="' + embedLink + '" width="100%" height="400" allowfullscreen frameborder="0"></iframe>'
   return {
     props: {
+      id,
+      embedCode,
       chartType: chart.chartType,
       chartData: chart.chartData,
       groupKeys: chart.groupKeys,
