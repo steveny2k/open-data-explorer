@@ -370,7 +370,12 @@ function reduceGroupedData (data, groupBy) {
 }
 
 function transformQueryData (json, state) {
-  let data = transformQueryDataLegacy(json, state)
+  let data
+  if (!(json.length === 1)) {
+    data = transformQueryDataLegacy(json, state)
+  } else {
+    data = [ ['x', json[0]['label']], [ 'Count of Nothing', json[0]['value'] ] ]
+  }
   let { query } = state
   let groupKeys = []
   if (query.groupBy) {

@@ -45,38 +45,69 @@ class ChartExperimentalHistogramStuff extends Component {
   render () {
     let {h, w, margin, rowLabel, fillColor, chartData, yTickCnt, xTickCnt, valTickFormater} = this.props
     let freqs = this.explodeFrequencies(chartData)
+    console.log(chartData)
     let xScale = this.getXScale(freqs, w)
     let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(15))
     let histogramData = histogramDataFn(freqs)
-    let dx = histogramData[0]['dx']
+    console.log(histogramData)
+    let dx = 0
+    if (histogramData[0]) {
+      dx = histogramData[0]['dx']
+    }
     let barData = this.makeBarData(histogramData)
     let maxValue = findMaxObjKeyValue(barData, 'frequency')
     let domainMax = maxValue + (maxValue * 0.03)
+    const zerosDivStyle = {
+      width: w,
+      height: h
+    }
+    const innnerZerosDivStyle = {
+      width: w,
+      margin: '15% 5% 5% 5%',
+      padding: '10px',
+      position: 'relative',
+      color: fillColor
+    }
+    const zeroMsg = {
+      fontSize: '75%'
+    }
 
     return (
-      <BarChart
-        width={w}
-        height={h}
-        data={barData}
-        margin={margin}
-        barGap={0}
-        barCategoryGap={0} >
-        <XAxis
-          dataKey='value'
-          type='number'
-          domain={[0, domainMax]}
-          tickCount={xTickCnt}
-          label={<CustomXaxisLabel val={'Values of ' + rowLabel} w={w} />} />
-        <YAxis
-          type='number'
-          label={<CustomYaxisLabel val={'Frequency of Values'} h={h} />}
-          tickCount={yTickCnt}
-          tickFormatter={valTickFormater}
-          domain={[0, domainMax]} />
-        <CartesianGrid strokeDasharray='3 3' vertical={false} />
-        <Tooltip content={<HistogramTooltip dx={dx} />} />
-        <Bar dataKey='frequency' fill={fillColor} />
-      </BarChart>
+      <Choose>
+        <When condition={dx === 0}>
+          <div className='zeros' style={zerosDivStyle}>
+            <div style={innnerZerosDivStyle}>
+              <p>No Chart to Display</p>
+              <p style={zeroMsg}> Column Only Contains 0 Values </p>
+            </div>
+          </div>
+        </When>
+        <Otherwise>
+          <BarChart
+            width={w}
+            height={h}
+            data={barData}
+            margin={margin}
+            barGap={0}
+            barCategoryGap={0} >
+            <XAxis
+              dataKey='value'
+              type='number'
+              domain={[0, domainMax]}
+              tickCount={xTickCnt}
+              label={<CustomXaxisLabel val={'Values of ' + rowLabel} w={w} />} />
+            <YAxis
+              type='number'
+              label={<CustomYaxisLabel val={'Frequency of Values'} h={h} />}
+              tickCount={yTickCnt}
+              tickFormatter={valTickFormater}
+              domain={[0, domainMax]} />
+            <CartesianGrid strokeDasharray='3 3' vertical={false} />
+            <Tooltip content={<HistogramTooltip dx={dx} />} />
+            <Bar dataKey='frequency' fill={fillColor} />
+          </BarChart>
+        </Otherwise>
+      </Choose>
     )
   }
 }
