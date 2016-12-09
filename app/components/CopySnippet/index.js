@@ -25,11 +25,11 @@ class CopySnippet extends Component {
   }
 
   render () {
-    let { snippet } = this.props
+    let { snippet, title, help } = this.props
     return (
       <div className='CopyEmbedLink-wrapper'>
-        <h3>Embed this visual</h3>
-        <small className='text-muted'>Copy the code snippet below and embed in your website</small>
+        <h3>{title}</h3>
+        <small className='text-muted'>{help}</small>
         <Form inline>
           <FormGroup controlId='formInlineName'>
             <FormControl
@@ -51,7 +51,9 @@ class CopySnippet extends Component {
 }
 
 CopySnippet.propTypes = {
-  snippet: PropTypes.string.isRequired
+  snippet: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  help: PropTypes.string
 }
 
 export default CopySnippet

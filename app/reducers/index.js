@@ -6,11 +6,7 @@ import columnsReducer, * as fromColumns from './columnsReducer'
 import { queryReducer } from './queryReducer'
 import { chartReducer } from './chartReducer'
 import { tableReducer } from './tableReducer'
-
-// move later
-function messagesReducer (state = null, action) {
-  return state
-}
+import { messagesReducer } from './messagesReducer'
 
 const rootReducer = combineReducers({
   metadata: metadataReducer,
