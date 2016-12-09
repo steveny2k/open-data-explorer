@@ -45,11 +45,9 @@ class ChartExperimentalHistogramStuff extends Component {
   render () {
     let {h, w, margin, rowLabel, fillColor, chartData, yTickCnt, xTickCnt, valTickFormater} = this.props
     let freqs = this.explodeFrequencies(chartData)
-    console.log(chartData)
     let xScale = this.getXScale(freqs, w)
     let histogramDataFn = d3.layout.histogram().bins(xScale.ticks(15))
     let histogramData = histogramDataFn(freqs)
-    console.log(histogramData)
     let dx = 0
     if (histogramData[0]) {
       dx = histogramData[0]['dx']
