@@ -31,6 +31,7 @@
     "algoliasearch": "^3.17.0",
     "algoliasearch-helper": "^2.9.1",
     "c3": "^0.4.11-rc4",
+    "copy-to-clipboard": "^3.0.5",
     "d3": "^3.5.17",
     "eslint-plugin-jsx-control-statements": "^2.1.1",
     "fixed-data-table": "^0.6.0",
@@ -40,10 +41,11 @@
     "normalizr": "^2.0.1",
     "pluralize": "^2.0.0",
     "rc-slider": "^3.5.1",
-    "react": "^15.3.2",
+    "react": "^15.4.1",
     "react-addons-update": "^15.1.0",
     "react-bootstrap": "^0.30.5",
     "react-bootstrap-daterangepicker": "^3.0.0",
+    "react-copy-to-clipboard": "^4.2.3",
     "react-dimensions": "^1.2.0",
     "react-dom": "^15.3.2",
     "react-radio-group": "^2.2.0",
@@ -134,7 +136,9 @@
       "*.spec.jsx"
     ],
     "globals": [
-      "Choose", "When", "Otherwise"
+      "Choose",
+      "When",
+      "Otherwise"
     ]
   },
   "eslintConfig": {

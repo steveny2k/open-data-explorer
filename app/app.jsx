@@ -26,7 +26,6 @@ const initialState = {
   }
 }
 const store = configureStore(initialState)
-console.log(store.getState())
 const history = syncHistoryWithStore(hashHistory, store)
 render(
   <Root store={store} history={history} />,
