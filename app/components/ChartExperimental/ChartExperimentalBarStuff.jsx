@@ -65,7 +65,7 @@ class ChartExperimentalBarStuff extends Component {
               type='number'
               tickCount={xTickCnt}
               padding={xpadding}
-              label={<CustomXaxisLabel val={rowLabel} w={w} />} />
+              label={<CustomXaxisLabel val={'Number of ' + rowLabel + 's'} w={w} />} />
             <YAxis dataKey='key' type='category' minTickGap={10} />
             <CartesianGrid strokeDasharray='3 3' horizontal={chartProperties.horizontal} vertical={chartProperties.vertical} />
             <Tooltip />
@@ -91,7 +91,7 @@ class ChartExperimentalBarStuff extends Component {
               tickCount={yTickCnt}
               domain={[0, domainMax]}
               type='number'
-              label={<CustomYaxisLabel val={rowLabel} h={h} />} />
+              label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} />} />
             <CartesianGrid strokeDasharray='3 3' vertical={false} />
             <Tooltip />
             <Bar dataKey='value' fill={fillColor} />

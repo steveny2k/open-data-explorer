@@ -6,8 +6,8 @@ import $ from 'jquery'
 import ChartExperimentalBarStuff from './ChartExperimentalBarStuff'
 import ChartExperimentalLineStuff from './ChartExperimentalLineStuff'
 import ChartExperimentalAreaStuff from './ChartExperimentalAreaStuff'
-// no
-import { findMaxObjKeyValue } from '../../helpers'
+import ChartExperimentalHistogramStuff from './ChartExperimentalHistogramStuff'
+import { findMaxObjKeyValue, isColTypeTest } from '../../helpers'
 
 class ChartExperimentalCanvas extends Component {
 
@@ -18,7 +18,7 @@ class ChartExperimentalCanvas extends Component {
       _self.updateSize()
     })
 
-    this.setState({width: this.props.width})
+    this.setState({width: this.props.width, height: this.props.height})
   }
   componentDidMount () {
     this.updateSize()
@@ -28,14 +28,23 @@ class ChartExperimentalCanvas extends Component {
   }
 
   updateSize () {
-    var ReactDOM = require('react-dom')
-    var node = ReactDOM.findDOMNode(this)
-    var parentWidth = $(node).width()
+    let ReactDOM = require('react-dom')
+    let node = ReactDOM.findDOMNode(this)
+    // console.log(node)
+    let parentWidth = $(node).width()
+    // console.log('****here*****')
+    // console.log($(node).height())
+    let parentHeight = $(node).height()
 
     if (!(parentWidth === this.props.width)) {
       this.setState({width: parentWidth - 20})
     } else {
       this.setState({width: this.props.width})
+    }
+    if (!(parentHeight === this.props.height)) {
+      this.setState({height: parentHeight - 20})
+    } else {
+      this.setState({height: this.props.height})
     }
   }
   shouldComponentUpdate (nextProps, nextState) {
@@ -99,10 +108,36 @@ class ChartExperimentalCanvas extends Component {
     return false
   }
 
+  isNumericCol (selectedColumnDef) {
+    if (selectedColumnDef.type === 'number') {
+      return true
+    }
+    return false
+  }
+
+  setDefaultChartType (selectedColumnDef, chartType) {
+    let isDateCol = isColTypeTest(selectedColumnDef, 'date')
+    let isNumericCol = isColTypeTest(selectedColumnDef, 'number')
+    if (!(chartType)) {
+      if (isDateCol) {
+        chartType = 'line'
+      } else if (isNumericCol) {
+        chartType = 'histogram'
+      } else {
+        chartType = 'bar'
+      }
+    }
+    return chartType
+  }
+
   render () {
-    // console.log("**chart canvas**")
+    console.log('**chart canvas**')
     // console.log(this.props)
     let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, dateBy} = this.props
+    chartType = this.setDefaultChartType (selectedColumnDef, chartType)
+    console.log(chartType)
+
+    console.log('******************')
     let fillColor
     let grpColorScale
     const fillColorIndex = {
@@ -125,6 +160,7 @@ class ChartExperimentalCanvas extends Component {
       'money': {'start': '#c71585', 'end': '#ffc0cb'}
     }
     let isDateSelectedCol
+    let numericCol = this.isNumericCol(selectedColumnDef)
     let isGroupBy = this.isGroupByz(groupKeys)
     if (!isGroupBy) {
       chartData = this.convertChartData(chartData, selectedColumnDef, dateBy)
@@ -154,10 +190,31 @@ class ChartExperimentalCanvas extends Component {
     let maxValue = findMaxObjKeyValue(chartData, 'value')
     let domainMax = maxValue + (maxValue * 0.03)
     return (
-      <div>
+      <div className='chartCanvas'>
         <Choose>
           <When condition={selectedColumnDef}>
             <Choose>
+              <When condition={numericCol}>
+                <Choose>
+                  <When condition={chartType === 'histogram'}>
+                    <ChartExperimentalHistogramStuff
+                      w={w}
+                      h={h}
+                      domainMax={domainMax}
+                      isGroupBy={isGroupBy}
+                      margin={margin}
+                      rowLabel={rowLabel}
+                      fillColor={fillColor}
+                      groupKeys={groupKeys}
+                      chartData={chartData}
+                      yTickCnt={yTickCnt}
+                      xTickCnt={xTickCnt}
+                      rowLabel={rowLabel}
+                      xAxisPadding={xAxisPadding}
+                      valTickFormater={valTickFormater} />
+                  </When>
+                </Choose>
+              </When>
               <When condition={chartType === 'bar'}>
                 <ChartExperimentalBarStuff
                   w={w}
@@ -244,6 +301,5 @@ ChartExperimentalCanvas.propTypes = {
 ChartExperimentalCanvas.defaultProps = {
   width: 800,
   height: 500,
-  chartType: 'bar'
 }
 export default ChartExperimentalCanvas

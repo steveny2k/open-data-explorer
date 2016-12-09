@@ -50,7 +50,7 @@ class ChartExperimentalAreaStuff extends Component {
               tickCount={yTickCnt}
               domain={[0, domainMax]}
               type='number'
-              label={<CustomYaxisLabel val={rowLabel} h={h} />} />
+              label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} />} />
             <CartesianGrid strokeDasharray='3 3' vertical={false} />
             <Tooltip />
             <Area
@@ -75,7 +75,7 @@ class ChartExperimentalAreaStuff extends Component {
               tickCount={yTickCnt}
               domain={[0, domainMax]}
               type='number'
-              label={<CustomYaxisLabel val={rowLabel + ' value'} h={h} />} />
+              label={<CustomYaxisLabel val={'Number of ' + rowLabel + 's'} h={h} />} />
             <CartesianGrid strokeDasharray='3 3' vertical={false} />
             <Tooltip />
             <Legend />

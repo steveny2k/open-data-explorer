@@ -10,6 +10,8 @@ H.toTitleCase = require('./toTitleCase')
 H.findMinObjKeyValue = require('./findMinObjKeyValue.js')
 H.findMaxObjKeyValue = require('./findMaxObjKeyValue.js')
 H.replacePropertyNameValue = require('./replacePropertyNameValue')
+H.fillArray = require('./fillArray.js')
+H.isColTypeTest = require('./isColTypeTest.js')
 
 // Implement chaining
 H.prototype = {

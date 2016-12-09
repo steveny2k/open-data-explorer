@@ -14,7 +14,7 @@ class CustomYaxisLabel extends Component {
           textAnchor='middle'
           fill='#666'
           transform='rotate(-90)'>
-          {'Number of ' + val + 's'}
+          {val}
         </text>
       </g>
     )
