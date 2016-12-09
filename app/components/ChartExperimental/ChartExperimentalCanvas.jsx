@@ -134,10 +134,7 @@ class ChartExperimentalCanvas extends Component {
     console.log('**chart canvas**')
     // console.log(this.props)
     let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, dateBy} = this.props
-    chartType = this.setDefaultChartType (selectedColumnDef, chartType)
-    console.log(chartType)
-
-    console.log('******************')
+    chartType = this.setDefaultChartType(selectedColumnDef, chartType)
     let fillColor
     let grpColorScale
     const fillColorIndex = {
@@ -209,7 +206,6 @@ class ChartExperimentalCanvas extends Component {
                       chartData={chartData}
                       yTickCnt={yTickCnt}
                       xTickCnt={xTickCnt}
-                      rowLabel={rowLabel}
                       xAxisPadding={xAxisPadding}
                       valTickFormater={valTickFormater} />
                   </When>
@@ -300,6 +296,6 @@ ChartExperimentalCanvas.propTypes = {
 
 ChartExperimentalCanvas.defaultProps = {
   width: 800,
-  height: 500,
+  height: 500
 }
 export default ChartExperimentalCanvas
