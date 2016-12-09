@@ -65,7 +65,7 @@ class Embed extends Component {
               selectedColumnDef={selectedColumnDef}
               groupBy={groupBy}
               sumBy={sumBy} />
-            </Messages>
+          </Messages>
         </Loading>
       </div>
     )
