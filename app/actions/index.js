@@ -191,6 +191,7 @@ export const UPDATE_FILTER = 'UPDATE_FILTER'
 export const APPLY_FILTER = 'APPLY_FILTER'
 export const APPLY_CHART_TYPE = 'APPLY_CHART_TYPE'
 export const UPDATE_FROM_QS = 'UPDATE_FROM_QS'
+export const QS_ERROR = 'QS_ERROR'
 
 export function addFilter (key) {
   return {
@@ -230,16 +231,30 @@ export function applyFilter (key, options) {
   }
 }
 
-export function loadQueryStateFromString (q) {
-  let payload = {}
+const parseQueryString = (q) => {
+  let payload
   if (typeof q === 'string') {
     payload = JSON.parse(q)
+  } else {
+    throw new Error('This URL does not point to a valid visual. Please check the URL.')
   }
-  return (dispatch, getState) => {
-    dispatch({
-      type: UPDATE_FROM_QS,
-      payload: payload
+  return Promise.resolve(payload)
+}
+
+export const loadQueryStateFromString = (q) => (dispatch, getState) => {
+  parseQueryString(q).then(
+    payload => {
+      dispatch({
+        type: UPDATE_FROM_QS,
+        payload
+      })
+      dispatch(fetchData(getState()))
+    },
+    error => {
+      dispatch({
+        type: QS_ERROR,
+        message: error.message || 'Something bad happened',
+        error: true
+      })
     })
-    dispatch(fetchData(getState()))
-  }
 }
