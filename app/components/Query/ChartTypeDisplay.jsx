@@ -2,26 +2,32 @@ import React, { Component } from 'react'
 import RadioGroup from 'react-radio-group'
 import './_chartTypeDisplay.scss'
 import { Panel } from 'react-bootstrap'
+import {isColTypeTest} from '../../helpers'
 
 class ChartTypeDisplay extends Component {
-  isDateColTest (selectedColumnDef) {
-    if (selectedColumnDef.type === 'date') {
-      return true
-    }
-    return false
-  }
 
   render () {
     let {applyChartType, chartType, selectedColumnDef} = this.props
-    if (!(chartType)) {
-      chartType = 'bar'
-    }
-    let isDateCol = this.isDateColTest(selectedColumnDef)
+
+    console.log(selectedColumnDef)
+    let isDateCol = isColTypeTest(selectedColumnDef, 'date')
+    let isNumericCol = isColTypeTest(selectedColumnDef, 'number')
     const panelTitle = (
       <div>
         Chart Type Options
       </div>
     )
+    if (!(chartType)) {
+      if (isDateCol) {
+        chartType = 'line'
+      } else if (isNumericCol) {
+        chartType = 'histogram'
+      } else {
+        chartType = 'bar'
+      }
+    }
+    console.log(chartType)
+
     return (
       <Panel collapsible defaultExpanded header={panelTitle}>
         <Choose>
@@ -38,6 +44,19 @@ class ChartTypeDisplay extends Component {
                     </label>
                     <label className={'chartTypeRadioLabel'}>
                       <Radio value='area' />Area
+                    </label>
+                  </div>
+                )}
+              </RadioGroup>
+            </div>
+          </When>
+          <When condition={isNumericCol}>
+            <div className={'chartTypeRadio'}>
+              <RadioGroup name='chartTypes' selectedValue={chartType} onChange={applyChartType}>
+                {Radio => (
+                  <div>
+                    <label className={'chartTypeRadioLabel'}>
+                      <Radio value='histogram' />Histogram
                     </label>
                   </div>
                 )}

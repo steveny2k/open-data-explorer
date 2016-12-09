@@ -6,8 +6,8 @@ import $ from 'jquery'
 import ChartExperimentalBarStuff from './ChartExperimentalBarStuff'
 import ChartExperimentalLineStuff from './ChartExperimentalLineStuff'
 import ChartExperimentalAreaStuff from './ChartExperimentalAreaStuff'
-// no
-import { findMaxObjKeyValue } from '../../helpers'
+import ChartExperimentalHistogramStuff from './ChartExperimentalHistogramStuff'
+import { findMaxObjKeyValue, isColTypeTest } from '../../helpers'
 
 class ChartExperimentalCanvas extends Component {
 
@@ -117,10 +117,33 @@ class ChartExperimentalCanvas extends Component {
     return false
   }
 
+  isNumericCol (selectedColumnDef) {
+    if (selectedColumnDef.type === 'number') {
+      return true
+    }
+    return false
+  }
+
+  setDefaultChartType (selectedColumnDef, chartType) {
+    let isDateCol = isColTypeTest(selectedColumnDef, 'date')
+    let isNumericCol = isColTypeTest(selectedColumnDef, 'number')
+    if (!(chartType)) {
+      if (isDateCol) {
+        chartType = 'line'
+      } else if (isNumericCol) {
+        chartType = 'histogram'
+      } else {
+        chartType = 'bar'
+      }
+    }
+    return chartType
+  }
+
   render () {
-    // console.log("**chart canvas**")
+    console.log('**chart canvas**')
     // console.log(this.props)
     let {rowLabel, selectedColumnDef, groupKeys, chartData, chartType, dateBy} = this.props
+    chartType = this.setDefaultChartType(selectedColumnDef, chartType)
     let fillColor
     let grpColorScale
     const fillColorIndex = {
@@ -143,6 +166,7 @@ class ChartExperimentalCanvas extends Component {
       'money': {'start': '#c71585', 'end': '#ffc0cb'}
     }
     let isDateSelectedCol
+    let numericCol = this.isNumericCol(selectedColumnDef)
     let isGroupBy = this.isGroupByz(groupKeys)
     if (!isGroupBy) {
       chartData = this.convertChartData(chartData, selectedColumnDef, dateBy)
@@ -172,10 +196,30 @@ class ChartExperimentalCanvas extends Component {
     let maxValue = findMaxObjKeyValue(chartData, 'value')
     let domainMax = maxValue + (maxValue * 0.03)
     return (
-      <div>
+      <div className='chartCanvas'>
         <Choose>
           <When condition={selectedColumnDef}>
             <Choose>
+              <When condition={numericCol}>
+                <Choose>
+                  <When condition={chartType === 'histogram'}>
+                    <ChartExperimentalHistogramStuff
+                      w={w}
+                      h={h}
+                      domainMax={domainMax}
+                      isGroupBy={isGroupBy}
+                      margin={margin}
+                      rowLabel={rowLabel}
+                      fillColor={fillColor}
+                      groupKeys={groupKeys}
+                      chartData={chartData}
+                      yTickCnt={yTickCnt}
+                      xTickCnt={xTickCnt}
+                      xAxisPadding={xAxisPadding}
+                      valTickFormater={valTickFormater} />
+                  </When>
+                </Choose>
+              </When>
               <When condition={chartType === 'bar'}>
                 <ChartExperimentalBarStuff
                   w={w}
@@ -261,7 +305,6 @@ ChartExperimentalCanvas.propTypes = {
 
 ChartExperimentalCanvas.defaultProps = {
   width: 800,
-  height: 500,
-  chartType: 'bar'
+  height: 500
 }
 export default ChartExperimentalCanvas
