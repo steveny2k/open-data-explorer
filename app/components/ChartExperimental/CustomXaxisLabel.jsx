@@ -13,7 +13,7 @@ class CustomXaxisLabel extends Component {
           dy={16}
           textAnchor='middle'
           fill='#666'>
-          {'Number of ' + val + 's'}
+          {val}
         </text>
       </g>
 
