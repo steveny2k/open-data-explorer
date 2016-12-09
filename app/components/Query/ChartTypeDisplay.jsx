@@ -8,8 +8,6 @@ class ChartTypeDisplay extends Component {
 
   render () {
     let {applyChartType, chartType, selectedColumnDef} = this.props
-
-    console.log(selectedColumnDef)
     let isDateCol = isColTypeTest(selectedColumnDef, 'date')
     let isNumericCol = isColTypeTest(selectedColumnDef, 'number')
     const panelTitle = (
@@ -26,8 +24,6 @@ class ChartTypeDisplay extends Component {
         chartType = 'bar'
       }
     }
-    console.log(chartType)
-
     return (
       <Panel collapsible defaultExpanded header={panelTitle}>
         <Choose>
