@@ -92,7 +92,7 @@ const mapStateToProps = (state, ownProps) => {
   const { query, columnProps, chart, metadata, messages } = state
   const id = ownProps.params.id
   const datasetPath = '/' + slugify(metadata.category) + '/' + slugify(metadata.name) + '/' + id
-  const datasetLink = BASE_HREF + '/#' + datasetPath
+  const datasetLink = BASE_HREF + '/#' + datasetPath + '/chart_experimental?q=' + encodeURIComponent(ownProps.location.query.q)
   return {
     id,
     queryString: ownProps.location.query.q,
@@ -109,7 +109,7 @@ const mapStateToProps = (state, ownProps) => {
     rowLabel: metadata.rowLabel,
     isFetching: query.isFetching,
     datasetLink,
-    exploreLink: datasetLink + '/chart_experimental',
+    exploreLink: datasetLink,
     datasetName: metadata.name,
     messages: messages
   }
