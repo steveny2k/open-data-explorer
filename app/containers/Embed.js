@@ -9,6 +9,7 @@ import ChartCanvas from '../components/ChartExperimental/ChartExperimentalCanvas
 import ChartTitle from '../components/ChartExperimental/ChartExperimentalTitle'
 import ChartSubTitle from '../components/ChartExperimental/ChartExperimentalSubTitle'
 import Loading from '../components/Loading'
+import Messages from '../components/Messages'
 
 import { BASE_HREF } from '../constants/AppConstants'
 
@@ -36,32 +37,35 @@ class Embed extends Component {
   }
 
   render () {
+    let { messages } = this.props
     let { columns, rowLabel, isFetching, selectedColumnDef, groupBy, sumBy, filters, datasetName, datasetLink, exploreLink } = this.props
     let { chartData, chartType, groupKeys } = this.props
 
     return (
       <div className='Embed'>
         <Loading isFetching={isFetching} style='centered'>
-          <div id='Embed-chartHeader' className='chartHeader'>
-            <ChartTitle
-              columns={columns}
+          <Messages messages={messages}>
+            <div id='Embed-chartHeader' className='chartHeader'>
+              <ChartTitle
+                columns={columns}
+                rowLabel={rowLabel}
+                selectedColumnDef={selectedColumnDef}
+                groupBy={groupBy}
+                sumBy={sumBy} />
+              <ChartSubTitle columns={columns} filters={filters} />
+              <EmbedContextLinks datasetName={datasetName} datasetLink={datasetLink} exploreLink={exploreLink} />
+            </div>
+            <ChartCanvas
+              embed
+              chartData={chartData}
+              chartType={chartType}
+              groupKeys={groupKeys}
+              filters={filters}
               rowLabel={rowLabel}
               selectedColumnDef={selectedColumnDef}
               groupBy={groupBy}
               sumBy={sumBy} />
-            <ChartSubTitle columns={columns} filters={filters} />
-            <EmbedContextLinks datasetName={datasetName} datasetLink={datasetLink} exploreLink={exploreLink} />
-          </div>
-          <ChartCanvas
-            embed
-            chartData={chartData}
-            chartType={chartType}
-            groupKeys={groupKeys}
-            filters={filters}
-            rowLabel={rowLabel}
-            selectedColumnDef={selectedColumnDef}
-            groupBy={groupBy}
-            sumBy={sumBy} />
+            </Messages>
         </Loading>
       </div>
     )
@@ -76,7 +80,8 @@ Embed.propTypes = {
   loadQueryStateFromString: PropTypes.func,
   datasetName: PropTypes.string,
   datasetLink: PropTypes.string,
-  exploreLink: PropTypes.string
+  exploreLink: PropTypes.string,
+  messages: PropTypes.object
 }
 
 Embed.defaultProps = {
@@ -84,7 +89,7 @@ Embed.defaultProps = {
 }
 
 const mapStateToProps = (state, ownProps) => {
-  const { query, columnProps, chart, metadata } = state
+  const { query, columnProps, chart, metadata, messages } = state
   const id = ownProps.params.id
   const datasetPath = '/' + slugify(metadata.category) + '/' + slugify(metadata.name) + '/' + id
   const datasetLink = BASE_HREF + '/#' + datasetPath
@@ -105,7 +110,8 @@ const mapStateToProps = (state, ownProps) => {
     isFetching: query.isFetching,
     datasetLink,
     exploreLink: datasetLink + '/chart_experimental',
-    datasetName: metadata.name
+    datasetName: metadata.name,
+    messages: messages
   }
 }
 

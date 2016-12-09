@@ -233,20 +233,27 @@ export function applyFilter (key, options) {
 
 const parseQueryString = (q) => {
   let payload
+  let error
   if (typeof q === 'string') {
-    payload = JSON.parse(q)
+    try {
+      payload = JSON.parse(q)
+    } catch (e) {
+      error = true
+    }
   } else {
-    throw new Error('This URL does not point to a valid visual. Please check the URL.')
+    error = true
   }
+
+  if (error) return Promise.reject(new Error('This URL does not point to a valid visual. Please check the URL.'))
   return Promise.resolve(payload)
 }
 
 export const loadQueryStateFromString = (q) => (dispatch, getState) => {
-  parseQueryString(q).then(
-    payload => {
+  return parseQueryString(q).then(
+    response => {
       dispatch({
         type: UPDATE_FROM_QS,
-        payload
+        payload: response
       })
       dispatch(fetchData(getState()))
     },

@@ -4,7 +4,10 @@ import { updateObject } from './reducerUtilities'
 const initialState = {}
 
 function setMessage (state, action) {
-  updateObject()
+  return updateObject(state, {
+    message: action.message,
+    type: 'error',
+    dismissable: false })
 }
 
 export const messagesReducer = (state = initialState, action) => {

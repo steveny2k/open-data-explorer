@@ -28,7 +28,7 @@ function dataRequest (state, action) {
   })
 }
 
-function dataSuccess (state, action) {
+function setFetchingFalse (state, action) {
   return updateObject(state, {
     isFetching: false
   })
@@ -81,7 +81,9 @@ export const queryReducer = (state = initialState, action) => {
     case ActionTypes.METADATA_REQUEST: return resetState(state, action)
     case ActionTypes.SELECT_COLUMN: return selectColumn(state, action)
     case ActionTypes.DATA_REQUEST: return dataRequest(state, action)
-    case ActionTypes.DATA_SUCCESS: return dataSuccess(state, action)
+    case ActionTypes.DATA_SUCCESS:
+    case ActionTypes.DATA_FAILURE:
+    case ActionTypes.QS_ERROR: return setFetchingFalse(state, action)
     case ActionTypes.SUM_BY: return sumBy(state, action)
     case ActionTypes.GROUP_BY: return groupBy(state, action)
     case ActionTypes.CHANGE_DATEBY: return updateQueryKeys(state, action)
