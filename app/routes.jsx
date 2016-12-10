@@ -10,9 +10,12 @@ import DatasetDetails from './containers/DatasetDetails'
 import Charts from './containers/Charts'
 import DataTable from './containers/DataTable'
 import AboutPage from './components/AboutPage/AboutPage'
+import VizContainer from './containers/VizContainer'
+import Embed from './containers/Embed'
 
 export default (
   <Route component={App} path='/'>
+    <Route path='/e/:id' component={Embed} />
     <IndexRoute component={HomePage} />
     <Route path='/catalog' component={Catalog}>
       <IndexRoute component={Catalog} />
@@ -29,6 +32,7 @@ export default (
       <Route path='charts' component={Charts} />
       <Route path='map' component={Dataset} />
       <Route path='table' component={DataTable} />
+      <Route path='chart_experimental' component={VizContainer} />
     </Route>
   </Route>
 )

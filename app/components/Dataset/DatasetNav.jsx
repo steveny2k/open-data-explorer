@@ -37,6 +37,9 @@ class DatasetNav extends Component {
             <NavItem eventKey={'charts'} className={'tabSelected'}>
               Charts
             </NavItem>
+            <NavItem eventKey={'chart_experimental'} className={'tabSelected'}>
+              Charts Experimental
+            </NavItem>
             <NavItem eventKey={'table'} className={'tabSelected'}>
               Table Preview
             </NavItem>

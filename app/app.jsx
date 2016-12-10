@@ -10,13 +10,19 @@ import airbrakeJs from 'airbrake-js'
 window.airbrake = new airbrakeJs({projectId: 129600, projectKey: 'b8fe4ddb8be71382afa569e93c9b0d87'}) // eslint-disable-line
 
 const initialState = {
-  dataset: {
+  metadata: {
     query: {
       dateBy: 'year'
     },
     table: {
       tablePage: 0
     }
+  },
+  table: {
+    tablePage: 0
+  },
+  query: {
+    groupKeys: []
   }
 }
 const store = configureStore(initialState)

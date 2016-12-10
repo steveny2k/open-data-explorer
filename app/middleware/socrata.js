@@ -2,6 +2,8 @@ import soda from 'soda-js'
 import pluralize from 'pluralize'
 import { capitalize } from 'underscore.string'
 import _ from 'lodash'
+import uniq from 'lodash/uniq'
+import { replacePropertyNameValue } from '../helpers'
 
 const API_ROOT = 'https://data.sfgov.org/'
 
@@ -17,7 +19,7 @@ export const Endpoints = {
 
 export const Transforms = {
   METADATA: transformMetadata,
-  QUERY: transformQuery,
+  QUERY: transformQueryData,
   TABLEQUERY: transformTableQuery,
   COUNT: transformCount,
   MIGRATION: transformApiMigration,
@@ -40,24 +42,27 @@ export const shouldRunColumnStats = (type, key) => {
 }
 
 // Construct URL based on chart options
+// TODO - break into smaller functions
 
 function constructQuery (state) {
-  let queryStack = state.dataset.query
-  let columns = state.dataset.columns
-  let { selectedColumn, dateBy, filters } = queryStack
+  let columns = state.columnProps.columns
+  let { selectedColumn, dateBy, groupBy, sumBy, filters } = state.query
+
   let columnType = columns[selectedColumn].type
+  let isCategory = (columns[selectedColumn].categories)
 
   let consumerRoot = API_ROOT.split('/')[2]
   let consumer = new soda.Consumer(consumerRoot)
-  let id = state.dataset.migrationId || state.dataset.id
+  let id = state.metadata.migrationId || state.metadata.id
   let query = consumer.query().withDataset(id)
 
-  let {groupBy, sumBy} = state.dataset.query
   let dateAggregation = dateBy === 'month' ? 'date_trunc_ym' : 'date_trunc_y'
   let selectAsLabel = selectedColumn + ' as label'
   let orderBy = 'value desc'
   if (columnType === 'date') {
     selectAsLabel = dateAggregation + '(' + selectedColumn + ') as label'
+    orderBy = 'label'
+  } else if (columnType === 'number' && !isCategory) {
     orderBy = 'label'
   }
 
@@ -86,7 +91,7 @@ function constructQuery (state) {
   }
 
   // Where (filter)
-  if (columnType === 'date' || columnType === 'number') query = query.where('label is not null')
+  if (columnType === 'date' || (columnType === 'number' && !isCategory)) query = query.where('label is not null')
   if (filters) {
     for (let key in filters) {
       let column = key !== 'checkboxes' ? columns[key] : {type: 'checkbox'}
@@ -127,7 +132,7 @@ function constructQuery (state) {
       }
     }
   }
-  query = query.limit(50000)
+  query = query.limit(9999999)
   return query.getURL()
 }
 
@@ -152,8 +157,8 @@ function endpointQuery (state) {
 function endpointTableQuery (state) {
   let consumerRoot = API_ROOT.split('/')[2]
   let consumer = new soda.Consumer(consumerRoot)
-  let id = state.dataset.migrationId || state.dataset.id
-  let table = state.dataset.table
+  let id = state.metadata.migrationId || state.metadata.id
+  let table = state.metadata.table
   let page = table.tablePage || 0
 
   let query = consumer.query()
@@ -163,7 +168,7 @@ function endpointTableQuery (state) {
 
   if (table.sorted && table.sorted.length > 0) {
     table.sorted.forEach((key) => {
-      query.order(key + ' ' + state.dataset.columns[key].sortDir)
+      query.order(key + ' ' + state.metadata.columns[key].sortDir)
     })
   }
 
@@ -198,6 +203,7 @@ function transformMetadata (json) {
     programLink: json.metadata.custom_fields['Detailed Descriptive']['Program link'] || null,
     rowLabel: json.metadata.rowLabel || 'Record',
     tags: json.tags || null,
+    category: json['category'] || 'dataset',
     columns: {}
   }
 
@@ -220,8 +226,7 @@ function transformMetadata (json) {
       name: column['name'].replace(/[_-]/g, ' '),
       description: column['description'] || '',
       type,
-      format
-    }
+      format}
 
     if (column['cachedContents']) {
       col.non_null = column['cachedContents']['non_null'] || 0
@@ -237,9 +242,11 @@ function transformMetadata (json) {
   return metadata
 }
 
-function transformQuery (json, state) {
-  let { columns, query, rowLabel } = state.dataset
+function transformQueryDataLegacy (json, state) {
+  let { query, metadata, columnProps } = state
+  let { rowLabel } = metadata
   let { selectedColumn, groupBy, sumBy } = query
+  let { columns } = columnProps
   let labels = ['x']
   let keys = []
   let data = []
@@ -338,10 +345,52 @@ function transformQuery (json, state) {
   }
 
   data = [labels].concat(data)
+  return data
+}
+
+function reduceGroupedData (data, groupBy) {
+  // collect unique labels
+  let groupedData = uniq(data.map((obj) => {
+    return obj['label']
+  })).map((label) => {
+    return {label: label}
+  })
+
+  // add columns to rows
+  let i = 0
+  let dataLength = data.length
+  for (i; i < dataLength; i++) {
+    let groupIdx = groupedData.findIndex((element, idx, array) => {
+      return element['label'] === data[i]['label']
+    })
+    groupedData[groupIdx][data[i][groupBy]] = parseInt(data[i]['value'])
+  }
+
+  return groupedData
+}
+
+function transformQueryData (json, state) {
+  let data
+  if (!(json.length === 1)) {
+    data = transformQueryDataLegacy(json, state)
+  } else {
+    data = [ ['x', json[0]['label']], [ 'Count of Nothing', json[0]['value'] ] ]
+  }
+  let { query } = state
+  let groupKeys = []
+  if (query.groupBy) {
+    groupKeys = uniq(json.map((obj) => {
+      return obj[query.groupBy]
+    }))
+    json = reduceGroupedData(json, query.groupBy)
+  }
+  json = replacePropertyNameValue(json, 'label', 'undefined', 'blank')
   return {
     query: {
       isFetching: false,
-      data: data
+      data: data,
+      originalData: json,
+      groupKeys: groupKeys
     }
   }
 }
@@ -365,8 +414,8 @@ function transformApiMigration (json) {
 
 function transformColumnProperties (json, state, params) {
   let maxRecord = parseInt(_.maxBy(json, function (o) { return parseInt(o.count) }).count)
-  let checkFirst = maxRecord / state.dataset.rowCount
-  let checkNumCategories = json.length / state.dataset.rowCount
+  let checkFirst = maxRecord / state.metadata.rowCount
+  let checkNumCategories = json.length / state.metadata.rowCount
   let transformed = {
     columns: {}
   }

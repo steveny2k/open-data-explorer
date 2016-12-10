@@ -76,10 +76,10 @@ export function loadMetadata (id) {
 
 export function loadColumnProps () {
   return (dispatch, getState) => {
-    let id = getState().dataset.migrationId ? getState().dataset.migrationId : getState().dataset.id
+    let id = getState().metadata.migrationId ? getState().metadata.migrationId : getState().metadata.id
     let promises = []
-    for (var key in getState().dataset.columns) {
-      if (shouldRunColumnStats(getState().dataset.columns[key].type, key)) {
+    for (var key in getState().metadata.columns) {
+      if (shouldRunColumnStats(getState().metadata.columns[key].type, key)) {
         promises.push(dispatch(fetchColumnProps(id, key)))
       }
     }
@@ -133,7 +133,7 @@ export function selectColumn (column) {
   return (dispatch, getState) => {
     dispatch({
       type: SELECT_COLUMN,
-      column})
+      payload: column})
     dispatch(fetchData(getState()))
   }
 }
@@ -142,7 +142,7 @@ export function changeDateBy (dateBy) {
   return (dispatch, getState) => {
     dispatch({
       type: CHANGE_DATEBY,
-      dateBy})
+      payload: dateBy})
     dispatch(fetchData(getState()))
   }
 }
@@ -151,7 +151,7 @@ export function groupBy (key) {
   return (dispatch, getState) => {
     dispatch({
       type: GROUP_BY,
-      key})
+      payload: key})
     dispatch(fetchData(getState()))
   }
 }
@@ -160,7 +160,7 @@ export function sumBy (key) {
   return (dispatch, getState) => {
     dispatch({
       type: SUM_BY,
-      key})
+      payload: key})
     dispatch(fetchData(getState()))
   }
 }
@@ -190,11 +190,13 @@ export const REMOVE_FILTER = 'REMOVE_FILTER'
 export const UPDATE_FILTER = 'UPDATE_FILTER'
 export const APPLY_FILTER = 'APPLY_FILTER'
 export const APPLY_CHART_TYPE = 'APPLY_CHART_TYPE'
+export const UPDATE_FROM_QS = 'UPDATE_FROM_QS'
+export const QS_ERROR = 'QS_ERROR'
 
 export function addFilter (key) {
   return {
     type: ADD_FILTER,
-    key}
+    payload: key}
 }
 
 export function applyChartType (chartType) {
@@ -207,7 +209,7 @@ export function removeFilter (key) {
   return (dispatch, getState) => {
     dispatch({
       type: REMOVE_FILTER,
-      key})
+      payload: key})
     dispatch(fetchData(getState()))
   }
 }
@@ -215,8 +217,11 @@ export function removeFilter (key) {
 export function updateFilter (key, options) {
   return {
     type: UPDATE_FILTER,
-    key,
-    options}
+    payload: {
+      key,
+      options
+    }
+  }
 }
 
 export function applyFilter (key, options) {
@@ -224,4 +229,39 @@ export function applyFilter (key, options) {
     dispatch(updateFilter(key, options))
     dispatch(fetchData(getState()))
   }
+}
+
+const parseQueryString = (q) => {
+  let payload
+  let error
+  if (typeof q === 'string') {
+    try {
+      payload = JSON.parse(q)
+    } catch (e) {
+      error = true
+    }
+  } else {
+    error = true
+  }
+
+  if (error) return Promise.reject(new Error('This URL does not point to a valid visual. Please check the URL.'))
+  return Promise.resolve(payload)
+}
+
+export const loadQueryStateFromString = (q) => (dispatch, getState) => {
+  return parseQueryString(q).then(
+    response => {
+      dispatch({
+        type: UPDATE_FROM_QS,
+        payload: response
+      })
+      dispatch(fetchData(getState()))
+    },
+    error => {
+      dispatch({
+        type: QS_ERROR,
+        message: error.message || 'Something bad happened',
+        error: true
+      })
+    })
 }

@@ -1,14 +1,14 @@
 import './_Query.scss'
 
-import React, { Component } from 'react'
+import React, { Component, PropTypes } from 'react'
 import Select from 'react-select'
-import { Well, Button, Row } from 'react-bootstrap'
+import { Well, Button, Panel } from 'react-bootstrap'
 import FilterDateTime from './FilterDateTime'
 import FilterCategory from './FilterCategory'
 import FilterNumeric from './FilterNumeric'
 import FilterBoolean from './FilterBoolean'
 
-class ChartFilters extends Component {
+class FilterOptions extends Component {
   constructor (props) {
     super(props)
 
@@ -101,7 +101,7 @@ class ChartFilters extends Component {
   }
 
   render () {
-    let { selectedColumn, handleAddFilter, columns, filters } = this.props
+    let { handleAddFilter, columns, filters } = this.props
     let checkboxes = false
     // todo: these are specific to Socrata, filterable columns should just be set in the state when columns are processed
     const notFilters = ['checkbox', 'location', 'url']
@@ -127,23 +127,25 @@ class ChartFilters extends Component {
     }
 
     return (
-    selectedColumn
-      ? (
-      <Row className='chartOptionsRow'>
-        <div className='chartOptionsTitle'>
-          Filter By
-        </div>
+      <Panel collapsible defaultExpanded header='Filter chart by other columns'>
         <Select
           name='filters'
           placeholder="Select fields you'd like to filter by"
           options={options}
           onChange={handleAddFilter} />
         {filters ? this.renderFilterList() : false}
-      </Row>
-      )
-      : false
+      </Panel>
     )
   }
 }
 
-export default ChartFilters
+FilterOptions.propTypes = {
+  filters: PropTypes.object,
+  columns: PropTypes.object,
+  handleRemoveFilter: PropTypes.func,
+  applyFilter: PropTypes.func,
+  updateFilter: PropTypes.func,
+  handleAddFilter: PropTypes.func
+}
+
+export default FilterOptions

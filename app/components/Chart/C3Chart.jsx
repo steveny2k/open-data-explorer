@@ -64,7 +64,7 @@ let C3Chart = React.createClass({
 
   // apply props.options to graph json
   graphObject: function () {
-    let {options, data} = this.props
+    let {options, chartData} = this.props
     let graphObject = {
       data: {},
       axis: {},
@@ -83,7 +83,7 @@ let C3Chart = React.createClass({
       }
     }
     if (options.stacked) {
-      graphObject.data.groups = [this.multiDmsGroups(this.props.data)]
+      graphObject.data.groups = [this.multiDmsGroups(this.props.chartData)]
     }
     if (options.rotated) {
       graphObject.axis.rotated = true
@@ -114,14 +114,14 @@ let C3Chart = React.createClass({
     graphObject.axis.y.tick = {format: options.tickFormat.y}
     if (options.timeseries) {
       let format = '%Y'
-      if (Array.isArray(data[0])) {
-        format = data[0][1].substring(0, 4) === data[0][2].substring(0, 4) ? '%m/%Y' : '%Y'
+      if (Array.isArray(chartData[0])) {
+        format = chartData[0][1].substring(0, 4) === chartData[0][2].substring(0, 4) ? '%m/%Y' : '%Y'
       } else {
-        format = data[0].values[0].label.substring(0, 4) === data[0].values[1].label.substring(0, 4) ? '%m/%Y' : '%Y'
+        format = chartData[0].values[0].label.substring(0, 4) === chartData[0].values[1].label.substring(0, 4) ? '%m/%Y' : '%Y'
       }
       graphObject.data.xFormat = '%Y-%m-%dT%H:%M:%S.%L'
       graphObject.axis.x =
-        {type: 'timeseries', tick: {culling: true, format: format}
+      {type: 'timeseries', tick: {culling: true, format: format}
       }
     }
     if (options.subchart) {
@@ -142,7 +142,7 @@ let C3Chart = React.createClass({
   // c3.js
   drawGraph: function () {
     let multi = false
-    if (this.props.data.length > 1) {
+    if (this.props.chartData.length > 1) {
       multi = true
     }
     let displayChartOptions = this.props.displayChartOptions
@@ -177,16 +177,16 @@ let C3Chart = React.createClass({
     if (multi) {
       graphObjectData = {
         x: 'x',
-        columns: Array.isArray(this.props.data[0]) ? this.props.data : this.multiDmsDataPreparator(this.props.data)
+        columns: Array.isArray(this.props.chartData[0]) ? this.props.chartData : this.multiDmsDataPreparator(this.props.chartData)
       }
     } else {
       graphObjectData = {
-        json: this.props.data[0].values,
+        json: this.props.chartData[0].values,
         keys: { x: 'label', value: ['value'] },
-        names: { value: this.props.data[0].key }
+        names: { value: this.props.chartData[0].key }
       }
     }
-    if (area && this.props.data.length === 2) {
+    if (area && this.props.chartData.length === 2) {
       graphObjectData.type = 'area'
     }
 
@@ -326,7 +326,7 @@ let C3Chart = React.createClass({
     }
 
     var cleanedData
-    if (this.props.data.length === 2) {
+    if (this.props.chartData.length === 2) {
       cleanedData = limitLongTail(rawData)
     } else {
       cleanedData = limitLongTailGroupBy(rawData)
@@ -342,16 +342,16 @@ let C3Chart = React.createClass({
     }
     if (!multi) {
       graphObjectData = _.merge(graphObjectData, {
-        json: this.props.data[0].values,
+        json: this.props.chartData[0].values,
         keys: { x: 'label', value: ['value'] },
-        names: { value: this.props.data[0].key }
+        names: { value: this.props.chartData[0].key }
       })
     } else {
       let barData = []
       if (displayChartOptions) {
-        barData = this.props.data
+        barData = this.props.chartData
       } else {
-        barData = this.dataPrepBarMulti(this.props.data)
+        barData = this.dataPrepBarMulti(this.props.chartData)
       }
 
       graphObjectData = _.merge(graphObjectData, {
@@ -376,14 +376,13 @@ let C3Chart = React.createClass({
     graphObject.data = _.merge(graphObjectData, graphObject.data)
     graphObject.axis = _.merge(graphObjectAxis, graphObject.axis)
     let chart = c3.generate(graphObject)
-    console.log(graphObject)
     return chart
   },
 
   drawGraphPie: function () {
     let graphObject = this.graphObject()
     let graphObjectData = {
-      columns: this.pieChartDataPreparator(this.props.data[0].values),
+      columns: this.pieChartDataPreparator(this.props.chartData[0].values),
       type: 'pie'
     }
 
@@ -444,7 +443,7 @@ let C3Chart = React.createClass({
     let graphObject = this.graphObject()
     let graphObjectData = {
       x: 'x',
-      columns: this.multiDmsDataPreparator(this.props.data),
+      columns: this.multiDmsDataPreparator(this.props.chartData),
       type: 'bar'
     }
     let graphObjectAxis = {
@@ -452,7 +451,7 @@ let C3Chart = React.createClass({
     }
 
     if (group) {
-      graphObjectData.groups = [this.multiDmsGroups(this.props.data)]
+      graphObjectData.groups = [this.multiDmsGroups(this.props.chartData)]
     }
 
     if (graphObject.axis.rotated) {
@@ -477,7 +476,7 @@ let C3Chart = React.createClass({
     let graphObject = this.graphObject()
     let graphObjectData = {
       x: 'x',
-      columns: this.multiDmsDataPreparator(this.props.data),
+      columns: this.multiDmsDataPreparator(this.props.chartData),
       types: {dataSource1: 'bar'}
     }
     let graphObjectAxis = {

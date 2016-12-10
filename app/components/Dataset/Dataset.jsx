@@ -12,21 +12,17 @@ class Dataset extends Component {
   }
 
   render () {
-    const { dataset, children, ...other } = this.props
+    const { metadata, children, ...other } = this.props
     return (
       <section id={'Dataset'}>
         <div className='container-fluid datasetContainer'>
-          <DatasetFrontMatter apiDomain={API_DOMAIN} {...dataset} />
+          <DatasetFrontMatter apiDomain={API_DOMAIN} {...metadata} />
           <DatasetNav {...other} />
           {children}
         </div>
       </section>
     )
   }
-}
-
-Dataset.propTypes = {
-  dataset: React.PropTypes.object.isRequired
 }
 
 export default Dataset
