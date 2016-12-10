@@ -9,7 +9,6 @@
 .catalogMain{
    margin-right:1%;
    margin-left:1%;
-   margin-top:5%;
 }
 
 h3.categories{
@@ -26,11 +25,15 @@ h3.categories{
   margin-top:3%;
 }
 
-
 .facetCategories{
 font-size:125%;
 }
 
 .panelItem{
   font-size:115;
+}
+
+.CatalogShowingMsg {
+  margin-top: 1.5em;
+  font-weight: bold;
 }

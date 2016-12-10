@@ -10,9 +10,9 @@ class Charts extends Component {
   // return !nextProps.dataset.query.isFetching
   // }
 
-  chartTypeChecks (otherProps, query, columns) {
+  chartTypeChecks (selectedColumnDef, query, columns) {
     let chartDisplay = { displayChartOptions: false, chartType: null }
-    if (otherProps.selectedColumnDef && otherProps.selectedColumnDef.type === 'date') {
+    if (selectedColumnDef && selectedColumnDef.type === 'date') {
       chartDisplay.chartType = 'area'
       chartDisplay.displayChartOptions = true
     } else {
@@ -28,33 +28,32 @@ class Charts extends Component {
   }
 
   renderChartArea (props) {
-    let { dataset, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType, selectColumn } = this.props
-    let { columns, query, ...other } = dataset
+    let { chartProps, panelProps } = this.props
+    let { selectedColumnDef } = chartProps
+    console.log(selectedColumnDef)
+    // let { chartType } = chartProps
+    let { metadata, handleGroupBy, handleSumBy, handleAddFilter, handleRemoveFilter, applyFilter, updateFilter, changeDateBy, applyChartType, selectColumn } = this.props
+    let { columns, query, ...other } = metadata
     let otherProps = {...other}
     let displayChartOptions = null
-    otherProps.selectedColumnDef = query.selectedColumn ? columns[query.selectedColumn] : null
-    let chartDisplay = this.chartTypeChecks(otherProps, query, columns)
+    // otherProps.selectedColumnDef = selectedColumn ? columns[selectedColumn] : null
+    let chartDisplay = this.chartTypeChecks(selectedColumnDef, query, columns)
     displayChartOptions = chartDisplay.displayChartOptions
-    console.log(displayChartOptions)
     let chartType = chartDisplay.chartType
     return (
       <Row>
         <ChartCanvas
-          query={query}
-          data={query.data}
-          dateBy={query.dateBy}
-          changeDateBy={changeDateBy}
-          groupBy={query.groupBy}
-          sumBy={query.sumBy}
-          filters={query.filters}
-          columns={columns}
+          {...chartProps}
           chartType={chartType}
+          changeDateBy={changeDateBy}
           applyChartType={applyChartType}
           displayChartOptions={displayChartOptions}
           {...otherProps} />
         <ChartSideBar
           {...query}
-          columns={columns}
+          panelProps={panelProps}
+          selectedColumn={chartProps.selectedColumn}
+          columns={chartProps.columns}
           handleGroupBy={handleGroupBy}
           handleAddFilter={handleAddFilter}
           handleRemoveFilter={handleRemoveFilter}
@@ -64,13 +63,14 @@ class Charts extends Component {
           applyChartType={applyChartType}
           displayChartOptions={displayChartOptions}
           chartType={chartType}
-          dataset={dataset}
+          metadata={metadata}
           selectColumn={selectColumn} />
       </Row>
     )
   }
 
   render () {
+    console.log(this.props)
     let ChartArea = this.renderChartArea(this.props)
     return (
       <div>

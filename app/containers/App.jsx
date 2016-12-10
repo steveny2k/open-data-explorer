@@ -5,22 +5,39 @@ import Footer from '../components/Footer/Footer'
 
 const pages = [
   {
-    route: '',
-    title: 'Home'
+    route: 'about',
+    title: 'About'
   },
   {
     route: 'catalog',
     title: 'Data Catalog'
   }]
 
+const FullLayout = (props) => (
+  <div className='FullLayout-wrapper'>
+    <Navigation pages={pages} />
+    <div className={'content-wrapper'}>
+      {props.children}
+    </div>
+    <Footer />
+  </div>
+  )
+
+const EmbedLayout = (props) => (
+  <div className='EmbedLayout-wrapper'>
+    {props.children}
+  </div>
+  )
+
 class App extends Component {
   render () {
-    const { children } = this.props
+    let { children } = this.props
+    let isEmbed = /\/e\//.test(this.props.location.pathname)
     return (
-      <div>
-        <Navigation pages={pages} />
-        {children}
-        <Footer />
+      <div className='App'>
+        { isEmbed
+        ? <EmbedLayout children={children} /> : <FullLayout children={children} />
+        }
       </div>
     )
   }

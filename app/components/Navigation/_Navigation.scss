@@ -16,7 +16,8 @@
 .navLogo {
   font-size:220%;
   font-family: 'Lato', sans-serif;
-  padding-top:12%;
+  margin-top:6.5%;
+  margin-bottom:2%;
   margin-left:5%;
 }
 
@@ -29,7 +30,47 @@
 }
 
 .navLi {
-  padding-top:2%;
+  padding-top:2.5%;
   font-size:120%;
   font-family: 'Lato', sans-serif;
+}
+
+
+.ribbon {
+  z-index: 9999;
+  background-color: #a00;
+  overflow: hidden;
+  white-space: nowrap;
+  /* top left corner */
+  position: absolute;
+  left: -30px;
+  top: 15px;
+  /* 45 deg ccw rotation */
+  -webkit-transform: rotate(-45deg);
+     -moz-transform: rotate(-45deg);
+      -ms-transform: rotate(-45deg);
+       -o-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+  /* shadow */
+  -webkit-box-shadow: 0 0 10px #888;
+     -moz-box-shadow: 0 0 10px #888;
+          box-shadow: 0 0 10px #888;
+}
+
+.navImg{
+  min-height:60px;
+  min-width:80px;
+}
+
+.ribbon a {
+  border: 1px solid #faa;
+  color: #fff;
+  display: block;
+  font: bold 90.25% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin: 1px 0;
+  padding: 10px 50px;
+  text-align: center;
+  text-decoration: none;
+  /* shadow */
+  text-shadow: 0 0 5px #444;
 }

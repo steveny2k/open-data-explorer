@@ -2,9 +2,9 @@ import { connect } from 'react-redux'
 import DatasetOverview from '../components/Dataset/DatasetOverview'
 
 const mapStateToProps = (state, ownProps) => {
-  const { dataset } = state
+  const { metadata } = state
   return {
-    dataset
+    metadata
   }
 }
 

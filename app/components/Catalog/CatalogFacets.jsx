@@ -1,32 +1,27 @@
-import React from 'react'
-import { Input } from 'react-bootstrap'
+import React, { Component } from 'react'
+import { Checkbox, Radio } from 'react-bootstrap'
 
-export default class CatalogFacets extends React.Component {
+class CatalogFacets extends Component {
   render () {
     let {facets} = this.props
 
-    var categories = facets.categories.map(function (cat, i) {
-      return <Input
-        type='checkbox'
+    var categories = facets.categories.map((cat, i) => {
+      return <Checkbox
         name='categoryOptions'
-        label={`${cat.name}` + ` (${cat.count})`}
         onClick={this.props.handleCategorySelect.bind(this, cat.name, 'categories')}
         key={i}
         checked={cat.isRefined}
         className={'facetCategories'}
-               />
-    }.bind(this))
+        >{`${cat.name}` + ` (${cat.count})`}</Checkbox>
+    })
 
-    var departments = facets.departments.map(function (cat, i) {
-      console.log(cat.isRefined)
-      return <Input
-        type='radio'
+    var departments = facets.departments.map((cat, i) => {
+      return <Radio
         name='departmentOptions'
-        label={`${cat.name}` + ` (${cat.count})`}
         onClick={this.props.handleCategorySelect.bind(this, cat.name, 'departments')}
         key={i}
-        checked={cat.isRefined} />
-    }.bind(this))
+        checked={cat.isRefined}>{`${cat.name}` + ` (${cat.count})`}</Radio>
+    })
 
     return (
       <div className={'facets'}>
@@ -42,3 +37,5 @@ export default class CatalogFacets extends React.Component {
     )
   }
 }
+
+export default CatalogFacets

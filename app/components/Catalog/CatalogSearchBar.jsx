@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input } from 'react-bootstrap'
+import { FormControl } from 'react-bootstrap'
 
 export default class CatalogSearchBar extends React.Component {
   constructor (props) {
@@ -14,10 +14,18 @@ export default class CatalogSearchBar extends React.Component {
   }
 
   render () {
+    let { searchTerm } = this.props
+
+    console.log(searchTerm)
+    let searchInput = <FormControl type='text' placeholder='Search' onKeyUp={this.handleSearch} />
+    if (searchTerm !== '') {
+      searchInput = <FormControl type='text' defaultValue={searchTerm} placeholder='Search' onKeyUp={this.handleSearch} />
+    }
     return (
       <div className={'catalogMainSearchBox'}>
-        <Input type='text' placeholder='Search' onKeyUp={this.handleSearch} />
+        {searchInput}
       </div>
     )
   }
 }
+

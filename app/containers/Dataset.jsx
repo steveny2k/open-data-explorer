@@ -3,9 +3,9 @@ import { loadMetadata, loadColumnProps, loadTable } from '../actions'
 import Dataset from '../components/Dataset/Dataset'
 
 const mapStateToProps = (state, ownProps) => {
-  const { dataset } = state
+  const { metadata } = state
   return {
-    dataset
+    metadata
   }
 }
 

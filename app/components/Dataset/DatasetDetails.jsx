@@ -27,11 +27,11 @@ class DatasetDetails extends Component {
           <Label bsStyle='info' style={labelStyle} className={'descriptionPanelField'}>API name: {column.key}</Label>
         </Panel>
       </Col>
-      )
+    )
   }
 
   render () {
-    let { columns } = this.props.dataset
+    let { columns } = this.props.metadata
     let rows = []
     if (columns) {
       let keys = Object.keys(columns)
@@ -52,7 +52,7 @@ class DatasetDetails extends Component {
       <div className={'descriptionPanelHead'}>
         {rows}
       </div>
-      )
+    )
   }
 }
 
