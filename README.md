@@ -85,4 +85,4 @@ The following are the **types** we use:
 
 ### Tests
 
-Coming soon
+- Run npm run lint to test for linting issues
