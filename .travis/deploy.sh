@@ -35,7 +35,8 @@ elif [ $TRAVIS_BRANCH == "develop" ] ; then
  # commit compressed files and push it to remote
     git add .
     git commit -m "Deploy compressed files"
-    git push --force deploy develop
+    git
+    git push --force deploy master
     echo "****SUCCESS: Staging build was deployed ********"
 else
     echo "No deploy script for branch '$TRAVIS_BRANCH'"
