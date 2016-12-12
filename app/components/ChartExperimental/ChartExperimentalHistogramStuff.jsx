@@ -3,9 +3,9 @@ import d3 from 'd3'
 import { XAxis, BarChart, YAxis, CartesianGrid, Bar, Tooltip } from 'recharts'
 import { findMaxObjKeyValue, fillArray } from '../../helpers'
 import CustomXaxisLabel from './CustomXaxisLabel'
-import HistogramTooltip from './Histogram/HistogramTooltip'
+import HistogramTooltip from './HistogramTooltip'
 import CustomYaxisLabel from './CustomYaxisLabel'
-require('./Histogram/_Histogram.scss')
+require('./_Histogram.scss')
 
 class ChartExperimentalHistogramStuff extends Component {
   explodeFrequencies (chartData) {
